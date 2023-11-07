@@ -1,4 +1,3 @@
-
 DROP SCHEMA IF EXISTS lbaw_23155 CASCADE;
 CREATE SCHEMA IF NOT EXISTS lbaw_23155;
 SET SEARCH_PATH TO lbaw_23155;
@@ -128,7 +127,7 @@ CREATE TABLE tags (
 );
 
 CREATE TABLE user_Settings (
-  user_id SERIAL NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   isGuide BOOLEAN DEFAULT false,
   isPublic BOOLEAN DEFAULT true,
   darkMode BOOLEAN DEFAULT false
@@ -141,7 +140,7 @@ CREATE TABLE notification (
 );
 
 CREATE TABLE user_notification (
-  notification_id SERIAL PRIMARY KEY REFERENCES notification(notification_id),
+  notification_id INTEGER PRIMARY KEY REFERENCES notification(notification_id),
   user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   notification_type user_notification_type NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
@@ -149,7 +148,7 @@ CREATE TABLE user_notification (
 
 CREATE TABLE groups (
   group_id SERIAL PRIMARY KEY,
-  owner_id SERIAL NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  owner_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   picture INTEGER NOT NULL REFERENCES images(image_id),
   name VARCHAR NOT NULL,
   description VARCHAR NOT NULL,
@@ -157,7 +156,7 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE group_notification (
-  notification_id SERIAL PRIMARY KEY REFERENCES notification(notification_id),
+  notification_id INTEGER PRIMARY KEY REFERENCES notification(notification_id),
   group_id INTEGER NOT NULL REFERENCES groups(group_id) ON UPDATE CASCADE,
   notification_type group_notification_type NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
