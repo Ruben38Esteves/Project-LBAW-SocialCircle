@@ -6,23 +6,23 @@ SET SEARCH_PATH TO lbaw_23155;
 --------------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS user_post CASCADE;
+DROP TABLE IF EXISTS userPost CASCADE;
 DROP TABLE IF EXISTS comment CASCADE;
 DROP TABLE IF EXISTS tags CASCADE;
 DROP TABLE IF EXISTS images CASCADE;
-DROP TABLE IF EXISTS user_Settings CASCADE;
+DROP TABLE IF EXISTS userSettings CASCADE;
 DROP TABLE IF EXISTS event CASCADE;
 DROP TABLE IF EXISTS location CASCADE;
 DROP TABLE IF EXISTS friendship CASCADE;
 DROP TABLE IF EXISTS friendRequest CASCADE;
-DROP TABLE IF EXISTS user_message CASCADE;
+DROP TABLE IF EXISTS userMessage CASCADE;
 DROP TABLE IF EXISTS notification CASCADE;
-DROP TABLE IF EXISTS user_notification CASCADE;
+DROP TABLE IF EXISTS userNotification CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
-DROP TABLE IF EXISTS group_notification CASCADE;
-DROP TABLE IF EXISTS group_member CASCADE;
-DROP TABLE IF EXISTS group_join_request CASCADE;
+DROP TABLE IF EXISTS groupNotification CASCADE;
+DROP TABLE IF EXISTS groupMember CASCADE;
+DROP TABLE IF EXISTS groupJoinRrequest CASCADE;
 DROP TABLE IF EXISTS likes CASCADE;
 
 --------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ CREATE TYPE group_notification_type AS ENUM ('requested_join', 'joined_group', '
 -- TABLES
 --------------------------------------------------------------------------------
 CREATE TABLE location (
-  location_id SERIAL PRIMARY KEY,
+  locationID SERIAL PRIMARY KEY,
   city VARCHAR NOT NULL,
   country VARCHAR NOT NULL,
   zipcode VARCHAR NOT NULL,
@@ -47,22 +47,22 @@ CREATE TABLE location (
 );
 
 CREATE TABLE images (
-  image_id SERIAL PRIMARY KEY,
-  image_path VARCHAR NOT NULL
+  imageID SERIAL PRIMARY KEY,
+  imagePath VARCHAR NOT NULL
 );
 
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  profilePicture_ID INTEGER REFERENCES images(image_id),
+  profilePictureID INTEGER REFERENCES images(imageID),
   firstName VARCHAR NOT NULL,
   lastName VARCHAR NOT NULL,
   aboutMe VARCHAR,
   gender VARCHAR,
   birthday DATE NOT NULL,
-  nationality INTEGER NOT NULL REFERENCES location(location_id) ON UPDATE CASCADE,
-  currentLocation INTEGER NOT NULL REFERENCES location(location_id) ON UPDATE CASCADE,
+  nationality INTEGER NOT NULL REFERENCES location(locationID) ON UPDATE CASCADE,
+  currentLocation INTEGER NOT NULL REFERENCES location(locationID) ON UPDATE CASCADE,
   username VARCHAR NOT NULL UNIQUE,
   email VARCHAR NOT NULL UNIQUE,
   passwordHash VARCHAR NOT NULL,
@@ -73,118 +73,118 @@ CREATE TABLE users (
 );
 
 CREATE TABLE event (
-  event_id SERIAL PRIMARY KEY,
-  owner_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  eventID SERIAL PRIMARY KEY,
+  ownerID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   title VARCHAR NOT NULL,
-  picture INTEGER NOT NULL REFERENCES images(image_id),
+  pictureID INTEGER NOT NULL REFERENCES images(imageID),
   description VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL,
-  location_id INTEGER NOT NULL REFERENCES location(location_id) ON UPDATE CASCADE,
-  start_date TIMESTAMP NOT NULL,
-  end_date TIMESTAMP NOT NULL,
+  locationID INTEGER NOT NULL REFERENCES location(locationID) ON UPDATE CASCADE,
+  startDate TIMESTAMP NOT NULL,
+  endDate TIMESTAMP NOT NULL,
   isFull BOOLEAN,
   maxUsers INTEGER
 );
 
 CREATE TABLE friendRequest (
-  source_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  target_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  sourceID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  targetID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   status friendRequestStatus NOT NULL,
   updated_at TIMESTAMP NOT NULL,
-  PRIMARY KEY (source_id, target_id)
+  PRIMARY KEY (sourceID, targetID)
 );
 
-CREATE TABLE user_message (
-  message_id SERIAL PRIMARY KEY,
-  source_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  target_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+CREATE TABLE userMessage (
+  messageID SERIAL PRIMARY KEY,
+  sourceID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  targetID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   sent_at TIMESTAMP NOT NULL DEFAULT NOW(),
   message VARCHAR NOT NULL
 );
 
-CREATE TABLE user_post (
+CREATE TABLE userPost (
   postID SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  event_id INTEGER REFERENCES event(event_id),
-  post_image_id INTEGER REFERENCES images(image_id),
+  userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  eventID INTEGER REFERENCES event(eventID),
+  postImageID INTEGER REFERENCES images(imageID),
   content TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE comment (
-  comment_id SERIAL PRIMARY KEY,
-  creator_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  post_id INTEGER NOT NULL REFERENCES user_post(postID) ON UPDATE CASCADE,
+  commentID SERIAL PRIMARY KEY,
+  creatorID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  postID INTEGER NOT NULL REFERENCES userPost(postID) ON UPDATE CASCADE,
   content VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE tags (
-  tag_id SERIAL PRIMARY KEY,
-  target_id INTEGER NOT NULL REFERENCES user_post(postID) ON UPDATE CASCADE,
+  tagID SERIAL PRIMARY KEY,
+  targetID INTEGER NOT NULL REFERENCES userPost(postID) ON UPDATE CASCADE,
   tagAlias tagAlias NOT NULL
 );
 
-CREATE TABLE user_Settings (
-  user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+CREATE TABLE userSettings (
+  userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   isGuide BOOLEAN DEFAULT false,
   isPublic BOOLEAN DEFAULT true,
   darkMode BOOLEAN DEFAULT false
 );
 
 CREATE TABLE notification (
-  notification_id SERIAL PRIMARY KEY,
-  notified_user INTEGER NOT NULL REFERENCES users(id),
+  notificationID SERIAL PRIMARY KEY,
+  notifiedUser INTEGER NOT NULL REFERENCES users(id),
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE user_notification (
-  notification_id INTEGER PRIMARY KEY REFERENCES notification(notification_id),
-  user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+CREATE TABLE userNotification (
+  notificationID INTEGER PRIMARY KEY REFERENCES notification(notificationID),
+  userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   notification_type user_notification_type NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE groups (
-  group_id SERIAL PRIMARY KEY,
-  owner_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  picture INTEGER NOT NULL REFERENCES images(image_id),
+  groupID SERIAL PRIMARY KEY,
+  ownerID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  pictureID INTEGER NOT NULL REFERENCES images(imageID),
   name VARCHAR NOT NULL,
   description VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE group_notification (
-  notification_id INTEGER PRIMARY KEY REFERENCES notification(notification_id),
-  group_id INTEGER NOT NULL REFERENCES groups(group_id) ON UPDATE CASCADE,
+CREATE TABLE groupNotification (
+  notificationID INTEGER PRIMARY KEY REFERENCES notification(notificationID),
+  groupID INTEGER NOT NULL REFERENCES groups(froupID) ON UPDATE CASCADE,
   notification_type group_notification_type NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 
-CREATE TABLE group_member (
-  group_id INTEGER NOT NULL REFERENCES groups(group_id) ON UPDATE CASCADE,
-  member_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  PRIMARY KEY (group_id, member_id)
+CREATE TABLE groupMember (
+  groupID INTEGER NOT NULL REFERENCES groups(groupID) ON UPDATE CASCADE,
+  memberID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  PRIMARY KEY (groupID, memberID)
 );
 
-CREATE TABLE group_join_request (
-  group_id INTEGER NOT NULL REFERENCES groups(group_id) ON UPDATE CASCADE,
-  member_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  PRIMARY KEY (group_id, member_id)
+CREATE TABLE groupJoinRrequest (
+  groupID INTEGER NOT NULL REFERENCES groups(groupID) ON UPDATE CASCADE,
+  memberID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  PRIMARY KEY (groupID, memberID)
 );
 
 CREATE TABLE friendship (
-  user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  friend_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  PRIMARY KEY (user_id, friend_id)
+  userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  friendID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  PRIMARY KEY (userID, friendID)
 );
 
 CREATE TABLE likes (
-  like_id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  post_id INTEGER REFERENCES user_post(postID),
+  likeID SERIAL PRIMARY KEY,
+  userID  INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  postID INTEGER REFERENCES userPost(postID),
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -193,13 +193,13 @@ CREATE TABLE likes (
 -- PERFORMANCE INDEXES 
 --------------------------------------------------------------------------------
 -- INDEX 01 
-CREATE INDEX index_friendship On friendship USING hash(user_id); -- ajuda a procurar amigos de um user
+CREATE INDEX index_friendship On friendship USING hash(id); -- ajuda a procurar amigos de um user
 
 -- INDEX 02
-CREATE INDEX index_notification On notification USING hash(notified_user); -- ajuda a procurar notificaçoes de um user
+CREATE INDEX index_notification On notification USING hash(notifiedUser); -- ajuda a procurar notificaçoes de um user
 
 -- INDEX 03
-CREATE INDEX post_created_at_index ON user_post(created_at); --ajuda a ordenar posts , vai ser mt usado
+CREATE INDEX post_created_at_index ON userPost(created_at); --ajuda a ordenar posts , vai ser mt usado
 
 --------------------------------------------------------------------------------
 -- TEXT SEARCH INDEXES
@@ -207,7 +207,7 @@ CREATE INDEX post_created_at_index ON user_post(created_at); --ajuda a ordenar p
 
 
 -- INDEX 04 post_content_index
-ALTER TABLE user_post ADD COLUMN tsvectors tsvector;
+ALTER TABLE userPost ADD COLUMN tsvectors tsvector;
 
 
 CREATE OR REPLACE FUNCTION update_tsv_content() RETURNS TRIGGER AS $$
@@ -220,11 +220,11 @@ CREATE OR REPLACE FUNCTION update_tsv_content() RETURNS TRIGGER AS $$
   $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER update_tsv_content_trigger
-  BEFORE INSERT OR UPDATE ON user_post
+  BEFORE INSERT OR UPDATE ON userPost
   FOR EACH ROW
   EXECUTE PROCEDURE update_tsv_content();
 ;
-CREATE INDEX post_content_index ON user_post USING GIN(tsvectors);
+CREATE INDEX post_content_index ON userPost USING GIN(tsvectors);
 
 
 
@@ -287,8 +287,8 @@ CREATE OR REPLACE FUNCTION create_friendship()
 RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.status = 'accepted' THEN
-    INSERT INTO friendship VALUES (NEW.source_id, NEW.target_id);
-    INSERT INTO friendship VALUES (NEW.target_id, NEW.source_id);
+    INSERT INTO friendship VALUES (NEW.sourceID, NEW.targetID);
+    INSERT INTO friendship VALUES (NEW.targetID, NEW.sourceID);
   END IF;
   RETURN NEW;
 END;
@@ -307,12 +307,12 @@ CREATE OR REPLACE FUNCTION delete_user_with_related_data(id_user INTEGER) RETURN
 BEGIN
   SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
   BEGIN;
-  DELETE FROM friendRequest WHERE source_id = id_user OR target_id = id_user;
-  DELETE FROM user_post WHERE user_id = id_user;
-  DELETE FROM comment WHERE creator_id = id_user;
-  DELETE FROM images WHERE image_id = (SELECT profilePicture_ID FROM users WHERE id = id_user);
-  DELETE FROM event WHERE owner_id = id_user;
-  DELETE FROM user_settings WHERE user_id = id_user;
+  DELETE FROM friendRequest WHERE sourceID = id_user OR targetID = id_user;
+  DELETE FROM userPost WHERE userID = id_user;
+  DELETE FROM comment WHERE creatorID = id_user;
+  DELETE FROM images WHERE imageID = (SELECT profilePictureID FROM users WHERE id = id_user);
+  DELETE FROM event WHERE ownerID = id_user;
+  DELETE FROM user_settings WHERE userID = id_user;
   DELETE FROM users WHERE id = id_user;
   COMMIT;
   EXCEPTION
