@@ -5,14 +5,14 @@ SET SEARCH_PATH TO lbaw_23155;
 -- DROP
 --------------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS images CASCADE;
+DROP TABLE IF EXISTS location CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS userPost CASCADE;
 DROP TABLE IF EXISTS comment CASCADE;
 DROP TABLE IF EXISTS tags CASCADE;
-DROP TABLE IF EXISTS images CASCADE;
 DROP TABLE IF EXISTS userSettings CASCADE;
 DROP TABLE IF EXISTS event CASCADE;
-DROP TABLE IF EXISTS location CASCADE;
 DROP TABLE IF EXISTS friendship CASCADE;
 DROP TABLE IF EXISTS friendRequest CASCADE;
 DROP TABLE IF EXISTS userMessage CASCADE;
@@ -43,7 +43,7 @@ CREATE TABLE location (
   city VARCHAR NOT NULL,
   country VARCHAR NOT NULL,
   zipcode VARCHAR NOT NULL,
-  address VARCHAR
+  addressName VARCHAR
 );
 
 CREATE TABLE images (
@@ -65,7 +65,7 @@ CREATE TABLE users (
   currentLocation INTEGER NOT NULL REFERENCES location(locationID) ON UPDATE CASCADE,
   username VARCHAR NOT NULL UNIQUE,
   email VARCHAR NOT NULL UNIQUE,
-  passwordHash VARCHAR NOT NULL,
+  password VARCHAR NOT NULL,
   isAdmin BOOLEAN DEFAULT false,
   isActive BOOLEAN NOT NULL DEFAULT TRUE,
   isGuide BOOLEAN DEFAULT false,
@@ -157,7 +157,7 @@ CREATE TABLE groups (
 
 CREATE TABLE groupNotification (
   notificationID INTEGER PRIMARY KEY REFERENCES notification(notificationID),
-  groupID INTEGER NOT NULL REFERENCES groups(froupID) ON UPDATE CASCADE,
+  groupID INTEGER NOT NULL REFERENCES groups(groupID) ON UPDATE CASCADE,
   notification_type group_notification_type NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -193,7 +193,7 @@ CREATE TABLE likes (
 -- PERFORMANCE INDEXES 
 --------------------------------------------------------------------------------
 -- INDEX 01 
-CREATE INDEX index_friendship On friendship USING hash(id); -- ajuda a procurar amigos de um user
+CREATE INDEX index_friendship On friendship USING hash(friendID); -- ajuda a procurar amigos de um user
 
 -- INDEX 02
 CREATE INDEX index_notification On notification USING hash(notifiedUser); -- ajuda a procurar notificaçoes de um user
@@ -306,13 +306,12 @@ EXECUTE FUNCTION create_friendship();
 CREATE OR REPLACE FUNCTION delete_user_with_related_data(id_user INTEGER) RETURNS VOID AS $$
 BEGIN
   SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-  BEGIN;
   DELETE FROM friendRequest WHERE sourceID = id_user OR targetID = id_user;
   DELETE FROM userPost WHERE userID = id_user;
   DELETE FROM comment WHERE creatorID = id_user;
   DELETE FROM images WHERE imageID = (SELECT profilePictureID FROM users WHERE id = id_user);
   DELETE FROM event WHERE ownerID = id_user;
-  DELETE FROM user_settings WHERE userID = id_user;
+  DELETE FROM userSettings WHERE userID = id_user;
   DELETE FROM users WHERE id = id_user;
   COMMIT;
   EXCEPTION
@@ -320,3 +319,83 @@ BEGIN
       ROLLBACK;
 END;
 $$ LANGUAGE plpgsql;
+
+
+--------------------------------------------------------------------------------
+-- POPULATE
+--------------------------------------------------------------------------------
+
+INSERT INTO location (locationID,city, country, zipcode, addressName)
+VALUES
+    (1,'Porto', 'Portugal','4000', 'Rua do Almada, 4050-032 Porto'),
+    (2,'Tokyo', 'Japan','100', '1 Chome-1-1 Oshiage, Sumida City');
+
+INSERT INTO users (id,firstName, lastName, aboutMe, gender, birthday, nationality, currentLocation, username, email, password, isAdmin, isActive, isGuide, isPublic)
+VALUES
+    (1,'João', 'Silva', 'Gosto de futebol', 'Male', '1990-05-15', 1, 1, 'joaosilva', 'joao@email.com', 'password123', false, true, true, true),
+    (2,'Ana', 'Pereira', 'Adoro viajar', 'Female', '1985-09-22', 2, 2, 'anapereira', 'ana@email.com', 'password456', false, true, false, true),
+    (3,'Pedro', 'Santos', 'Amante da música', 'Male', '1995-02-10', 1, 2, 'pedrosantos', 'pedro@email.com', 'password789', false, true, false, true),
+    (4,'Marta', 'Ferreira', 'Apaixonada por fotografia', 'Female', '1987-07-30', 2, 1, 'martaf', 'marta@email.com', 'password123', false, true, true, true),
+    (5,'Luís', 'Ribeiro', 'Fã de esportes radicais', 'Male', '1993-11-18', 1, 1, 'luisr', 'luis@email.com', 'password456', false, true, true, true),
+    (6,'Sofia', 'Gomes', 'Viciada em culinária', 'Female', '1988-04-05', 2, 2, 'sofiag', 'sofia@email.com', 'password789', false, true, false, true),
+    (7,'Rui', 'Machado', 'Aventuras ao ar livre', 'Male', '1991-03-20', 1, 2, 'ruim', 'rui@email.com', 'password123', false, true, true, true),
+    (8,'Carla', 'Oliveira', 'Apaixonada por arte', 'Female', '1986-12-14', 2, 1, 'carlao', 'carla@email.com', 'password456', false, true, false, true),
+    (9,'Hugo', 'Sousa', 'Entusiasta de tecnologia', 'Male', '1997-08-09', 1, 1, 'hugos', 'hugo@email.com', 'password789', false, true, true, true),
+    (10,'Mónica', 'Costa', 'Amante de literatura', 'Female', '1989-06-25', 2, 2, 'monicac', 'monica@email.com', 'password123', false, true, true, true),
+    (11,'António', 'Ramos', 'Adepto de desportos de equipe', 'Male', '1992-01-12', 1, 2, 'antonior', 'antonio@email.com', 'password456', false, true, true, true),
+    (12,'Cláudia', 'Fonseca', 'Apreciadora de filmes', 'Female', '1984-10-08', 2, 1, 'claudiaf', 'claudia@email.com', 'password789', false, true, false, true),
+    (13,'Manuel', 'Lopes', 'Amante de gastronomia', 'Male', '1998-03-05', 1, 2, 'manuell', 'manuel@email.com', 'password123', false, true, true, true),
+    (14,'Rosa', 'Mendes', 'Fã de música clássica', 'Female', '1986-06-14', 2, 1, 'rosam', 'rosa@email.com', 'password456', false, true, false, true),
+    (15,'Gonçalo', 'Pereira', 'Apaixonado por tecnologia', 'Male', '1993-09-28', 1, 1, 'goncalop', 'goncalo@email.com', 'password789', false, true, true, true),
+    (16,'Beatriz', 'Santos', 'Aventuras ao ar livre', 'Female', '1989-11-20', 2, 2, 'beatrizs', 'beatriz@email.com', 'password123', false, true, true, true),
+    (17,'Carlos', 'Ferreira', 'Amante de fotografia', 'Male', '1991-07-18', 1, 2, 'carlosf', 'carlos@email.com', 'password456', false, true, true, true),
+    (18,'Teresa', 'Silva', 'Adepta de desportos radicais', 'Female', '1987-02-23', 2, 1, 'teresas', 'teresa@email.com', 'password789', false, true, false, true),
+    (19,'André', 'Ribeiro', 'Viciado em culinária', 'Male', '1995-04-30', 1, 1, 'andrer', 'andre@email.com', 'password123', false, true, true, true),
+    (20,'Inês', 'Gomes', 'Adoro viajar', 'Female', '1988-12-09', 2, 2, 'inesg', 'ines@email.com', 'password456', false, true, false, true),
+    (21,'Miguel', 'Machado', 'Gosto de música eletrônica', 'Male', '1996-03-15', 1, 2, 'miguelm', 'miguel@email.com', 'password789', false, true, true, true),
+    (22,'Lúcia', 'Oliveira', 'Apaixonada por dança', 'Female', '1985-05-28', 2, 1, 'luciao', 'lucia@email.com', 'password123', false, true, false, true),
+    (23,'Vasco', 'Sousa', 'Amante de história', 'Male', '1994-10-02', 1, 1, 'vascos', 'vasco@email.com', 'password456', false, true, true, true),
+    (24,'Isabel', 'Costa', 'Fã de literatura', 'Female', '1988-09-16', 2, 2, 'isabelc', 'isabel@email.com', 'password789', false, true, true, true),
+    (25,'Ricardo', 'Ramos', 'Entusiasta de esportes', 'Male', '1992-06-25', 1, 2, 'ricardor', 'ricardo@email.com', 'password123', false, true, true, true),
+    (26,'Ruben', 'Esteves', 'Sou um gajo fixe', 'Male', '2002-05-24', 1, 2, 'ruben38esteves', 'ruben38esteves@gmail.com','$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, true);
+
+
+INSERT INTO friendRequest (sourceID, targetID, status, updated_at)
+VALUES
+    (1, 2, 'pending', NOW()),
+    (3, 4, 'accepted', NOW()),
+    (5, 6, 'pending', NOW());
+
+
+INSERT INTO userMessage (sourceID, targetID, message)
+VALUES
+    (1, 2, 'Oi, como vai?'),
+    (2, 1, 'Olá! Estou bem, obrigado! E você?');
+
+
+INSERT INTO userPost (userID, content)
+VALUES
+    (1, 'Acabei de assistir a um jogo de futebol!'),
+    (2, 'Minha última viagem foi incrível!');
+
+
+INSERT INTO comment (creatorID, postID, content)
+VALUES
+    (1, 1, 'Que jogo emocionante!'),
+    (2, 2, 'Adoraria ouvir mais sobre sua viagem.');
+
+
+INSERT INTO userSettings (userID, isGuide, isPublic, darkMode)
+VALUES
+    (1, false, true, true),
+    (2, true, true, false);
+
+INSERT INTO notification (notificationID, notifiedUser)
+VALUES
+    (1, 1),
+    (2, 2);
+
+INSERT INTO userNotification (notificationID, userID, notification_type)
+VALUES
+    (1, 1, 'request_friendship'),
+    (2, 2, 'request_friendship');
