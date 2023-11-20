@@ -1,6 +1,6 @@
-DROP SCHEMA IF EXISTS lbaw_23155 CASCADE;
+--DROP SCHEMA IF EXISTS lbaw_23155 CASCADE;
 CREATE SCHEMA IF NOT EXISTS lbaw_23155;
-SET SEARCH_PATH TO lbaw_23155;
+--SET SEARCH_PATH TO lbaw_23155;
 --------------------------------------------------------------------------------
 -- DROP
 --------------------------------------------------------------------------------
@@ -24,16 +24,19 @@ DROP TABLE IF EXISTS groupNotification CASCADE;
 DROP TABLE IF EXISTS groupMember CASCADE;
 DROP TABLE IF EXISTS groupJoinRrequest CASCADE;
 DROP TABLE IF EXISTS likes CASCADE;
-
+DROP TYPE IF EXISTS friendRequestStatus_types CASCADE;
+DROP TYPE IF EXISTS tagAlias_types CASCADE;
+DROP TYPE IF EXISTS user_notification_types CASCADE;
+DROP TYPE IF EXISTS group_notification_types CASCADE;
 --------------------------------------------------------------------------------
 -- ENUMS
 --------------------------------------------------------------------------------
 
-CREATE TYPE friendRequestStatus AS ENUM ('pending', 'accepted', 'declined');
-CREATE TYPE tagAlias AS ENUM ('Networking', 'Food', 'Sports', 'Music', 'Culture', 'Party',
+CREATE TYPE friendRequestStatus_types AS ENUM ('pending', 'accepted', 'rejected');
+CREATE TYPE tagAlias_types AS ENUM ('Networking', 'Food', 'Sports', 'Music', 'Culture', 'Party',
                               'Technology', 'Business', 'Education', 'Fun', 'Study');
-CREATE TYPE user_notification_type AS ENUM ('accepted_friend_request', 'request_friendship', 'received_message');
-CREATE TYPE group_notification_type AS ENUM ('requested_join', 'joined_group', 'accepted_join', 'ban', 'leave_group', 'invite');
+CREATE TYPE user_notification_types AS ENUM ('accepted_friend_request', 'request_friendship', 'received_message');
+CREATE TYPE group_notification_types AS ENUM ('requested_join', 'joined_group', 'accepted_join', 'ban', 'leave_group', 'invite');
 
 --------------------------------------------------------------------------------
 -- TABLES
@@ -90,7 +93,7 @@ CREATE TABLE friendRequest (
   sourceID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   targetID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  status friendRequestStatus NOT NULL,
+  friendRequestState friendRequestStatus_types NOT NULL,
   updated_at TIMESTAMP NOT NULL,
   PRIMARY KEY (sourceID, targetID)
 );
@@ -123,7 +126,7 @@ CREATE TABLE comment (
 CREATE TABLE tags (
   tagID SERIAL PRIMARY KEY,
   targetID INTEGER NOT NULL REFERENCES userPost(postID) ON UPDATE CASCADE,
-  tagAlias tagAlias NOT NULL
+  tagAlias tagAlias_types NOT NULL
 );
 
 CREATE TABLE userSettings (
@@ -142,7 +145,7 @@ CREATE TABLE notification (
 CREATE TABLE userNotification (
   notificationID INTEGER PRIMARY KEY REFERENCES notification(notificationID),
   userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  notification_type user_notification_type NOT NULL,
+  notification_type user_notification_types NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -158,7 +161,7 @@ CREATE TABLE groups (
 CREATE TABLE groupNotification (
   notificationID INTEGER PRIMARY KEY REFERENCES notification(notificationID),
   groupID INTEGER NOT NULL REFERENCES groups(groupID) ON UPDATE CASCADE,
-  notification_type group_notification_type NOT NULL,
+  notification_type group_notification_types NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -286,7 +289,7 @@ EXECUTE FUNCTION update_friend_request_updated_at();
 CREATE OR REPLACE FUNCTION create_friendship()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF NEW.status = 'accepted' THEN
+  IF NEW.friendRequestState = 'accepted' THEN
     INSERT INTO friendship VALUES (NEW.sourceID, NEW.targetID);
     INSERT INTO friendship VALUES (NEW.targetID, NEW.sourceID);
   END IF;
@@ -360,7 +363,7 @@ VALUES
     (26,'Ruben', 'Esteves', 'Sou um gajo fixe', 'Male', '2002-05-24', 1, 2, 'ruben38esteves', 'ruben38esteves@gmail.com','$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, true);
 
 
-INSERT INTO friendRequest (sourceID, targetID, status, updated_at)
+INSERT INTO friendRequest (sourceID, targetID, friendRequestState, updated_at)
 VALUES
     (1, 2, 'pending', NOW()),
     (3, 4, 'accepted', NOW()),

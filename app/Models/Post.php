@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Like;
@@ -14,7 +15,8 @@ class Post extends Model
     
     protected $table = 'userPost';
     protected $primaryKey = 'postID';
-    public $timestamps  = false;
+    protected $connection = 'pgsql';
+    #public $timestamps  = false;
 
     // preciso checkar se funçoes funcionam
     public function owner(): BelongsTo
