@@ -1,0 +1,1546 @@
+openapi: 3.0.0
+
+info:
+  version: '1.0'
+  title: 'LBAW SocialCircle Web API'
+  description: 'Web Resource Specification'
+
+servers:
+- url: http://lbaw.fe.up.pt
+description: Production server
+
+externalDocs:
+  description: Find more info here
+  url: https://git.fe.up.pt/lbaw/lbaw2324/lbaw23155/-/wikis/lbaw/components/-/wikis/eap
+
+tags:
+  - name: 'M01: Authentication and Individual Profile'
+  - name: 'M02: Timeline Interaction and Management'
+  - name: 'M03: Friend Requests'
+  - name: 'M04: Posts and Comments'
+  - name: 'M05: Notifications'
+  - name: 'M06: Groups and Events'
+  - name: 'M07: Messages'
+  - name: 'M08: User Administration' 
+
+paths:
+
+  ######## AUTHENTICATION AND INDIVIDUAL PROFILE 
+
+  /login:
+    get: 
+      operationId: R101
+      summary: 'R101 - Login Form'
+      description: 'Provide login form. Acess: PUB'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '200':
+          description: 'Ok. Show Log-in UI'
+
+    post:
+      operationId: R102
+      summary: 'R102 - Login Action' 
+      description: 'Processes the login form submission' 
+      tags:
+        - 'M01: Authentication and Individual Profile'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencode:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password 
+                required:
+                  - email
+                  - password
+
+      responses:
+        '302': 
+          description: 'Redirect after processing the login credentials.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Logged In. Redirecting to user profile'
+                  value: '/home'
+                302Failure:
+                  description: 'Failed to Login. Redirecting to login form'
+                  value: '/login'
+
+  /logout:
+    post:
+      operationId: R103
+      summary: 'R103 - Logout Action'
+      description: 'Logout the current authenticated user.Acess: USR, ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '302':
+          description: 'Redirect after processing logout.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Logged Out. Redirecting to login form'
+                  value: '/login'
+    
+  /register:  
+    get:
+      operationId: R104
+      summary: 'R104: Register Form'
+      description: 'Provide new user registration form.Acess: PUB'
+      tags: 
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '200':
+          description: 'Ok. Show Sign-Up UI'
+
+    post:
+      operationId: R105
+      summary: 'R105: Register Action'
+      description: 'Processes the new user registration form submission. Access: PUB'
+      tags:
+       - 'M01: Authentication and Individual Profile'
+
+      requestBody:
+        required: true
+        content:
+        application/x-www-form-urlencoded:
+           schema:
+             type: object
+             properties:
+              firstName:
+                type: string
+              lastName:
+                type: string
+              birthday:
+                type: string
+                format: date
+              username:
+                type: string
+              email:
+                type: string
+                format: email
+              password:
+                type: string
+                format: password
+              confirm_password:
+                type: string
+                format: password
+              required:
+                - firstName
+                - lastName
+                - birthday
+                - username
+                - email
+                - password
+                - confirm_password        
+
+      responses:
+        '302':
+          description: 'Redirecting after processing the new user information.'
+          headers:
+            Location:
+              schema:
+                type: string 
+              examples:
+                302Success:
+                  description: 'Authenticated sucessfuly. Redirecting to new user profile'
+                  value: '/profile'
+                302Failure:
+                  description: 'Failed authentication. Redirecting to register form'
+                  value: '/register'
+
+  /sendEmailVerification:
+    post:
+      operationId: R106
+      summary: 'R106 - Send Email Verification Action'
+      description: 'Sends an email with a verification token. Acess: USR'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        '200':
+          description: 'Verification email sent.'
+        '404':
+          description: 'Error. Email doesnt exist.'
+  
+  /passwordRecovery:
+    post:
+      operationId: R107
+      summary: 'R107: Password Recovery Action'
+      description: 'Changes the current user password after receiving a validation token. Acess: USR'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                verify_password:
+                  type: string
+                  format: password
+                required:
+                  - token
+                  - password
+                  - verify_password
+      
+      responses:
+        '200':
+          description: 'Your password has been changed'
+        '404':
+          description: 'Error. Invalid token.'
+
+  /user/{id}:
+    operationId: R108
+    summary: 'R108: View User Profile'
+    description: 'Show the profile of a user. Access: USR'
+    tags:
+      - 'M01: Authentication and Individual Profile'
+    
+    parameters:
+      - in: path
+        name: id 
+        schema: 
+          type: integer
+        required: true 
+    
+    responses:
+     '200':
+       description: 'Ok. Show User Profile UI'
+
+  /user/edit: 
+
+    get:
+      operationId: R109
+      summary: 'R109: Edit user profile page'
+      description: 'Shows the edit profile page of the user. Access: USR'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      
+      responses:
+        '200':
+          description: 'Ok. Personalize your profile. Show edit profile UI'
+        '401':
+          description: 'Unauthorized access. You cannot edit this profile'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                401Success:
+                  description: 'Unauthorized. Redirect to user profile'
+                  value: '/user/{id}'
+
+    post: 
+      operationId: R110 
+      summary: 'R110: Edit user profile action' 
+      description: 'Processes and saves the changes made by the user. Access: USR'
+      tags:
+        - 'M01: Authentication and Individual Profile' 
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username: 
+                  type: string 
+                password: 
+                  type: string
+                  format: password
+                verify_password:
+                  type: string 
+                  format: password 
+                aboutMe:
+                  type: string
+                  format: password
+                image: 
+                  type: string
+                  format: binary 
+                isPublic:
+                  type: boolean
+                isGuide:
+                  type: boolean
+                isExchangeStudent:
+                  type: boolean 
+                
+              required:
+                - username
+                - aboutMe
+                - isPublic
+                - isGuide
+                - isExchangeStudent
+
+      responses:
+        '302':
+          description: 'Redirect after processing new user information.'
+          headers:
+            Location:
+              schema:
+                type: string 
+              examples:
+                302Success:
+                  description: 'Updated information with success. Redirecting to user profile'
+                  value: '/user/{id}'
+                302Failure:
+                  description: 'Update failed. Redirect to edit profile page'
+                  value: '/user/edit'
+  
+  /user/profileDelete:
+
+    post:
+      operationId: R111
+      summary: 'R111: Delete a user' 
+      description: 'Deletes a user while in the profile page. Access: USR, ADM.'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required:
+                - id
+
+      responses:
+        '302':
+          description: 'Deleted user information. Redirecting.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Deleted user successfully. Redirect to login page.' 
+
+  ###### TIMELINE INTERACTION AND MANAGEMENT
+
+  /home:
+
+    get:
+      operationId: R201
+      summary: 'R201: View Home Page'
+      description: 'Show user home page. Access: USR, ADM'
+      tags:
+        - 'M02: Timeline Interaction And Management'
+
+      responses:
+        '200':
+          description: 'Ok. Show the home page for an individual user'
+        '302': 
+          description: 'Unauthorized Acess'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success: 
+                  description: 'You must be login first. Redirect to login page'
+                  value: '/login'
+    
+  /addInteraction:
+
+    post:
+      operationId: R202
+      summary: 'R202: Add Interaction to Timeline'
+      description: 'Add a new interaction to the user timeline' 
+      tags:
+        - 'M02: Timeline Interaction And Management'
+      
+      parameters:
+        in: header 
+        description: Bearer token for authentication 
+        required: true 
+        schema: 
+          type: string 
+      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                interactionType:
+                  type: string
+                details:
+                  type: string 
+                required:
+                  - interactionType
+                  - details
+
+      responses:
+        '201':
+          description: 'Interaction added successfully'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  timestamp:
+                    type: string 
+                  interactionType:
+                    type: string 
+                  details: 
+                    type: string
+        
+        '401':
+          description: 'Interaction not added'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties: 
+                  error:
+                    type: string
+    
+  /deleteInteraction:
+
+      operationId: R203
+      summary: 'Remove Interaction From Timeline'
+      description: 'Remove a specific interaction from the user timeline'
+      tags:
+        - 'M02: Timeline Interaction And Management'
+      
+      parameters:
+      - name: Authorization 
+        in: header
+        description: Bearer token for authentication 
+        required: true
+        schema:
+          type: string
+      
+      - name: interactionId
+        in: path
+        description: ID of the interaction to be removed
+        required: true
+        schema:
+          type: string
+      
+      responses: 
+        '204':
+          description: 'Interaction removed successfully'
+        '401':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '404':
+          description: 'Interaction not found'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  error:
+                    type: string
+  
+  ##### FRIEND REQUESTS 
+
+  /user/sendFriendRequest:
+
+    post:
+      operationId: R301
+      summary: 'R301: Send Friend Request to another user'
+      description: 'Sends friend request to another user. Access: USR, ADM'
+      tags:
+        - 'M03: Friend Requests'
+      
+      requestBody:
+        required: true 
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required:
+                - id 
+      
+      responses:
+        '200':
+          description: 'Friend Request sent'
+        '403':
+          description: 'Friend Request failed' 
+  
+  /user/cancelFriendRequest:
+
+    post:
+      operationId: R302
+      summary: 'R302: Cancel a Friend Request to another user'
+      description: 'Removes the notification of the friend request to other user. Access: USR, ADM'
+      tags:
+        - 'M03: Friend Requests'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required:
+                - id 
+
+      responses:
+        '200':
+          description: 'Friend Request cancelled successfully'
+        '403':  
+          description: 'Cancelation failed'
+  
+  /user/acceptFriendRequest:
+
+    post:
+      operationId: R303
+      summary: 'R303: Accept a Friend Request'
+      description: 'Accepting a follow request from another user. Access: USR, ADM'
+      tags:
+        - 'M03: Friend Requests' 
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                required:
+                  - id
+
+      responses:
+        '200':
+          description: 'You accepted the Friend Request'
+        '403':
+          description: 'Friend Request failed'
+
+  /user/rejectFriendRequest:
+
+    post:
+      operationId: R304
+      summary: 'R304'
+      description: 'Reject a friend request from another user. Access: USR, ADM'
+      tags:
+        - 'M03: Friend Requests'
+
+      requestBody:
+         required: true
+         content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required:
+                - id 
+
+      responses:
+        '200':
+          description: 'You rejected the Friend Request'
+        '403': 
+          description: 'Friend Request failed'
+
+###### POSTS AND COMMENTS 
+
+  /post/createPost:
+
+    post:
+      operationId: R401
+      summary: 'R403: Create Post Action' 
+      description: 'Create a post. Access: USR'
+      tags:
+        - 'M03: Posts and Comments'
+      
+      requestBody:
+         required: true
+         content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                media:
+                  type: string
+                  format: binary 
+                group_id:
+                  type: integer 
+      
+      responses:
+        '302':
+          description: 'Redirect after processing the new post information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Post created with success. Redirecting'
+                302Failure:
+                  description: 'Post is not created. Redirecting'
+
+  /post/deletePost:
+
+    post:
+      operationId: R402
+      summary: 'R402: Delete Post Action'
+      description: 'Delete post. Access: USR, ADM'
+      tags:
+        - 'M03: Posts and Comments'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required:
+                - id
+
+      responses:
+        '200':
+          description: 'Deleting post. Redirecting'
+        '403':
+          description: 'Deletion failed'
+  
+  /post/editPost:
+
+    post: 
+      operationId: R403 
+      summary: 'R403: Edit Post Action'
+      description: 'Allows user to change post content. Access: USR'
+      tags:
+        - 'M04: Posts and Comments' 
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+            properties:
+              id:
+                type: integer
+              content:
+                type: string
+              image:
+                type: string
+                format: binary
+            required:
+              - id 
+              - content
+      
+      responses:
+        '200':
+          description: 'Edited post successfully.'
+        '403':
+          description: 'Edit failed' 
+   
+  /post/likePost:
+
+    post:
+      operationId: R404
+      summary: 'R404: Like a post action'
+      description: 'Like a post. Access: USR, ADM'
+      tags:
+        - 'M04: Posts and Comments'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required:
+                - id 
+
+      responses:
+        '200':
+          description: 'Liked the post successfully.' 
+        '403':
+          description: 'Like failed.'
+
+  /post/dislikePost:
+
+    post:
+      operationId: R405
+      summary: 'R405: Dislike a post action'
+      description: 'Dislike a post. Access: USR, ADM'
+      tags:
+        - 'M04: Posts and Comments'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required:
+                - id 
+      
+      responses:
+        '200':
+          description: 'Disliked successfully.'
+        '403':
+          description: 'Dislike failed.'
+  
+  /comment/createComment:
+
+    post:
+      operationId: R406
+      summary: 'R406: Create a comment action'
+      description: 'Creates a comment under a post. Access: USR'
+      tags:
+        - 'M04: Posts and Comments'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                group_id:
+                  type: integer
+      
+      responses:
+        '302':
+          description: 'Processing new comment information'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Comment created successfully.'
+                302Failure:
+                  description: 'Failed to post comment. Redirecting'
+
+  /comment/deleteComment:
+
+    post:
+      operationId: R407
+      summary: 'R407: Delete a comment action'
+      description: 'Deletes a comment under a post. Access: USR'
+      tags:
+        - 'M04: Posts and Comments'
+
+      requestBody:
+        required: true 
+        content: 
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required: 
+                - id 
+
+      responses:
+        '200':
+          description: 'Processing delete comment information. Redirecting'
+        '403': 
+          description: 'Failed to delete comment. Redirecting'
+  
+  /comment/editComment:
+
+    post:
+      operationId: R408
+      summary: 'R408: Edit a comment action'
+      description: 'Edits a comments content. Access: USR'
+      tags: 
+        - 'M04: Posts and Comments' 
+      
+      requestBody:
+        required: true 
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object 
+            properties:
+              id:
+                type: integer
+              content: 
+                type: string
+      
+      responses: 
+        '200':
+          description: 'Edited comment successfully.'
+        '403':  
+          description: 'Edit failed.'
+  
+  /comment/likeComment:
+
+    post:
+      operationId: R409
+      summary: 'R409: Like a comment action'
+      description: 'Like a comment under a post. Access: USR'
+      tags:
+        - 'M04: Posts and Comments'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                required:
+                  - id
+      
+      responses:
+        '200':
+          description: 'Liked a comment successfully.'
+        '403':
+          description: 'Like comment failed.'
+  
+  /comment/dislikeComment:
+
+    post:
+      operationId: R410 
+      summary: 'R410: Dislike comment action' 
+      description: 'Deslike a comment under a post. Access: USR'
+      tags:
+        - 'M04: Posts and Comments'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required:
+                - id 
+      
+      responses:
+        '200': 
+          description: 'Disliked comment successfully.'
+        '403':
+          description: 'Dislike failed.'
+
+####### NOTIFICATIONS
+
+  /home/notifications:
+
+    get:
+      operationId: R501
+      summary: 'R501: User notifications page'
+      description: 'Show user notifications page. Access: USR, ADM' 
+      tags:
+        - 'M05: Notifications' 
+      
+      responses:
+        '200':
+          description: 'Show user notification page.'
+        '302':
+          description: 'Redirect if user is not logged in' 
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Failure:
+                  description: 'Failure. User not logged in.'
+
+  /notifications/deleteNotifications:
+
+    post: 
+      operationId: R502
+      summary: 'R502: Delete a notification' 
+      description: 'Deletes a notification selected by the user. Access: USR, ADM'
+      tags:
+        - 'M05: Notifications'
+      
+      requestBody:
+        required: true 
+        content: 
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required:
+                - id 
+      
+      responses:
+        '200':
+          description: 'Notification successfully deleted.'
+        '403': 
+          description: 'Deletion failed.'
+  
+  /notifications/updateNotification:
+    
+    post:
+      operationId: R503
+      summary: 'R503: Updates a notification' 
+      description: 'Updates a notifications information. Access: USR, ADM'
+      tags:
+        - 'M05: Notifications'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object 
+              properties:
+                id:
+                  type: integer
+              required:
+                - id
+      
+      responses:
+        '200': 
+          description: 'Notification updated successfully'
+        '403':
+          description: 'Update failed.'
+
+### GROUPS AND EVENTS
+
+  /group&events/{group_id}:
+
+    get:
+      operationId: R601
+      summary: 'R601: View group page' 
+      description: 'Show the group page of a specific user. Access: USR, ADM'
+      tags:
+        - 'M06: Groups and Events' 
+      
+      parameters:
+        - in: path 
+          name: id
+          schema:
+            type: integer
+          required: True 
+      
+      responses:
+        '200':
+          description: 'Show the user group page'
+        '302':
+          description: 'User is not logged in or group does not exist'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failed to load page.'
+  
+  /group&events/{group_id}/editGroup:
+
+    get:
+      operationId: R602
+      summary: 'R602: Edit group'
+      description: 'Show the edit group page. Access: USR'
+      tags: 
+        - 'M06: Comments and Events' 
+      
+      parameters:
+      - in: query
+        name: id 
+        description: 'Group ID'
+        schema:
+          type: integer
+        required: true 
+      
+      responses:
+        '200':
+          description: 'You can now edit the group. Show edit group page'
+        '401':
+          description: 'You can not edit this group.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                401Success:
+                  description: 'Unauthorized Access'
+                  value: '/group/{id}'
+  
+  /group&events/groupCreation:
+
+    post:
+      operationId: R603
+      summary: 'R603: Create a group action'
+      description: 'Processes information and creates a new group. Access: USR'
+      tags:
+        - 'M06: Groups and Events'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string 
+                  format: password
+                image:
+                  type: string 
+                  format: binary
+                is_public:
+                  type: boolean
+      
+      responses:
+        '302':
+          description: 'Processing new group information.' 
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Created group successfully. Redirect to group page'
+                  value: '/group/{id}'
+                302Failure:
+                  description: 'Failed. Redirect to previous page'
+
+  /group&events/groupJoinRequest:
+
+    post: 
+      operationId: R604
+      summary: 'R604: Group Join Request'
+      description: 'Sending a group join request to another user. Access: USR'
+      tags:
+        - 'M06: Groups and Events'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                group_id:
+                  type: integer
+                user_id:
+                  type: integer
+                required:
+                  - user_id
+                  - group_id
+      
+      responses:
+        '200':
+          description: 'Join Request Sent successfully'
+        '401':
+          description: 'You cant send a join request from this group.'
+    
+  /group&events/groupCancelJoinRequest:
+
+    post:
+      operationId: R605
+      summary: 'R605: Cancel group join request'
+      description: 'Cancel group join request. Access: USR'
+      tags:
+        - 'M06: Groups and Events'
+
+      requestBody:
+        required: true
+        content: 
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                group_id:
+                  type: integer
+                user_id:
+                  type: integer 
+              required:
+                - user_id
+                - group_id 
+      
+      responses:
+        '200':
+          description: 'Cancelled joing request successfully.'
+        '401':
+          description: 'Cancellation failed.'
+
+  /group&events/removeGroupMember:
+
+    post:
+      operationId: R606
+      summary: 'R606: Remove Group Member Action' 
+      description: 'Remove a group member. Access: USR'
+      tags:
+        - 'M06: Groups and Events'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              group_id:
+                type: integer
+              user_id:
+                type: integer 
+            required:
+              - user_id
+              - group_id 
+      
+      responses: 
+        '200':
+          description: 'Member removed successfully.'
+        '401':
+          description: 'You cant remove members on this group.'    
+  
+  /group&events/leaveGroup:
+
+    post:
+      operationId: R607
+      summary: 'R607: Leave Group Action'
+      description: 'Leave a group. Access: USR'
+      tags:
+        - 'M06: Groups and Events'
+      
+      requestBody:
+        required: true
+        content: 
+          application/x-www-form-urlencoded:
+            schema:
+              type: object 
+              properties:
+                group_id:
+                  type: integer
+                user_id:
+                  type: integer 
+              required:
+                - user_id
+                - group_id 
+      
+      responses:
+        '200':
+          description: 'Left group successfully.' 
+        '401':
+          description: 'Couldnt leave group.'
+
+  /group&events/deleteGroup:
+
+    post:
+      operationId: R608
+      summary: 'R608: Group Delete Action'
+      description: 'Delete Group. Access: USR, ADM'
+      tags:
+        - 'M07: Groups and Events'
+    
+      requestBody:
+        required: true
+        content: 
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                group_id:
+                  type: integer
+              required:
+                - group_id
+      
+      responses:
+        '200': 
+          description: 'Group deletion complete.'
+        '401': 
+          description: 'You cant delete a group.'
+  
+  /group&events/{evento_id}:
+
+    get:
+      operationId: R609
+      summary: 'R609: View event page' 
+      description: 'Show the event page of a specific user. Access: USR, ADM'
+      tags:
+        - 'M06: Groups and Events' 
+      
+      parameters:
+        - in: path 
+          name: id
+          schema:
+            type: integer
+          required: True 
+      
+      responses:
+        '200':
+          description: 'Show the user event page'
+        '302':
+          description: 'User is not logged in or event does not exist'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failed to load page.'
+
+  /group&events/{event_id}/editEvent: 
+
+    get:
+      operationId: R610 
+      summary: 'R610: Edit event'
+      description: 'Show the edit event page. Access: USR'
+      tags: 
+        - 'M06: Comments and Events' 
+      
+      parameters:
+      - in: query
+        name: id 
+        description: 'Event ID'
+        schema:
+          type: integer
+        required: true 
+      
+      responses:
+        '200':
+          description: 'You can now edit the event. Show edit event page'
+        '401':
+          description: 'You can not edit this group.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                401Success:
+                  description: 'Unauthorized Access'
+                  value: '/event/{id}' 
+
+  /group&events/eventCreation:
+
+    post:
+      operationId: R611
+      summary: 'R611: Create a event action'
+      description: 'Processes information and creates a new event. Access: USR'
+      tags:
+        - 'M06: Groups and Events'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string 
+                  format: password
+                image:
+                  type: string 
+                  format: binary
+              required:
+                - name
+                - description
+                - image
+      
+      responses:
+        '302':
+          description: 'Processing new event information.' 
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Created event successfully. Redirect to event page'
+                  value: '/event/{id}'
+                302Failure:
+                  description: 'Failed. Redirect to previous page'
+
+  /group&events/removeEventMember:
+
+    post:
+      operationId: R612
+      summary: 'R612: Remove Event Member Action' 
+      description: 'Remove a Event member. Access: USR'
+      tags:
+        - 'M06: Groups and Events'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              event_id:
+                type: integer
+              user_id:
+                type: integer 
+            required:
+              - user_id
+              - group_id 
+      
+      responses: 
+        '200':
+          description: 'Member removed successfully.'
+        '401':
+          description: 'You cant remove members on this event.'
+  
+  /group&events/leaveEvent:
+
+    post:
+      operationId: R613
+      summary: 'R607: Leave Event Action'
+      description: 'Leave a Event. Access: USR'
+      tags:
+        - 'M06: Groups and Events'
+      
+      requestBody:
+        required: true
+        content: 
+          application/x-www-form-urlencoded:
+            schema:
+              type: object 
+              properties:
+                event_id:
+                  type: integer
+                user_id:
+                  type: integer 
+              required:
+                - user_id
+                - event_id 
+      
+      responses:
+        '200':
+          description: 'Left event successfully.' 
+        '401':
+          description: 'Couldnt leave event.'
+
+  /group&events/deleteEvent:
+
+      post:
+        operationId: R614
+        summary: 'R608: Event Delete Action'
+        description: 'Delete Event. Access: USR, ADM'
+        tags:
+          - 'M07: Groups and Events'
+      
+        requestBody:
+          required: true
+          content: 
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  event_id:
+                    type: integer
+                required:
+                  - event_id
+        
+        responses:
+          '200': 
+            description: 'Event deletion complete.'
+          '401': 
+            description: 'You cant delete a event.'
+
+  /group&events/joinEvent:
+
+    post:
+      operationId: R615
+      summary: 'R615: Join Event Action'
+      description: 'Join Event. Access: USR'
+      tags:
+        - 'M07: Groups and Events'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                event_id:
+                  type: integer
+                user_id:
+                  type: integer
+              required:
+                - user_id 
+                - event_id 
+      
+      responses:
+        '200': 
+          description: 'Joined event successfully.'
+        '401': 
+          description: 'Failed to join event successfully.'
+
+##### MESSAGES
+
+  /messages:
+    
+    get:
+      operationId: R701
+      summary: 'R701: Users Message Page' 
+      description: 'Show the users Message page. Access: USR, ADM'
+      tags:
+        - 'M07: Messages'
+      
+      responses:
+        '200':
+          description: 'Show the users Message page.'
+        '302':
+          description: 'Redirecting. user not logged in.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failure.'
+  
+  /messages/{id}: 
+
+    get:
+      operationId: R702
+      summary: 'R702: Show Messages with another user'
+      description: 'Show the messages exhanged between two users. Access: USR, ADM'
+      tags:
+        - 'M07: Messages' 
+      
+      parameters:
+        - in: path 
+          name: id 
+          schema: 
+            type: integer
+          required: True
+
+      responses:
+        '200':
+          description: 'Show the Messages between the two users.'
+        '302':
+          description: 'User not logged in. Redirecting'
+          headers:
+            Location:
+              schema:
+                type: string 
+              example:
+                302Failure:
+                  description: 'Failure.'
+  
+  /messages/create:
+
+    post:
+      operationId: R703
+      summary: 'R703: Sends a new Message to a user.'
+      description: 'Sends a new message to a user. Access: USR, ADM'
+      tags:
+        - 'M07: Messages'
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer 
+                content: 
+                  type: string
+                media:
+                  type: string
+                  format: binary
+              required:
+                - user_id
+
+      responses:
+        '302':
+          description: 'Processing the new message sent. Redirecting.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Message sent successfully.'
+                302Failure:
+                  description: 'Error. Could not send message.'
+
+##### API
+
+  /api/userVerifY:
+
+    get:
+      operationId: R801
+      summary: 'R801: Verify username'
+      description: 'Verify if username exists. Access: USR, ADM'
+      tags:
+        - 'M08: User Administration'
+      
+      parameters:
+        - in: query 
+          name: username 
+          description: 'Username attempt'
+          schema:
+            type: string
+          required: true
+      
+      responses:
+        '200':
+          description: 'Success. Username exists and returns said users ID.'
+        '403':
+          description: 'Forbidden action. You need to be logged in to perform this action.'
