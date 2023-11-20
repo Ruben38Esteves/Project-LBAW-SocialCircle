@@ -22,7 +22,9 @@ class PostController extends Controller
             return redirect('/login');
         }else{
             
-            $posts = DB::table('userPost')->get();
+            #$posts = DB::table('userPost')->get();
+            #$posts = Post::all();
+            $posts = DB::select('select * from userPost');
             return view('pages.home', ['posts' => $posts]);
         }
 
