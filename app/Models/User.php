@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-// Added to define Eloquent relationships.
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use app/Models/Post;
 
 class User extends Authenticatable
 {
@@ -24,9 +20,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'firstName',
+        'lastName',
+        'aboutMe',
+        'username',
         'email',
-        'password',
+        'password'       
     ];
 
     /**
@@ -35,8 +34,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password'
     ];
 
     /**
@@ -49,11 +47,15 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    /**
-     * Get the cards for a user.
-     */
-    public function cards(): HasMany
+
+    // Get all of the posts for the User
+
+    public function posts(): HasMany
     {
-        return $this->hasMany(Card::class);
+        return $this->hasMany(Post::class);
+    }
+
+    public function isAdmin() {
+        return $this->isAdmin;
     }
 }
