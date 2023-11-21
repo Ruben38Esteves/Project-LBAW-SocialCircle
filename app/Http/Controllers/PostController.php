@@ -38,7 +38,7 @@ class PostController extends Controller{
             return view('pages.profile', ['nonEventPosts' => $nonEventPosts]);
         }
     }
-}
+
 
     public function homeFeed(){
         if(!Auth::check()){
