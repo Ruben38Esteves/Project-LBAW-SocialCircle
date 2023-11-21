@@ -53,19 +53,18 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-
     // Get all of the posts for the User
 
-    public function ownPosts() {
+    public function ownPosts(){
         return $this->hasMany(Post::class, 'userid');
-    }
-
-    public function friends(){
-        return $this-> hasMany(User::class, 'friendid');
     }
 
     public function isAdmin() {
         return $this->isAdmin;
+    }
+
+    public function friends() {
+        return $this->belongsToMany(User::class, 'friendship', 'userid', 'friendid');
     }
 
 }
