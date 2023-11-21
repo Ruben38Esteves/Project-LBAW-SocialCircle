@@ -19,12 +19,13 @@ class UserController extends Controller
         
     }
 
-    public function getUser($username){
+    public function fillProfile($username){
         if(!Auth::check()){
             return redirect('/login');
         }else{ 
             $user = User::where('username', $username)->first();
-            return view('pages.profile', ['user' => $user]);
+            $nonEventPosts = Post::where('userid', $user->userid)->where('eventid', null)->get();
+            return view('pages.profile', ['user' => $user, 'nonEventPosts' => $nonEventPosts]);
         }    
     }
 

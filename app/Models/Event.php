@@ -6,34 +6,31 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\User;
-use App\Models\Comment;
-use App\Models\Like;
-use App\Models\Event;
 
-class Post extends Model
+class Event extends Model
 {
     use HasFactory;
     
-    protected $table = 'userpost';
-    protected $primaryKey = 'postid';
+    protected $table = 'event';
+    protected $primaryKey = 'eventid';
     protected $connection = 'pgsql';
     #public $timestamps  = false;
 
     protected $fillable = [
-        'userid',
-        'content',
-        'eventid'
+        'ownerid',
+        'title',
+        'pictureid',
+        'description',
+        'locationid',
+        'startdate',
+        'enddate',
     ];
 
     public function owner(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'userid');
+        return $this->belongsTo(User::class, 'ownerid');
     }
-
-    public function fromEvent(): BelongsTo
-    {
-        return $this->belongsTo(Event::class, 'eventid');
+    public function posts() {
+        return $this->hasMany(Post::class, 'eventid');
     }
-
 }

@@ -183,3 +183,12 @@ body {
     border-radius: 50%;
     align-self: flex-start;
 }
+
+.event{
+  border: 5px solid #000000;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  padding: 20px;
+  display: flexbox;
+  
+}
