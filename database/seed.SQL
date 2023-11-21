@@ -369,7 +369,15 @@ VALUES
     (3, 4, 'accepted', NOW()),
     (5, 6, 'pending', NOW());
 
-
+INSERT INTO friendship (userID, friendID)
+VALUES
+    (26, 1),
+    (1, 26),
+    (26, 2),
+    (2, 26),
+    (3, 4),
+    (4, 3);
+  
 INSERT INTO userMessage (sourceID, targetID, message)
 VALUES
     (1, 2, 'Oi, como vai?'),
