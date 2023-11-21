@@ -59,6 +59,10 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'userid');
     }
 
+    public function ownEvents() {
+        return $this->hasMany(Event::class, 'ownerid');
+      }
+
     public function isAdmin() {
         return $this->isAdmin;
     }

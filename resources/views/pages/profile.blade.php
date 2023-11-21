@@ -9,9 +9,12 @@
         <h3>About me: {{ $user->aboutme }}</h3>
 
         <h3>Posts:</h3>
+        <section>
+            <?php $events = $user->ownEvents; ?>
+            @each('partials.events', $events, 'event')
+        </section>
         <section id='posts'>
-            <?php $posts = $user->ownPosts; ?>
-            @each('partials.posts', $posts, 'post')
+            @each('partials.posts', $nonEventPosts, 'post')
         </section>
     </div>
 @endsection

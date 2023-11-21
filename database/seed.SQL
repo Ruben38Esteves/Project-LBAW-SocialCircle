@@ -79,7 +79,7 @@ CREATE TABLE event (
   eventID SERIAL PRIMARY KEY,
   ownerID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   title VARCHAR NOT NULL,
-  pictureID INTEGER NOT NULL REFERENCES images(imageID),
+  pictureID INTEGER REFERENCES images(imageID),
   description VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL,
   locationID INTEGER NOT NULL REFERENCES location(locationID) ON UPDATE CASCADE,
@@ -388,7 +388,8 @@ INSERT INTO userPost (userID, content)
 VALUES
     (1, 'Acabei de assistir a um jogo de futebol!'),
     (2, 'Minha última viagem foi incrível!'),
-    (26, 'Tenho dúvidas da minha sexualidade');
+    (2, 'Minha penúltima viagem foi mais ou menos!'),
+    (26, 'Vou beber umas cervejas hoje!');
 
 
 INSERT INTO comment (creatorID, postID, content)
@@ -411,3 +412,13 @@ INSERT INTO userNotification (notificationID, userID, notification_type)
 VALUES
     (1, 1, 'request_friendship'),
     (2, 2, 'request_friendship');
+
+INSERT INTO event (eventID, ownerID, title, description, created_at, locationID, startDate, endDate)
+VALUES
+    (1, 26, 'Festa!!!!!', 'Festa em minha casa!!!!', '2023-11-21 20:00:00',1, '2024-05-24 20:00:00', '2021-05-25 04:00:00');
+
+INSERT INTO userPost (userID, eventID, content)
+VALUES
+    (26, 1, 'Isto vai ser incrivel!'),
+    (26, 1, 'Acreditem, vai mesmo!'),
+    (26, 1, 'É o meu aniversario... Venham por favor...');
