@@ -380,6 +380,7 @@ INSERT INTO userPost (userID, content)
 VALUES
     (1, 'Acabei de assistir a um jogo de futebol!'),
     (2, 'Minha última viagem foi incrível!');
+    (26, 'Tenho dúvidas da minha sexualidade');
 
 
 INSERT INTO comment (creatorID, postID, content)

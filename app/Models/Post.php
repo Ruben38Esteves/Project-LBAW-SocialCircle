@@ -19,7 +19,11 @@ class Post extends Model
     protected $connection = 'pgsql';
     #public $timestamps  = false;
 
-    // preciso checkar se funçoes funcionam
+    protected $fillable = [
+        'userid',
+        'content'
+    ];
+
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'userid');

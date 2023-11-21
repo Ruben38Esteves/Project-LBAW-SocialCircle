@@ -6,6 +6,7 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -59,3 +60,8 @@ Route::controller(RegisterController::class)->group(function () {
 Route::controller(PostController::class)->group(function () {
     Route::get('/home', 'list')->name('posts');
 });
+
+Route::controller(UserController::class)->group(function (){
+    Route::get('/profile/{username}', 'getUser')->name('user');
+});
+
