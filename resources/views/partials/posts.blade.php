@@ -1,11 +1,13 @@
 <div class="post">
-    <div class="postHeader">
-        <div class="miniUserPic">
-            
+    <a href="/profile/{{$post->owner->username}}">
+        <div class="postHeader">
+            <div class="miniUserPic">
+                
+            </div>
+            <div class="username">
+                {{$post->owner->username}}
+            </div>
         </div>
-        <div class="username">
-            {{$post->owner->username}}
-        </div>
-    </div>
+    </a>
     {{ $post->content }}
 </div>

@@ -369,7 +369,15 @@ VALUES
     (3, 4, 'accepted', NOW()),
     (5, 6, 'pending', NOW());
 
-
+INSERT INTO friendship (userID, friendID)
+VALUES
+    (26, 1),
+    (1, 26),
+    (26, 2),
+    (2, 26),
+    (3, 4),
+    (4, 3);
+  
 INSERT INTO userMessage (sourceID, targetID, message)
 VALUES
     (1, 2, 'Oi, como vai?'),
@@ -379,7 +387,9 @@ VALUES
 INSERT INTO userPost (userID, content)
 VALUES
     (1, 'Acabei de assistir a um jogo de futebol!'),
-    (2, 'Minha última viagem foi incrível!');
+    (2, 'Minha última viagem foi incrível!'),
+    (2, 'Minha penúltima viagem foi mais ou menos!'),
+    (26, 'Vou beber umas cervejas hoje!');
 
 
 INSERT INTO comment (creatorID, postID, content)

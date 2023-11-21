@@ -53,12 +53,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-
     // Get all of the posts for the User
 
-    public function ownPosts() {
+    public function ownPosts(){
         return $this->hasMany(Post::class, 'userid');
-      }
+    }
 
     public function ownEvents() {
         return $this->hasMany(Event::class, 'ownerid');
@@ -66,6 +65,10 @@ class User extends Authenticatable
 
     public function isAdmin() {
         return $this->isAdmin;
+    }
+
+    public function friends() {
+        return $this->belongsToMany(User::class, 'friendship', 'userid', 'friendid');
     }
 
 }

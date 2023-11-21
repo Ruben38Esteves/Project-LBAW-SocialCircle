@@ -12,12 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Post;
 use App\Models\User;
  
-class PostController extends Controller
-{
+class PostController extends Controller{
+    
     public function index(): View
     {
         
     }
+
 
     public function list(){
         if(!Auth::check()){
@@ -26,7 +27,6 @@ class PostController extends Controller
             $posts = Post::all();
             return view('pages.home', ['posts' => $posts]);
         }
-
     }
 
     public function getNonEventPosts($username){
@@ -39,3 +39,21 @@ class PostController extends Controller
         }
     }
 }
+
+    public function homeFeed(){
+        if(!Auth::check()){
+            return redirect('/login');
+        }else{
+            $user = Auth::user();
+            $friends = $user->friends;
+            $posts = $user->ownPosts;
+            foreach ($friends as $friend) {
+                if ($friend->ownPosts != null) {
+                    $posts = $posts->concat($friend->ownPosts);
+                }
+            }
+            return view('pages.home', ['posts' => $posts]);
+        }
+    }
+}
+
