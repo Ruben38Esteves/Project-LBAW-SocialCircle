@@ -58,7 +58,11 @@ class User extends Authenticatable
 
     public function ownPosts() {
         return $this->hasMany(Post::class, 'userid');
-      }
+    }
+
+    public function friends(){
+        return $this-> hasMany(User::class, 'friendid');
+    }
 
     public function isAdmin() {
         return $this->isAdmin;
