@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use app\Models\Post;
 
@@ -16,6 +17,8 @@ class User extends Authenticatable
 
     // Don't add create and update timestamps in database.
     public $timestamps  = false;
+    protected $table = 'users';
+    protected $primaryKey = 'id';
 
     /**
      * The attributes that are mass assignable.
@@ -23,7 +26,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'firstName',
+        'firstname',
         'lastName',
         'aboutMe',
         'username',

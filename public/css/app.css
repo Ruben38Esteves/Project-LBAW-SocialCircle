@@ -160,3 +160,26 @@ body {
     border-color: #9b4dca;
   }
   
+
+  .post{
+    border: 5px solid #000000;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    padding: 20px;
+    display: flexbox;
+    
+}
+
+.postHeader{
+    color: #ff0000;
+    display: flexbox;
+}
+
+
+.miniUserPic{
+    width: 100px;
+    height: 100px;
+    background-color: #000000;
+    border-radius: 50%;
+    align-self: flex-start;
+}

@@ -1,5 +1,5 @@
 <?php
- 
+
 namespace App\Http\Controllers;
  
 use App\Http\Controllers\Controller;
@@ -9,9 +9,9 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Post;
+use App\Models\Message;
  
-class PostController extends Controller
+class MessageController extends Controller
 {
     public function index(): View
     {
@@ -23,9 +23,10 @@ class PostController extends Controller
             return redirect('/login');
         }else{
             
-            $posts = Post::all();
-            #$posts = DB::select('select * from userPost');
-            return view('pages.home', ['posts' => $posts]);
+            #$posts = DB::table('userPost')->get();
+            $messages = Message::all();
+            #$messages = DB::select('select * from userMessage');
+            return view('pages.home', ['messages' => $messages]);
         }
 
     }
