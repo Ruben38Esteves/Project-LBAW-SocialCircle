@@ -42,7 +42,8 @@ class PostController extends Controller{
 
     public function homeFeed(){
         if(!Auth::check()){
-            return redirect('/login');
+            $posts = Post::all();
+            return view('pages.home', ['posts' => $posts]);
         }else{
             $user = Auth::user();
             $friends = $user->friends;

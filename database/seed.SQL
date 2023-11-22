@@ -389,7 +389,8 @@ VALUES
     (1, 'Acabei de assistir a um jogo de futebol!'),
     (2, 'Minha última viagem foi incrível!'),
     (2, 'Minha penúltima viagem foi mais ou menos!'),
-    (26, 'Vou beber umas cervejas hoje!');
+    (26, 'Vou beber umas cervejas hoje!'),
+    (12, 'Que dia lindo!');
 
 
 INSERT INTO comment (creatorID, postID, content)
