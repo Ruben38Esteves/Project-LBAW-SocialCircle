@@ -112,7 +112,8 @@ CREATE TABLE userPost (
   eventID INTEGER REFERENCES event(eventID),
   postImageID INTEGER REFERENCES images(imageID),
   content TEXT NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE comment (
