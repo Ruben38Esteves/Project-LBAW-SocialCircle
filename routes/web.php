@@ -59,6 +59,7 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(PostController::class)->group(function () {
     Route::get('/home', 'homeFeed')->name('posts');
+    Route::post('/posts', 'create')->name('posts.create');
 });
 
 Route::controller(UserController::class)->group(function (){
