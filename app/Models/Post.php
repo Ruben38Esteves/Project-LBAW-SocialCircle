@@ -18,7 +18,6 @@ class Post extends Model
     protected $table = 'userpost';
     protected $primaryKey = 'postid';
     protected $connection = 'pgsql';
-    #public $timestamps  = false;
 
     protected $fillable = [
         'userid',
