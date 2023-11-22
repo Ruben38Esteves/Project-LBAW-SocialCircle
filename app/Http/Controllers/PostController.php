@@ -70,5 +70,13 @@ class PostController extends Controller{
         }
     }
 
+
+    public function edit(Request $request)
+    {
+      $post = Post::find($request->id);
+      $this->authorize('edit', $post);
+      $post->content = $request->content;
+      $post->save();
+    }
 }
 
