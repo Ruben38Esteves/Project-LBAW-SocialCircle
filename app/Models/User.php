@@ -31,7 +31,9 @@ class User extends Authenticatable
         'aboutme',
         'username',
         'email',
-        'password'       
+        'password',
+        'ispublic',
+        'isAdmin'      
     ];
 
     /**
