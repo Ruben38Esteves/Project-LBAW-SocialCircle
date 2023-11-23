@@ -42,7 +42,7 @@ class PostController extends Controller{
 
     public function homeFeed(){
         if(!Auth::check()){
-            $posts = Post::all();
+            $posts = Post::all()->sortByCresc('created_at');
             return view('pages.home', ['posts' => $posts]);
         }else{
             $user = Auth::user();
@@ -53,6 +53,7 @@ class PostController extends Controller{
                     $posts = $posts->concat($friend->ownPosts);
                 }
             }
+            $posts = $posts->sortByDesc('created_at');
             return view('pages.home', ['posts' => $posts]);
         }
     }
