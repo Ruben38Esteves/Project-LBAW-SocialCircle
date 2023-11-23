@@ -28,4 +28,17 @@ class UserController extends Controller
         }    
     }
 
+    public function search(Request $request)    {
+        if(!Auth::check())
+            return redirect('/login');
+
+        $search = $request->get('query');
+
+        
+        $users = User::whereRaw("tsvectors @@ to_tsquery('english', ?)", [$search])
+        ->orderByRaw("ts_rank(users.tsvectors, to_tsquery(?)) ASC", [$search])->get();     
+        
+        //dd(Post::paginate(10));
+        return $users;
+    }
 }

@@ -204,6 +204,9 @@ CREATE INDEX index_notification On notification USING hash(notifiedUser); -- aju
 -- INDEX 03
 CREATE INDEX post_created_at_index ON userPost(created_at); --ajuda a ordenar posts , vai ser mt usado
 
+-- INDEX 04
+CREATE INDEX index_username ON users(username, firstname, lastname);
+
 --------------------------------------------------------------------------------
 -- TEXT SEARCH INDEXES
 --------------------------------------------------------------------------------
@@ -265,6 +268,37 @@ CREATE TRIGGER update_tsv_event_trigger
 CREATE INDEX event_search_index ON event USING GIN(tsvectors);
 
 
+-- INDEX 06 user_search_index
+
+ALTER TABLE users ADD COLUMN tsvectors TSVECTOR;
+
+CREATE OR REPLACE FUNCTION update_tsv_user() RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    NEW.tsvectors = (
+      setweight(to_tsvector('english', NEW.username), 'A') ||
+      setweight(to_tsvector('english', NEW.firstname), 'B') ||
+      setweight(to_tsvector('english', NEW.lastname), 'C')
+    );
+  END IF;
+  IF TG_OP = 'UPDATE' THEN
+    IF (NEW.username <> OLD.username) OR (NEW.firstname <> OLD.firstname) OR (NEW.lastname <> OLD.lastname) THEN
+      NEW.tsvectors = (
+        setweight(to_tsvector('english', NEW.username), 'A') ||
+        setweight(to_tsvector('english', NEW.firstname), 'B') ||
+        setweight(to_tsvector('english', NEW.lastname), 'C')
+      );
+    END IF;
+  END IF;
+    RETURN NEW;
+  END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER update_tsv_user_trigger
+  BEFORE INSERT OR UPDATE ON users
+  FOR EACH ROW
+  EXECUTE PROCEDURE update_tsv_user();
 --------------------------------------------------------------------------------
 -- TRIGGERS
 --------------------------------------------------------------------------------
