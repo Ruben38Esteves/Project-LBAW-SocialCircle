@@ -178,3 +178,27 @@ body {
 .profile-posts-section {
   margin-top: 10px;
 }
+
+.search-result {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.search-result .miniUserPic {
+  width: 35px;
+  height: 35px;
+  background-color: #ccc;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.search-result a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.search-result p {
+  margin: 0;
+}
