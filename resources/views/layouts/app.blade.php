@@ -30,8 +30,8 @@
             </header>
             <section id="content">
                 <div class="search-bar">
-                    <form action="{{ url('/search?query') }}" method="GET" onsubmit="return false;">
-                        <input type="text" name="query" id="search-input" placeholder="Search... Result will be displayed below without the need to press" onchange="">
+                    <form action="{{ url('/search?query') }}" method="GET">
+                        <input type="text" name="query" id="search-input" placeholder="Search... Result will be displayed below without the need to press">
                         <div id="search-results"></div>
                     </form>
                 </div>
@@ -52,7 +52,7 @@
             fetch(`/search?query=${query}`)
                 .then(response => response.json())
                 .then(data => {
-                    let resultsHtml = '<ul>'; // Start the unordered list
+                    let resultsHtml = '<ul>';
 
                     data.forEach(result => {
                         resultsHtml += `

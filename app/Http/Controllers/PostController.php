@@ -83,7 +83,7 @@ class PostController extends Controller{
         ->orderByRaw("ts_rank(users.tsvectors, to_tsquery(?)) ASC", [$search])->get();     
         
         //dd(Post::paginate(10));
-        return $posts;
+        return $posts;}
 
     public function edit(Request $request, $id){
         if(!Auth::check()){
