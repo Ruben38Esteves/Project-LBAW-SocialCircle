@@ -71,5 +71,32 @@ class PostController extends Controller{
         }
     }
 
+    public function edit(Request $request, $id){
+        if(!Auth::check()){
+            return redirect('/login');
+        }else{
+            $user = Auth::user();
+            $post = Post::where('postid', $id)->first();
+            if($post->userid == $user->id){
+                $post->content = $request->content;
+                $post->save();
+            }
+            return redirect('/home');
+        }
+    }
+
+    public function delete($id){
+        if(!Auth::check()){
+            return redirect('/login');
+        }else{
+            $user = Auth::user();
+            $post = Post::where('postid', $id)->first();
+            if($post->userid == $user->id){
+                $post->delete();
+            }
+            return redirect('/home');
+        }
+    }
+
 }
 
