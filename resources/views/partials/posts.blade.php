@@ -14,13 +14,13 @@
             {{ $post->content }}
         </div>
         <div id="edit_post" style="display: none">
-            <form action="{{ route('posts.create') }}" method="POST">
+            <form action="{{ url('/posts/edit/'.$post->postid) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <br>
                 <label for="content">Content:</label>
                 <textarea name="content" placeholder="{{ $post->content }}" required></textarea>
                 <br>
-                <!-- Add other form fields as needed -->
                 <button type="submit">Edit</button>
                 <button onclick="hide_post_changer()">Go Back</button>
             </form>
