@@ -31,9 +31,13 @@
             <button id="edit_button" onclick="show_post_changer('post_{{$post->postid}}')" >
                 Edit
             </button>
-            <button id="delete_button">
-                Delete
-            </button>
+            <form action="{{ url('/posts/delete/'.$post->postid) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" id="delete_button">
+                    Delete
+                </button>
+            </form>
         </div>
     <?php endif; ?>
     <div class="post-footer">

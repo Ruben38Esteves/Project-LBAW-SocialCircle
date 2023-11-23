@@ -84,5 +84,18 @@ class PostController extends Controller{
         }
     }
 
+    public function delete($id){
+        if(!Auth::check()){
+            return redirect('/login');
+        }else{
+            $user = Auth::user();
+            $post = Post::where('postid', $id)->first();
+            if($post->userid == $user->id){
+                $post->delete();
+            }
+            return redirect('/home');
+        }
+    }
+
 }
 

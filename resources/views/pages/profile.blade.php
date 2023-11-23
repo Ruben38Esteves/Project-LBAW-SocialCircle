@@ -8,10 +8,6 @@
         <h3 class="profile-about">About me: {{ $user->aboutme }}</h3>
 
         <h3 class="profile-posts-heading">Posts:</h3>
-        <section class="profile-events-section">
-            <?php $events = $user->ownEvents; ?>
-            @each('partials.events', $events, 'event')
-        </section>
         <section class="profile-posts-section" id='posts'>
             @each('partials.posts', $nonEventPosts, 'post')
         </section>

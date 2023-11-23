@@ -24,8 +24,8 @@ class UserController extends Controller
             return redirect('/login');
         }else{ 
             $user = User::where('username', $username)->first();
-            $nonEventPosts = Post::where('userid', $user->userid)->where('eventid', null)->get();
-            return view('pages.profile', ['user' => $user, 'nonEventPosts' => $nonEventPosts]);
+            //$nonEventPosts = Post::where('userid', $user->userid)->get();
+            return view('pages.profile', ['user' => $user, 'nonEventPosts' => $user->ownPosts]);
         }    
     }
 
