@@ -55,6 +55,21 @@
         </div>
         -->
     </div>
+    <section id="post-form">
+        @auth
+            <form action="{{ url('/comments/create/'.$post->postid) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <br>
+                <label for="content">Content:</label>
+                <textarea name="content" required></textarea>
+                <br>
+                <button type="submit">Create Comment</button>
+            </form>
+        @endauth
+    </section>
+    <?php $comments = $post->comments; ?>
+    @each('partials.comments', $comments, 'comment')
 </div>
 <script>
     function show_post_changer(postId) {

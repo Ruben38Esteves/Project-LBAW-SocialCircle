@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -68,3 +69,6 @@ Route::controller(UserController::class)->group(function (){
     Route::get('/profile/{username}', 'fillProfile')->name('user');
 });
 
+Route::controller(CommentController::class)->group(function (){
+    Route::put('/comments/create/{id}', [CommentController::class, 'create']);
+});

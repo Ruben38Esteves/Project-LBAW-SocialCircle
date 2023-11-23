@@ -11,25 +11,25 @@ class Comment extends Model
 {
     use HasFactory;
 
-    public $timestamps  = false;
+    public $timestamps = false; 
     protected $table = 'comment';
-    protected $primaryKey = 'commentID';
+    protected $primaryKey = 'commentid';
 
 
     protected $fillable = [
-        'commentID',
-        'postID',
-        'creatorID',
-        'comment',
+        'commentid',
+        'postid',
+        'creatorid',
         'content',
+        'created_at'
     ];
 
     public function owner() {
-        return User::find($this->creatorID);
+        return $this->belongsTo(User::class, 'creatorid');
     }
 
     public function post() {
-        return Post::find($this->postID);
+        return Post::find($this->postid);
     }
  
 
