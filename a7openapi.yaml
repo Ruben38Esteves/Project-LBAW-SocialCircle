@@ -30,7 +30,7 @@ paths:
   /login:
     get: 
       operationId: R101
-      summary: 'R101 - Login Form'
+      summary: 'R101: Login Form'
       description: 'Provide login form. Acess: PUB'
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -40,7 +40,7 @@ paths:
 
     post:
       operationId: R102
-      summary: 'R102 - Login Action' 
+      summary: 'R102: Login Action' 
       description: 'Processes the login form submission' 
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -78,7 +78,7 @@ paths:
   /logout:
     post:
       operationId: R103
-      summary: 'R103 - Logout Action'
+      summary: 'R103: Logout Action'
       description: 'Logout the current authenticated user.Acess: USR, ADM'
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -166,7 +166,7 @@ paths:
   /sendEmailVerification:
     post:
       operationId: R106
-      summary: 'R106 - Send Email Verification Action'
+      summary: 'R106: Send Email Verification Action'
       description: 'Sends an email with a verification token. Acess: VST'
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -361,7 +361,7 @@ paths:
       summary: 'R201: View Home Page'
       description: 'Show user home page. Access: USR, ADM'
       tags:
-        - 'M02: Timeline Interaction And Management'
+        - 'M02: Timeline Interaction and Management'
 
       responses:
         '200':
@@ -384,7 +384,7 @@ paths:
       summary: 'R202: Add Interaction to Timeline'
       description: 'Add a new interaction to the user timeline. Access: USR, ADM' 
       tags:
-        - 'M02: Timeline Interaction And Management'
+        - 'M02: Timeline Interaction and Management'
       
       parameters:
         - in: header 
@@ -433,12 +433,14 @@ paths:
                   error:
                     type: string
     
+  /deleteInteraction/{interactionId}:
+    
     delete:
       operationId: R203
       summary: 'R203: Remove Interaction From Timeline'
       description: 'Remove a specific interaction from the user timeline. Access: USR, ADM'
       tags:
-        - 'M02: Timeline Interaction And Management'
+        - 'M02: Timeline Interaction and Management'
       
       parameters:
       - name: Authorization 
@@ -480,11 +482,11 @@ paths:
   /home/search:
 
     get:
-      operationId: R304
-      summary: 'R304: View User Search Page'
+      operationId: R204
+      summary: 'R204: View User Search Page'
       description: 'Show user search page. Access: USR, ADM'
       tags:
-        - 'M02: Timeline Interaction And Management'
+        - 'M02: Timeline Interaction and Management'
       
       responses:
         '200':
@@ -502,11 +504,11 @@ paths:
   /api/user: 
 
     get: 
-      operationId: R305
-      summary: 'R402: User Search'
+      operationId: R205
+      summary: 'R205: User Search'
       description: 'Search other users by their username. Access: USR, ADM'
       tags:
-        - 'M02: Timeline Interaction And Management'
+        - 'M02: Timeline Interaction and Management'
       
       parameters:
         - in: query
@@ -525,11 +527,11 @@ paths:
   /api/group:
 
     get:        
-      operationId: R306
-      summary: 'R306: Group Search'
+      operationId: R206
+      summary: 'R206: Group Search'
       description: 'Search different groups by their group name. Access: USR, ADM'
       tags:
-        - 'M02: Timeline Interaction And Management'
+        - 'M02: Timeline Interaction and Management'
       
       parameters:
         - in: query
@@ -548,11 +550,11 @@ paths:
   /api/events:
 
     get: 
-      operationId: R307
-      summary: 'R307: Event Search'
+      operationId: R207
+      summary: 'R207: Event Search'
       description: 'Search different event by their group name. Access: USR, ADM' 
       tags:
-        - 'M02: Timeline Interaction And Management'
+        - 'M02: Timeline Interaction and Management'
       
       parameters:
         - in: query
@@ -655,7 +657,7 @@ paths:
 
     post:
       operationId: R304
-      summary: 'R304'
+      summary: 'R304: Reject Friend Request'
       description: 'Reject a friend request from another user. Access: USR, ADM'
       tags:
         - 'M03: Friend Requests'
@@ -684,7 +686,7 @@ paths:
 
     post:
       operationId: R401
-      summary: 'R403: Create Post Action' 
+      summary: 'R401: Create Post Action' 
       description: 'Create a post. Access: USR'
       tags:
         - 'M04: Posts and Comments'
@@ -1064,7 +1066,7 @@ paths:
       
       parameters:
         - in: path 
-          name: id
+          name: group_id
           schema:
             type: integer
           required: True 
@@ -1082,7 +1084,7 @@ paths:
                 302Failure:
                   description: 'Failed to load page.'
   
-  /group&events/{group_id}/editGroup:
+  /group&events/editGroup:
 
     get:
       operationId: R602
@@ -1093,7 +1095,7 @@ paths:
       
       parameters:
       - in: query
-        name: id 
+        name: group_id 
         description: 'Group ID'
         schema:
           type: integer
@@ -1350,7 +1352,7 @@ paths:
       
       parameters:
         - in: path 
-          name: id
+          name: evento_id
           schema:
             type: integer
           required: True 
@@ -1368,7 +1370,7 @@ paths:
                 302Failure:
                   description: 'Failed to load page.'
 
-  /group&events/{event_id}/editEvent: 
+  /group&events//editEvent: 
 
     get:
       operationId: R611 
@@ -1379,7 +1381,7 @@ paths:
       
       parameters:
       - in: query
-        name: id 
+        name: evento_id 
         description: 'Event ID'
         schema:
           type: integer
