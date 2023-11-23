@@ -8,6 +8,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facade\DB;
 
 use App\Models\Post;
 
@@ -31,9 +32,12 @@ class User extends Authenticatable
         'aboutme',
         'username',
         'email',
+        'birthday',
+        'nationality',
+        'currentlocation',
         'password',
         'ispublic',
-        'isAdmin'      
+        'isadmin'      
     ];
 
     /**
@@ -56,7 +60,6 @@ class User extends Authenticatable
     ];
 
     // Get all of the posts for the User
-
     public function ownPosts(){
         return $this->hasMany(Post::class, 'userid')->orderBy('created_at', 'desc');
     }
