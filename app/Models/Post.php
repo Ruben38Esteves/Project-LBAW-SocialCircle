@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Models\Event;
 
 class Post extends Model
 {
@@ -17,27 +18,27 @@ class Post extends Model
     protected $table = 'userpost';
     protected $primaryKey = 'postid';
     protected $connection = 'pgsql';
-    #public $timestamps  = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'userid',
-        'content'
+        'content',
+        'eventid'
     ];
 
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'userid');
     }
-    /*
-    public function comments():
+
+    public function fromEvent(): BelongsTo
     {
-        return $this->hasMany(Comment::class);
+        return $this->belongsTo(Event::class, 'eventid');
     }
 
-    public function likes():
+    public function comments()
     {
-        return $this->hasMany(Like::class);
+        return $this->hasMany(Comment::class, 'postid');
     }
-*/
 
 }

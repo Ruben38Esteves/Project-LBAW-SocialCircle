@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Post;
+use App\Models\User;
  
 class PostController extends Controller{
     
@@ -23,16 +24,26 @@ class PostController extends Controller{
         if(!Auth::check()){
             return redirect('/login');
         }else{
-            
             $posts = Post::all();
-            #$posts = DB::select('select * from userPost');
             return view('pages.home', ['posts' => $posts]);
         }
     }
 
-    public function homeFeed(){
+    public function getNonEventPosts($username){
         if(!Auth::check()){
             return redirect('/login');
+        }else{
+            $user = User::where('username', $username)->first();
+            $nonEventPosts = Post::where('userid', $user->userid)->where('eventid', null)->get();
+            return view('pages.profile', ['nonEventPosts' => $nonEventPosts]);
+        }
+    }
+
+
+    public function homeFeed(){
+        if(!Auth::check()){
+            $posts = Post::all()->sortByCresc('created_at');
+            return view('pages.home', ['posts' => $posts]);
         }else{
             $user = Auth::user();
             $friends = $user->friends;
@@ -42,6 +53,7 @@ class PostController extends Controller{
                     $posts = $posts->concat($friend->ownPosts);
                 }
             }
+            $posts = $posts->sortByDesc('created_at');
             return view('pages.home', ['posts' => $posts]);
         }
     }
@@ -59,6 +71,7 @@ class PostController extends Controller{
         }
     }
 
+
     public function search(Request $request)    {
         if(!Auth::check())
             return redirect('/login');
@@ -71,6 +84,33 @@ class PostController extends Controller{
         
         //dd(Post::paginate(10));
         return $posts;
+
+    public function edit(Request $request, $id){
+        if(!Auth::check()){
+            return redirect('/login');
+        }else{
+            $user = Auth::user();
+            $post = Post::where('postid', $id)->first();
+            if($post->userid == $user->id){
+                $post->content = $request->content;
+                $post->save();
+            }
+            return redirect('/home');
+        }
+    }
+
+    public function delete($id){
+        if(!Auth::check()){
+            return redirect('/login');
+        }else{
+            $user = Auth::user();
+            $post = Post::where('postid', $id)->first();
+            if($post->userid == $user->id){
+                $post->delete();
+            }
+            return redirect('/home');
+        }
     }
 
 }
+

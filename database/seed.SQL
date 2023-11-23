@@ -79,7 +79,7 @@ CREATE TABLE event (
   eventID SERIAL PRIMARY KEY,
   ownerID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   title VARCHAR NOT NULL,
-  pictureID INTEGER NOT NULL REFERENCES images(imageID),
+  pictureID INTEGER REFERENCES images(imageID),
   description VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL,
   locationID INTEGER NOT NULL REFERENCES location(locationID) ON UPDATE CASCADE,
@@ -112,7 +112,8 @@ CREATE TABLE userPost (
   eventID INTEGER REFERENCES event(eventID),
   postImageID INTEGER REFERENCES images(imageID),
   content TEXT NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE comment (
@@ -394,7 +395,8 @@ VALUES
     (23,'Vasco', 'Sousa', 'Amante de história', 'Male', '1994-10-02', 1, 1, 'vascos', 'vasco@email.com', 'password456', false, true, true, true),
     (24,'Isabel', 'Costa', 'Fã de literatura', 'Female', '1988-09-16', 2, 2, 'isabelc', 'isabel@email.com', 'password789', false, true, true, true),
     (25,'Ricardo', 'Ramos', 'Entusiasta de esportes', 'Male', '1992-06-25', 1, 2, 'ricardor', 'ricardo@email.com', 'password123', false, true, true, true),
-    (26,'Ruben', 'Esteves', 'Sou um gajo fixe', 'Male', '2002-05-24', 1, 2, 'ruben38esteves', 'ruben38esteves@gmail.com','$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, true);
+    (26,'Ruben', 'Esteves', 'Sou um gajo fixe', 'Male', '2002-05-24', 1, 2, 'ruben38esteves', 'ruben38esteves@gmail.com','$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, true),
+    (27,'Miguel', 'Dionisio', 'Sou um gajo fixe', 'Male', '2002-08-14', 1, 2, 'miguelmdionisio', 'miguelmdionisio@gmail.com','$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, false);
 
 
 INSERT INTO friendRequest (sourceID, targetID, friendRequestState, updated_at)
@@ -418,11 +420,17 @@ VALUES
     (2, 1, 'Olá! Estou bem, obrigado! E você?');
 
 
-INSERT INTO userPost (userID, content)
+INSERT INTO userPost (userID, content, created_at)
 VALUES
-    (1, 'Acabei de assistir a um jogo de futebol!'),
-    (2, 'Minha última viagem foi incrível!'),
-    (26, 'Tenho dúvidas da minha sexualidade');
+    (1, 'Acabei de assistir a um jogo de futebol!', '2021-05-24 20:00:00'),
+    (2, 'Acabei de voltar de uma viagem!', '2021-05-25 04:00:00'),
+    (26, 'segund avez que bebi cervejas!', '2021-05-24 05:00:00'),
+    (12, 'Que dia lindo!', '2021-05-23 04:00:00'),
+    (2, 'Minha última viagem foi incrível!', '2021-05-22 02:00:00'),
+    (2, 'primeiro post!', '2021-05-22 01:00:00'),
+    (2, 'segundo post!', '2021-05-22 03:00:00'),
+    (26, 'primeira vez que bebi cervejas !', '2021-05-24 04:00:00'),
+    (12, 'segundo post!', '2021-05-22 02:00:00');
 
 
 INSERT INTO comment (creatorID, postID, content)
@@ -445,3 +453,13 @@ INSERT INTO userNotification (notificationID, userID, notification_type)
 VALUES
     (1, 1, 'request_friendship'),
     (2, 2, 'request_friendship');
+
+INSERT INTO event (eventID, ownerID, title, description, created_at, locationID, startDate, endDate)
+VALUES
+    (1, 26, 'Festa!!!!!', 'Festa em minha casa!!!!', '2023-11-21 20:00:00',1, '2024-05-24 20:00:00', '2021-05-25 04:00:00');
+
+INSERT INTO userPost (userID, eventID, content)
+VALUES
+    (26, 1, 'Isto vai ser incrivel!'),
+    (26, 1, 'Acreditem, vai mesmo!'),
+    (26, 1, 'É o meu aniversario... Venham por favor...');

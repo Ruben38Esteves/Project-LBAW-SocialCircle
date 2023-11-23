@@ -31,7 +31,9 @@ class User extends Authenticatable
         'aboutme',
         'username',
         'email',
-        'password'       
+        'password',
+        'ispublic',
+        'isAdmin'      
     ];
 
     /**
@@ -56,7 +58,15 @@ class User extends Authenticatable
     // Get all of the posts for the User
 
     public function ownPosts(){
-        return $this->hasMany(Post::class, 'userid');
+        return $this->hasMany(Post::class, 'userid')->orderBy('created_at', 'desc');
+    }
+
+    public function ownEvents() {
+        return $this->hasMany(Event::class, 'ownerid');
+    }
+
+    public function ownComments() {
+        return $this->hasMany(Comment::class, 'creatorid');
     }
 
     public function isAdmin() {

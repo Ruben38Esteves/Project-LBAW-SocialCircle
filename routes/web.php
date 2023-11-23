@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -59,6 +60,9 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(PostController::class)->group(function () {
     Route::get('/home', 'homeFeed')->name('posts');
+    Route::post('/posts', 'create')->name('posts.create');
+    Route::put('/posts/edit/{id}', [PostController::class, 'edit']);
+    Route::delete('/posts/delete/{id}', [PostController::class, 'delete']);
 });
 
 Route::controller(UserController::class)->group(function (){
@@ -66,3 +70,6 @@ Route::controller(UserController::class)->group(function (){
     Route::get('/search', 'search')->name('search');
 });
 
+Route::controller(CommentController::class)->group(function (){
+    Route::put('/comments/create/{id}', [CommentController::class, 'create']);
+});
