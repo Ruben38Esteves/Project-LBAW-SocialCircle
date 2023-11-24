@@ -220,7 +220,7 @@ paths:
         '404':
           description: 'Error. Invalid token.'
 
-  /user/{id}:
+  /profile/{username}:
 
     get:
       operationId: R108
@@ -501,7 +501,7 @@ paths:
                 - 302Success:
                   description: 'You must login first. Redirecting to login page.' 
                   value: '/login'
-  /api/user: 
+  /search: 
 
     get: 
       operationId: R205
@@ -524,7 +524,7 @@ paths:
         '403': 
           description: 'Unauthorized. You need to be logged in first.'
 
-  /api/group:
+  /search/group:
 
     get:        
       operationId: R206
@@ -547,7 +547,7 @@ paths:
         '403':
             description: 'Unauthorized. You need to be logged in first.'
 
-  /api/events:
+  /search/events:
 
     get: 
       operationId: R207
@@ -682,7 +682,7 @@ paths:
 
 ###### POSTS AND COMMENTS 
 
-  /post/createPost:
+  /posts:
 
     post:
       operationId: R401
@@ -719,9 +719,9 @@ paths:
                 302Failure:
                   description: 'Post is not created. Redirecting'
 
-  /post/deletePost:
+  /posts/delete/{id}:
 
-    post:
+    delete:
       operationId: R402
       summary: 'R402: Delete Post Action'
       description: 'Delete post. Access: OWN, ADM'
@@ -746,9 +746,9 @@ paths:
         '403':
           description: 'Deletion failed'
   
-  /post/editPost:
+  /posts/edit/{id}:
 
-    post: 
+    put: 
       operationId: R403 
       summary: 'R403: Edit Post Action'
       description: 'Allows user to change post content. Access: OWN, ADM'
@@ -833,9 +833,9 @@ paths:
         '403':
           description: 'Dislike failed.'
   
-  /comment/createComment:
+  /comment/create/{id}:
 
-    post:
+    put:
       operationId: R406
       summary: 'R406: Create a comment action'
       description: 'Creates a comment under a post. Access: USR'
@@ -1784,4 +1784,3 @@ paths:
           description: 'User has been unblocked.'
         '401':
           description: 'Unauthorized.'
-

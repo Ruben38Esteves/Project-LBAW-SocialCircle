@@ -36,21 +36,6 @@ class RegisterController extends Controller
             'password' => 'required|min:8|confirmed'
         ]);
 
-        $request->input('name');
-
-        if (User::where('username', $request->input('username'))->exists()) {
-            // username already exits
-            return redirect()->route('register')
-            ->withSuccess('username already exits!');
-        }
-
-        if (User::where('email', $request->input('email'))->exits()) {
-            // email already exits
-            return redirect()->route('register')
-            ->withSuccess('email already exits!');
-        }
-
-
         User::create([
             'username' => $request->username,
             'firstname' => $request->firstname,
