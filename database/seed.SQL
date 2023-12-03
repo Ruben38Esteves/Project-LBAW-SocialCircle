@@ -19,7 +19,6 @@ DROP TABLE IF EXISTS userMessage CASCADE;
 DROP TABLE IF EXISTS notification CASCADE;
 DROP TABLE IF EXISTS userNotification CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
-DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS groupNotification CASCADE;
 DROP TABLE IF EXISTS groupMember CASCADE;
 DROP TABLE IF EXISTS groupJoinRrequest CASCADE;
@@ -106,30 +105,6 @@ CREATE TABLE userMessage (
   message VARCHAR NOT NULL
 );
 
-CREATE TABLE userPost (
-  postID SERIAL PRIMARY KEY,
-  userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  eventID INTEGER REFERENCES event(eventID),
-  postImageID INTEGER REFERENCES images(imageID),
-  content TEXT NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
-CREATE TABLE comment (
-  commentID SERIAL PRIMARY KEY,
-  creatorID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  postID INTEGER NOT NULL REFERENCES userPost(postID) ON UPDATE CASCADE,
-  content VARCHAR NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
-CREATE TABLE tags (
-  tagID SERIAL PRIMARY KEY,
-  targetID INTEGER NOT NULL REFERENCES userPost(postID) ON UPDATE CASCADE,
-  tagAlias tagAlias_types NOT NULL
-);
-
 CREATE TABLE userSettings (
   userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   isGuide BOOLEAN DEFAULT false,
@@ -153,10 +128,21 @@ CREATE TABLE userNotification (
 CREATE TABLE groups (
   groupID SERIAL PRIMARY KEY,
   ownerID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  pictureID INTEGER NOT NULL REFERENCES images(imageID),
+  pictureID INTEGER REFERENCES images(imageID),
   name VARCHAR NOT NULL,
   description VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE userPost (
+  postID SERIAL PRIMARY KEY,
+  userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  eventID INTEGER REFERENCES event(eventID),
+  groupID INTEGER REFERENCES groups(groupID),
+  postImageID INTEGER REFERENCES images(imageID),
+  content TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE groupNotification (
@@ -164,6 +150,20 @@ CREATE TABLE groupNotification (
   groupID INTEGER NOT NULL REFERENCES groups(groupID) ON UPDATE CASCADE,
   notification_type group_notification_types NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE comment (
+  commentID SERIAL PRIMARY KEY,
+  creatorID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  postID INTEGER NOT NULL REFERENCES userPost(postID) ON UPDATE CASCADE,
+  content VARCHAR NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE tags (
+  tagID SERIAL PRIMARY KEY,
+  targetID INTEGER NOT NULL REFERENCES userPost(postID) ON UPDATE CASCADE,
+  tagAlias tagAlias_types NOT NULL
 );
 
 
@@ -419,6 +419,9 @@ VALUES
     (1, 2, 'Oi, como vai?'),
     (2, 1, 'Olá! Estou bem, obrigado! E você?');
 
+INSERT INTO groups (ownerID, name, description)
+VALUES
+    (26, 'Grupo de amigos', 'Grupo de amigos que gostam de se divertir!');
 
 INSERT INTO userPost (userID, content, created_at)
 VALUES
@@ -431,6 +434,10 @@ VALUES
     (2, 'segundo post!', '2021-05-22 03:00:00'),
     (26, 'primeira vez que bebi cervejas !', '2021-05-24 04:00:00'),
     (12, 'segundo post!', '2021-05-22 02:00:00');
+
+INSERT INTO userPost (userID, groupID, content, created_at)
+VALUES
+    (26, 1, 'Isto vai muito mesmoe ser incrivel!', '2021-05-24 20:00:00');
 
 
 INSERT INTO comment (creatorID, postID, content)
