@@ -21,9 +21,12 @@
         </script>
     </head>
     <body>
+        <nav id = 'sidebar'>
+            @section('sidebar')
+            @show
+        </nav>
         <main>
             <header>
-                <h1><a href="{{ url('/cards') }}">SocialCircle</a></h1>
                 @if (Auth::check())
                     <a class="button" href="{{ url('/logout') }}"> Logout </a> <a href="profile/{{ Auth::user()->username }}">{{ Auth::user()->username }}</a>
                 @endif

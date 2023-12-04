@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content') 
+@include('sidebars.bar')
     <div class="profile-container">
         <h1 class="profile-heading">Profile</h1>
         <h2 class="profile-name">{{ $user->firstname }} {{ $user->lastname }}</h2>

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content') 
+@include('sidebars.bar')
     <div class="group-container">
         <h1 class="group-name">{{ $group->name }}</h1>
         <h2 class="group-description">{{ $group->description }}</h2>
@@ -9,5 +10,5 @@
         <section class="group-posts-section" id='posts'>
             @each ('partials.posts', $posts, 'post')
         </section>
-            
+    </div>
 @endsection
