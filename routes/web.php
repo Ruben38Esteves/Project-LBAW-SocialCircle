@@ -9,6 +9,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\GroupJoinRequestController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -73,4 +74,9 @@ Route::controller(CommentController::class)->group(function (){
 
 Route::controller(GroupController::class)->group(function (){
     Route::get('/group/{id}', 'show')->name('group');
+});
+
+Route::controller(GroupJoinRequestController::class)->group(function (){
+    Route::post('/group/{id}/join-request', 'create')->name('group-join-request.create');
+    Route::delete('/group/{id}/remove-request', 'remove')->name('group-join-request.remove');
 });

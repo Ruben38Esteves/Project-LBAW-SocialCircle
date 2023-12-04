@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS userNotification CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS groupNotification CASCADE;
 DROP TABLE IF EXISTS groupMember CASCADE;
-DROP TABLE IF EXISTS groupJoinRrequest CASCADE;
+DROP TABLE IF EXISTS groupJoinRequest CASCADE;
 DROP TABLE IF EXISTS likes CASCADE;
 DROP TYPE IF EXISTS friendRequestStatus_types CASCADE;
 DROP TYPE IF EXISTS tagAlias_types CASCADE;
@@ -128,6 +128,7 @@ CREATE TABLE userNotification (
 CREATE TABLE groups (
   groupID SERIAL PRIMARY KEY,
   ownerID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  isPublic BOOLEAN DEFAULT true,
   pictureID INTEGER REFERENCES images(imageID),
   name VARCHAR NOT NULL,
   description VARCHAR NOT NULL,
@@ -169,14 +170,14 @@ CREATE TABLE tags (
 
 CREATE TABLE groupMember (
   groupID INTEGER NOT NULL REFERENCES groups(groupID) ON UPDATE CASCADE,
-  memberID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  PRIMARY KEY (groupID, memberID)
+  userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  PRIMARY KEY (groupID, userID)
 );
 
-CREATE TABLE groupJoinRrequest (
+CREATE TABLE groupJoinRequest (
   groupID INTEGER NOT NULL REFERENCES groups(groupID) ON UPDATE CASCADE,
-  memberID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
-  PRIMARY KEY (groupID, memberID)
+  userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  PRIMARY KEY (groupID, userID)
 );
 
 CREATE TABLE friendship (
@@ -419,9 +420,14 @@ VALUES
     (1, 2, 'Oi, como vai?'),
     (2, 1, 'Olá! Estou bem, obrigado! E você?');
 
-INSERT INTO groups (ownerID, name, description)
+INSERT INTO groups (ownerID, name, description, isPublic)
 VALUES
-    (26, 'Grupo de amigos', 'Grupo de amigos que gostam de se divertir!');
+    (26, 'Grupo de amigos', 'Grupo de amigos que gostam de se divertir!', false);
+
+INSERT INTO groupMember (groupID, userID)
+VALUES
+    (1, 26);
+    
 
 INSERT INTO userPost (userID, content, created_at)
 VALUES

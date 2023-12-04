@@ -265,3 +265,20 @@ body {
   color: #106af1;
   font-weight: bold;
 }
+
+.group-notmember {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.group-notmember .notmember-text {
+  margin-top: 50px;
+}
+
+.group-notmember h3 {
+  margin: 0;
+  font-size: 32px;
+  color: gray;
+}

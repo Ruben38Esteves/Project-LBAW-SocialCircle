@@ -20,7 +20,7 @@ class Group extends Model
 
     public function getMembers()
     {
-        return $this->belongsToMany('App\Models\User', 'GroupMember', 'groupid', 'userid');
+        return $this->belongsToMany('App\Models\User', 'groupmember', 'groupid', 'userid');
     }
 
     public function getPosts() {
@@ -28,6 +28,6 @@ class Group extends Model
     }
 
     public function isMember(User $user) {
-        return $this->getMembers()->where('memberID', $user->id)->exists();
+        return $this->getMembers()->where('userid', $user->id)->exists();
     }
 }
