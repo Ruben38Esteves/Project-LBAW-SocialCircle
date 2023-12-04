@@ -9,7 +9,7 @@
             <ul class="members-list">
                 @foreach ($members as $member)
                     <li class="member-list-item">
-                        <a href="{{ route('user', ['username' => $member->username]) }}"><h3 class="member-list-item-text">{{ $member->username }}</h3></a>
+                        <a href="{{ route('user', ['username' => $member->username]) }}"><p class="member-list-item-text">{{ $member->username }}</p></a>
                         <form action="{{ route('group-join-request.remove', ['id' => $group->groupid]) }}" method="POST">
                             @csrf
                             @method('DELETE')
@@ -24,16 +24,7 @@
             <ul class="join-requests-list">
                 @foreach ($joinRequests as $joinRequest)
                     <li class="join-requests-list-item">
-                        <a href="{{ route('user', ['username' => $joinRequest->user()->username]) }}"><h3 class="join-requests-list-item-text">{{ $joinRequest->user()->username }}</h3></a>
-                        <form action="{{ route('group-join-request.remove', ['id' => $group->groupid]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="remove-join-request-button" name="userid" value="{{ $joinRequest->user()->id }}">Remove</button>
-                        </form>
-                        <form action="{{ route('group-join-request.accept', ['id' => $group->groupid]) }}" method="POST">
-                            @csrf
-                            <button class="accept-join-request-button" name="userid" value="{{ $joinRequest->user()->id }}">Accept</button>
-                        </form>
+                        <a href=" {{ route('user', ['username' => $joinRequest->user()->username]) }}"><p class="join-requests-list-item-text">{{ $joinRequest->user->username }}</p></a>
                     </li>
                 @endforeach
             </ul>
