@@ -15,7 +15,7 @@ class Group extends Model
     public $primaryKey = 'groupid';
 
     public Function owner() {
-        return User::find($this->creatorID);
+        return User::find($this->ownerid);
     }
 
     public function getMembers()
@@ -29,5 +29,9 @@ class Group extends Model
 
     public function isMember(User $user) {
         return $this->getMembers()->where('userid', $user->id)->exists();
+    }
+
+    public function getJoinRequests() {
+        return $this->hasMany(GroupJoinRequest::class, 'groupid', 'groupid');
     }
 }

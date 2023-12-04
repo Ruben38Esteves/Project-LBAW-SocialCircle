@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Group;
 
 class GroupJoinRequest extends Model
 {
@@ -18,7 +20,11 @@ class GroupJoinRequest extends Model
      public $primaryKey = ['groupid', 'userid'];
 
     public function group() {
-        return $this->hasOne('App\Model\Group');
+        return $this->hasOne(Group::class);
+    }
+
+    public function user() {
+        return $this->hasOne(User::class);
     }
 
     public static function exists($groupid, $userid){

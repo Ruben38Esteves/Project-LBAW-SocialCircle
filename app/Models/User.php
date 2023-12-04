@@ -80,4 +80,8 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'friendship', 'userid', 'friendid');
     }
 
+    public function groups() {
+        return $this->belongsToMany(Group::class, 'groupmember', 'userid', 'groupid');
+    }
+
 }

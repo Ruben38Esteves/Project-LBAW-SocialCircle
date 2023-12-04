@@ -26,4 +26,16 @@ class GroupController extends Controller
         $group = Group::where('groupid', $id)->first();
         return view('pages.group', ['group' => $group], ['posts' => $group->getPosts()->get()]);
     }
+
+    public function manage($id){
+        $group = Group::where('groupid', $id)->first();
+        $members = $group->getMembers()->get();
+        $joinRequests = $group->getJoinRequests()->get();
+
+        if ($group->owner() == Auth::user()) {
+            return view('pages.managegroup', compact('group', 'members', 'joinRequests'));
+        } else {
+            return redirect()->route('group', ['id' => $group->groupid]);
+        }
+    }
 }

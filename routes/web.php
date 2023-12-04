@@ -74,6 +74,7 @@ Route::controller(CommentController::class)->group(function (){
 
 Route::controller(GroupController::class)->group(function (){
     Route::get('/group/{id}', 'show')->name('group');
+    Route::get('/group/{id}/manage', 'manage')->name('group.manage');
 });
 
 Route::controller(GroupJoinRequestController::class)->group(function (){

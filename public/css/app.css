@@ -282,3 +282,16 @@ body {
   font-size: 32px;
   color: gray;
 }
+
+.manage-lists-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+h2.members-lists-heading,
+h2.join-requests-list-heading {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
