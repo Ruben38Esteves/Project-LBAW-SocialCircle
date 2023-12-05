@@ -23,9 +23,8 @@
             <h2 class="join-requests-list-heading">Join Requests:</h2>
             <ul class="join-requests-list">
                 @foreach ($joinRequests as $joinRequest)
-                    <li class="join-requests-list-item">
-                        <a href=" {{ route('user', ['username' => $joinRequest->user()->username]) }}"><p class="join-requests-list-item-text">{{ $joinRequest->user->username }}</p></a>
-                    </li>
+                    <li class="join-request-list-item">
+                        <a href="{{ route('user', ['username' => $joinRequest->user()->username]) }}"><p class="join-request-list-item-text">{{ $joinRequest->user()->username }}</p></a>
                 @endforeach
             </ul>
         </div>

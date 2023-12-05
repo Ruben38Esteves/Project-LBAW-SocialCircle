@@ -17,14 +17,15 @@ class GroupJoinRequest extends Model
         'groupid',
         'userid'
     ];
-     public $primaryKey = ['groupid', 'userid'];
+
 
     public function group() {
         return $this->hasOne(Group::class);
     }
 
     public function user() {
-        return $this->hasOne(User::class);
+        //return $this->hasOne(User::class, 'id', 'userid');
+        return User::find($this->userid);
     }
 
     public static function exists($groupid, $userid){

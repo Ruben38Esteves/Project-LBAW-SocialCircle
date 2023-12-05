@@ -427,6 +427,10 @@ VALUES
 INSERT INTO groupMember (groupID, userID)
 VALUES
     (1, 26);
+  
+INSERT INTO groupJoinRequest (groupID, userID)
+VALUES
+    (1, 27);
     
 
 INSERT INTO userPost (userID, content, created_at)
