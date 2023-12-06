@@ -8,6 +8,8 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\GroupJoinRequestController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -34,10 +36,6 @@ Route::controller(CardController::class)->group(function () {
 
 
 // API
-Route::controller(CardController::class)->group(function () {
-    Route::put('/api/cards', 'create');
-    Route::delete('/api/cards/{card_id}', 'delete');
-});
 
 Route::controller(ItemController::class)->group(function () {
     Route::put('/api/cards/{card_id}', 'create');
@@ -62,7 +60,7 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/home', 'homeFeed')->name('posts');
     Route::post('/posts', 'create')->name('posts.create');
     Route::put('/posts/edit/{id}', [PostController::class, 'edit']);
-    Route::delete('/posts/delete/{id}', [PostController::class, 'delete']);
+    Route::delete('/posts/delete/{id}', [PostController::class, 'delete']); 
 });
 
 Route::controller(UserController::class)->group(function (){
@@ -72,4 +70,14 @@ Route::controller(UserController::class)->group(function (){
 
 Route::controller(CommentController::class)->group(function (){
     Route::put('/comments/create/{id}', [CommentController::class, 'create']);
+});
+
+Route::controller(GroupController::class)->group(function (){
+    Route::get('/group/{id}', 'show')->name('group');
+    Route::get('/group/{id}/manage', 'manage')->name('group.manage');
+});
+
+Route::controller(GroupJoinRequestController::class)->group(function (){
+    Route::post('/group/{id}/join-request', 'create')->name('group-join-request.create');
+    Route::delete('/group/{id}/remove-request', 'remove')->name('group-join-request.remove');
 });

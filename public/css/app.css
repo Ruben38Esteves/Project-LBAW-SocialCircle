@@ -2,17 +2,19 @@ body {
     background-color: #ffffff;
     color: #4a76da;
   }
+  main {
+    margin-left: 241px;
+  }
+
   main > header {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
-    background-color: #cdd2df;
+    background-color: white;
     padding: 1em;
     margin: 1em;
   }
-  main > header h1 {
-    margin: 0;
-  }
+
   main > header a.button {
     margin: 1em;
     justify-self: center;
@@ -223,4 +225,73 @@ body {
 
 .search-result p {
   margin: 0;
+}
+
+.container {
+  display: flex;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 240px;
+  height: 100%;
+  padding: 40px 10px 30px 10px;
+  border-right: 1px solid #000000;
+}
+
+.sidebar ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+
+.sidebar h1 {
+  margin: 0;
+  margin-bottom: 20px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.sidebar a {
+  display: block;
+  padding: 25px;
+  text-decoration: none;
+  color: #106af1;
+  font-weight: bold;
+}
+
+.group-notmember {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.group-notmember .notmember-text {
+  margin-top: 50px;
+}
+
+.group-notmember h3 {
+  margin: 0;
+  font-size: 32px;
+  color: gray;
+}
+
+.manage-lists-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+h2.members-lists-heading,
+h2.join-requests-list-heading {
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }

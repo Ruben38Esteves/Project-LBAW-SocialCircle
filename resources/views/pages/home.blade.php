@@ -3,7 +3,7 @@
 
 
 @section('content')
-
+@include('sidebars.bar')
     <section id="post-form">
         @auth
             <form action="{{ route('posts.create') }}" method="POST">
