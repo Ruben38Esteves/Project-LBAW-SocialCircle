@@ -58,5 +58,19 @@ class UserController extends Controller
             return redirect('/login');
         }
     }
+
+    public function friends($username){
+        $user = User::where('username', $username)->first();
+        if($user->ispublic){
+            return $user->friends;
+        }elseif (Auth::check()) {
+            $user_me = Auth::user();
+            if($user_me->isFriend($user->userid)){
+                return $user->friends;
+            }
+        }else{
+            return redirect('/login');
+        }
+    }
 }    
 

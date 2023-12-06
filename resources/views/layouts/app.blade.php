@@ -19,6 +19,8 @@
         </script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer>
         </script>
+        <script type="text/javascript" src={{ asset('js/getFriendList.js') }}>
+        </script>
     </head>
     <body>
         <nav id = 'sidebar'>

@@ -66,6 +66,7 @@ Route::controller(PostController::class)->group(function () {
 Route::controller(UserController::class)->group(function (){
     Route::get('/profile/{username}', 'fillProfile')->name('user');
     Route::get('/search', 'search')->name('search');
+    Route::get('/friends/{username}', 'friends')->name('friends');
 });
 
 Route::controller(CommentController::class)->group(function (){
