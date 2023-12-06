@@ -1,20 +1,20 @@
 @section('sidebar')
     <aside class = 'sidebar'>
-        <ul class="list-unstyled sidebar-itens-positioning">
+        <ul class = 'list-unstyled sidebar-itens-positioning'>
             <li class="sidebar-top">
                 <h1 id="page-title"><a href="{{ url('/home') }}">SocialCircle</a></h1>
             </li>
             <li>
-                <a href="{{ url('/home') }}">Home</a>
+                <button onclick="location.href='{{url('/home')}}'">Home</button>
             </li>
             <li>
-                <a href="{{ url('/messages') }}">Messages</a>
+                <button onclick="location.href='{{url('/home')}}'">Messages</button>
             </li>
             <li>
-                <a href = "{{ url('/groups') }}">Groups</a>
+                <button onclick='getGroupList("{{Auth::user()->username}}")'>Groups</button>
             </li>
             <li>
-                <a href="{{ url('/friends') }}">Friends</a>
+                <button onclick='getFriendList("{{Auth::user()->username}}")'>Friends</button>
             </li>
         </ul>
     </aside>

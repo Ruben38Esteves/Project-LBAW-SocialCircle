@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facade\DB;
 
 use App\Models\Post;
+use App\Models\Event;
+use App\Models\Comment;
+use App\Models\Group;
 
 class User extends Authenticatable
 {
@@ -79,6 +82,7 @@ class User extends Authenticatable
     public function friends() {
         return $this->belongsToMany(User::class, 'friendship', 'userid', 'friendid');
     }
+
 
     public function groups() {
         return $this->belongsToMany(Group::class, 'groupmember', 'userid', 'groupid');
