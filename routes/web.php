@@ -27,6 +27,7 @@ use App\Http\Controllers\Auth\RegisterController;
 
 // Home
 Route::redirect('/', '/login');
+Route::redirect('/', '/messages');
 
 // Cards
 Route::controller(CardController::class)->group(function () {
@@ -42,6 +43,10 @@ Route::controller(ItemController::class)->group(function () {
     Route::post('/api/item/{id}', 'update');
     Route::delete('/api/item/{id}', 'delete');
 });
+
+/*Route::controller(MessageController::class)->group(function () {
+
+});*/
 
 
 // Authentication
@@ -81,3 +86,7 @@ Route::controller(GroupJoinRequestController::class)->group(function (){
     Route::post('/group/{id}/join-request', 'create')->name('group-join-request.create');
     Route::delete('/group/{id}/remove-request', 'remove')->name('group-join-request.remove');
 });
+
+Route::controller(MessageController::class)->group(function (){
+    Route::get('messages/{id}', [MessageController::class, 'showPage']);
+}); 

@@ -10,24 +10,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Message;
- 
+use App\Models\User;
+
 class MessageController extends Controller
-{
-    public function index(): View
-    {
-        
+{   
+    public function getMsg(){
+        $messages=Message::where('messageID', $this->messageID)->get();
+        return $messages;
     }
 
-    public function list(){
-        if(!Auth::check()){
-            return redirect('/login');
-        }else{
-            
-            #$posts = DB::table('userPost')->get();
-            $messages = Message::all();
-            #$messages = DB::select('select * from userMessage');
-            return view('pages.home', ['messages' => $messages]);
-        }
-
+    public function showPage(int $id) {
+        $user=User::where('id',$this->id)->get();
+        return view('pages.message', ['user' => $user, 'messages' => $user->getMsg()->get()]);
     }
+
 }
