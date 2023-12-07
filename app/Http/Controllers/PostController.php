@@ -42,7 +42,7 @@ class PostController extends Controller{
 
     public function homeFeed(){
         if(!Auth::check()){
-            $posts = Post::all()->sortByCresc('created_at');
+            $posts = Post::all()->sortByDesc('created_at');
             return view('pages.home', ['posts' => $posts]);
         }else{
             $user = Auth::user();
