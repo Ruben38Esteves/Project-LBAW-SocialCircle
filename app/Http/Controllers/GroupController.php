@@ -32,7 +32,7 @@ class GroupController extends Controller
         $members = $group->getMembers()->get();
         $joinRequests = $group->getJoinRequests()->get();
 
-        if ($group->owner() == Auth::user()) {
+        if (Auth::user()->can('manage', $group)) {
             return view('pages.managegroup', compact('group', 'members', 'joinRequests'));
         } else {
             return redirect()->route('group', ['id' => $group->groupid]);

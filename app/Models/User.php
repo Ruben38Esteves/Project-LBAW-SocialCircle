@@ -76,7 +76,7 @@ class User extends Authenticatable
     }
 
     public function isAdmin() {
-        return $this->isAdmin;
+        return $this->isadmin;
     }
 
     public function friends() {

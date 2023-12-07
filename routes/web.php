@@ -59,7 +59,7 @@ Route::controller(RegisterController::class)->group(function () {
 Route::controller(PostController::class)->group(function () {
     Route::get('/home', 'homeFeed')->name('posts');
     Route::post('/posts', 'create')->name('posts.create');
-    Route::put('/posts/edit/{id}', [PostController::class, 'edit']);
+    Route::put('/posts/edit/{id}', [PostController::class, 'update']);
     Route::delete('/posts/delete/{id}', [PostController::class, 'delete']); 
 });
 

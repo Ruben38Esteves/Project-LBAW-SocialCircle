@@ -85,16 +85,18 @@ class PostController extends Controller{
         //dd(Post::paginate(10));
         return $posts;}
 
-    public function edit(Request $request, $id){
+    public function update(Request $request, $id){
         if(!Auth::check()){
             return redirect('/login');
         }else{
-            $user = Auth::user();
             $post = Post::where('postid', $id)->first();
-            if($post->userid == $user->id){
-                $post->content = $request->content;
-                $post->save();
+            if (Auth::user()->cannot('update', $post)) {
+                return redirect('/home');
             }
+            $user = Auth::user();
+            $affected = DB::table('userpost')
+              ->where('postid', $id)
+              ->update(['content' => $request->content]);
             return redirect('/home');
         }
     }
