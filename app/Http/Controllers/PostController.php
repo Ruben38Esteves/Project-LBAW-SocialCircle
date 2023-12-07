@@ -41,6 +41,7 @@ class PostController extends Controller{
 
 
     public function homeFeed(){
+        /*
         if(!Auth::check()){
             $posts = Post::all()->sortByCresc('created_at');
             return view('pages.home', ['posts' => $posts]);
@@ -56,6 +57,14 @@ class PostController extends Controller{
             $posts = $posts->sortByDesc('created_at');
             return view('pages.home', ['posts' => $posts]);
         }
+        */
+        $posts = Post::all()->sortByDesc('created_at');
+        foreach ($posts as $post) {
+            if (Auth::user()->cannot('view', $post)) {
+                $posts->forget($post);
+            }
+        }
+        return view('pages.home', ['posts' => $posts]);
     }
 
     public function create(Request $request){
@@ -93,7 +102,6 @@ class PostController extends Controller{
             if (Auth::user()->cannot('update', $post)) {
                 return redirect('/home');
             }
-            $user = Auth::user();
             $affected = DB::table('userpost')
               ->where('postid', $id)
               ->update(['content' => $request->content]);
@@ -105,9 +113,11 @@ class PostController extends Controller{
         if(!Auth::check()){
             return redirect('/login');
         }else{
-            $user = Auth::user();
             $post = Post::where('postid', $id)->first();
-            if($post->userid == $user->id){
+            if(Auth::user()->cannot('delete', $post)){
+                return redirect('/home');
+            }
+            if($post->userid == Auth::user()->id){
                 $post->delete();
             }
             return redirect('/home');

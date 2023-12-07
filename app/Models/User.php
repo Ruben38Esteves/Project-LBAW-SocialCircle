@@ -79,6 +79,10 @@ class User extends Authenticatable
         return $this->isadmin;
     }
 
+    public function isPublic() {
+        return $this->ispublic;
+    }
+
     public function friends() {
         return $this->belongsToMany(User::class, 'friendship', 'userid', 'friendid');
     }

@@ -19,9 +19,28 @@ class PostPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Post $post): bool
+    public function view(User $user, Post $post): Response
     {
-        //checkar se o user esta blocked ou nao
+        $postOwner = $post->owner;
+        if($postOwner->ispublic){
+            return $postOwner->ispublic
+                ? Response::allow()
+                : Response::deny('You cant see this post.');
+        }
+        if(Auth::check()){
+            $postViewer = Auth::user();
+            if($postOwner==$postViewer){
+                return $postOwner == $postViewer
+                    ? Response::allow()
+                    : Response::deny('You cant see this post.');
+            }
+            if($postOwner->isFriend($postViewer)){
+                return $postOwner->isFriend($postViewer)
+                    ? Response::allow()
+                    : Response::deny('You cant see this post.');
+            }
+        }
+        return false;
     }
 
     /**
