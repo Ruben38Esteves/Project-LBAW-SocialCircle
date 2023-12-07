@@ -14,6 +14,14 @@ class Group extends Model
     public $timestamps  = false;
     public $primaryKey = 'groupid';
 
+    protected $fillable = [
+        'name',
+        'description',
+        'ownerid',
+        'ispublic',
+        'isactive'
+    ];
+
     public Function owner() {
         return User::find($this->ownerid);
     }
