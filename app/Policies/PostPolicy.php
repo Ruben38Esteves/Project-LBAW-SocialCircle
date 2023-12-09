@@ -48,7 +48,9 @@ class PostPolicy
      */
     public function create(User $user): bool
     {
-        //checkar se o user pode ou nao publicar
+        return Auth::check()
+            ? Response::allow()
+            : Response::deny('You must be logged in to create a post.');
     }
 
     /**

@@ -15,6 +15,8 @@ use App\Models\Event;
 use App\Models\Comment;
 use App\Models\Group;
 
+use App\Policies\UserPolicy;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;

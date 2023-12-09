@@ -36,13 +36,11 @@ Route::controller(CardController::class)->group(function () {
 
 
 // API
-
 Route::controller(ItemController::class)->group(function () {
     Route::put('/api/cards/{card_id}', 'create');
     Route::post('/api/item/{id}', 'update');
     Route::delete('/api/item/{id}', 'delete');
 });
-
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {

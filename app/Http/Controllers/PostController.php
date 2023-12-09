@@ -41,23 +41,6 @@ class PostController extends Controller{
 
 
     public function homeFeed(){
-        /*
-        if(!Auth::check()){
-            $posts = Post::all()->sortByCresc('created_at');
-            return view('pages.home', ['posts' => $posts]);
-        }else{
-            $user = Auth::user();
-            $friends = $user->friends;
-            $posts = $user->ownPosts;
-            foreach ($friends as $friend) {
-                if ($friend->ownPosts != null) {
-                    $posts = $posts->concat($friend->ownPosts);
-                }
-            }
-            $posts = $posts->sortByDesc('created_at');
-            return view('pages.home', ['posts' => $posts]);
-        }
-        */
         $posts = Post::all()->sortByDesc('created_at');
         foreach ($posts as $post) {
             if (Auth::user()->cannot('view', $post)) {
@@ -68,7 +51,7 @@ class PostController extends Controller{
     }
 
     public function create(Request $request){
-        if(!Auth::check()){
+        if(Auth::user()->cannot('create', Post::class)){
             return redirect('/login');
         }else{
             $user = Auth::user();
@@ -117,9 +100,7 @@ class PostController extends Controller{
             if(Auth::user()->cannot('delete', $post)){
                 return redirect('/home');
             }
-            if($post->userid == Auth::user()->id){
-                $post->delete();
-            }
+            $post->delete();
             return redirect('/home');
         }
     }
