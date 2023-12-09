@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Event;
+use App\Policies\PostPolicy;
 
 class Post extends Model
 {

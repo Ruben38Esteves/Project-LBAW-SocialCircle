@@ -26,19 +26,23 @@
             </form>
         </div>
     </div>
-    <?php if(Auth::check() && Auth::user()->id == $post->owner->id): ?>
-        <div class="post_buttons" style="display: inline-block">
-            <button id="edit_button" onclick="show_post_changer('post_{{$post->postid}}')" >
-                Edit
-            </button>
-            <form action="{{ url('/posts/delete/'.$post->postid) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button type="submit" id="delete_button">
-                    Delete
+    <?php if(Auth::check() && (Auth::user()->id == $post->owner->id || Auth::user()->isAdmin())): ?>
+        <ul class="post_buttons">
+            <li>
+                <button id="edit_button" onclick="show_post_changer('post_{{$post->postid}}')" >
+                    Edit
                 </button>
-            </form>
-        </div>
+            </li>
+            <li>
+                <form action="{{ url('/posts/delete/'.$post->postid) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" id="delete_button">
+                        Delete
+                    </button>
+                </form>
+            </li>
+        </ul>
     <?php endif; ?>
     <div class="post-footer">
         <div class="post-date">

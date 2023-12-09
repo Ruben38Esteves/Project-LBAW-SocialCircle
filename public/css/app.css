@@ -300,3 +300,13 @@ h2.join-requests-list-heading {
   justify-content: center;
   text-align: center;
 }
+
+.post_buttons{
+  list-style-type: none;
+  display: inline-block;
+}
+
+.post_buttons li{
+  float: left;
+  margin-right: 20px;
+}
