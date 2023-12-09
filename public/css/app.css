@@ -83,6 +83,7 @@ body {
   button {
     background-color: #4a76da;
     border-color: #4a76da;
+    width: 200px;
   }
   a.button {
     background-color: #4a76da;
@@ -247,6 +248,10 @@ body {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.sidebar button{
+  width: 97%
 }
 
 
