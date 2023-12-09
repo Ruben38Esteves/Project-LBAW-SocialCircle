@@ -310,3 +310,11 @@ h2.join-requests-list-heading {
   float: left;
   margin-right: 20px;
 }
+
+.other-user {
+  text-align: left;
+}
+
+.authenticated-user {
+  text-align: right;
+}
