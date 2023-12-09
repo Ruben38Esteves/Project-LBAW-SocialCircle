@@ -19,11 +19,23 @@ class GroupController extends Controller
 
     public function getPosts(){
         $posts = Post::where('groupid', $this->groupid)->get();
+        foreach($posts as $post){
+            if(Auth::user()->cannot('view', $post)){
+                $posts->forget($post);
+            }
+        }
         return $posts;
     }
 
     public function show($id){
         $group = Group::where('groupid', $id)->first();
+        if(Auth::check()){
+            if(Auth::user()->cannot('view', $group)){
+                return redirect('/login');
+            }
+        }elseif(!($group->ispublic)){
+            return redirect('/login');
+        }
         return view('pages.group', ['group' => $group], ['posts' => $group->getPosts()->get()]);
     }
 
@@ -32,7 +44,7 @@ class GroupController extends Controller
         $members = $group->getMembers()->get();
         $joinRequests = $group->getJoinRequests()->get();
 
-        if ($group->owner() == Auth::user()) {
+        if (Auth::user()->can('manage', $group)) {
             return view('pages.managegroup', compact('group', 'members', 'joinRequests'));
         } else {
             return redirect()->route('group', ['id' => $group->groupid]);

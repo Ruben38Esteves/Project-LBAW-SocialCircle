@@ -15,6 +15,8 @@ use App\Models\Event;
 use App\Models\Comment;
 use App\Models\Group;
 
+use App\Policies\UserPolicy;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -76,7 +78,11 @@ class User extends Authenticatable
     }
 
     public function isAdmin() {
-        return $this->isAdmin;
+        return $this->isadmin;
+    }
+
+    public function isPublic() {
+        return $this->ispublic;
     }
 
     public function friends() {
