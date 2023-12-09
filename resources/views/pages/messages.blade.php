@@ -1,19 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-@include('sidebars.bar')
-    <div class="message-chat-page">
-        <section class="msg-contact-info">
-            <div>
-                <a href="../users/{$users->id}"><h1>{{$users->firstName}}</h1></a>
-                <h2>&#64;{$users->username}</h2>
-            </div>
-        </section>
+    @include('sidebars.bar')
+    <div id = 'message-heading'>
+        <h1>{{$user->username}}</h1>
+    <div id="messages-container">
+    </div>
+    <div id="message-input">
+        <form>
+            <input type="text" id="message-content" placeholder="Type a message...">
+        </form>
+    </div>
 
-        <section id="message-content-container" class="msg-contents">
-            @each('partials.message', $usermessage, 'message')
-        </section>
-
-        <section id="message-chat-box" class="msg-write">
-            <article class="message-create-article">
-                
+    <script src="{{ asset('js/getMessages.js') }}"></script>
+    <script>
+        setInterval(function() {
+            getMessages("{{ Auth::user()->id }}", "{{ $user->id }}", "{{ Auth::user()->username }}", "{{ $user->username }}");
+        }, 500);
+    </script>
+@endsection

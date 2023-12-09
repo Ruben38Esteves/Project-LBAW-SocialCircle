@@ -73,6 +73,7 @@ Route::controller(UserController::class)->group(function (){
     Route::get('/search', 'search')->name('search');
     Route::get('/friends/{username}', 'friends')->name('friends');
     Route::get('/groups/{username}', 'groups')->name('groups');
+    //Route::get('/messages/{username}', 'messages')->name('messages');
 });
 
 Route::controller(CommentController::class)->group(function (){
@@ -90,5 +91,6 @@ Route::controller(GroupJoinRequestController::class)->group(function (){
 });
 
 Route::controller(MessageController::class)->group(function (){
-    Route::get('messages/{id}', [MessageController::class, 'showPage']);
-}); 
+    Route::get('/messages/{username}', 'showPage')->name('messages');
+    Route::get('/message/{username}', 'messages')->name('messages');
+});

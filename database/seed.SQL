@@ -418,7 +418,13 @@ VALUES
 INSERT INTO userMessage (sourceID, targetID, message)
 VALUES
     (1, 2, 'Oi, como vai?'),
-    (2, 1, 'Olá! Estou bem, obrigado! E você?');
+    (2, 1, 'Olá! Estou bem, obrigado! E você?'),
+    (27, 26, 'Olá ruben'),
+    (26, 27, 'Olá meu rei dionisio'),
+    (26, 27, 'Tudo bem?'),
+    (27, 26, 'Tudo e contigo?'),
+    (26, 27, 'Tudo também!'),
+    (27, 26, 'Ainda bem!');
 
 INSERT INTO groups (ownerID, name, description, isPublic)
 VALUES
