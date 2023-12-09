@@ -41,16 +41,16 @@ class MessageController extends Controller
         }
     }
 
-    public function sendMessage($user, $content){
+    public function sendMessage(Request $request, $username){
         $user_me = Auth::user();
         if($user_me){
             $message = new Message();
             $message->sourceid = $user_me->id;
-            $message->targetid = $user->id;
+            $message->targetid = User::where('username', $username)->first()->id;
             $message->sent_at = now();
-            $message->message = $content;
+            $message->message = $request->input('message-content');
             $message->save();
-            return $message;
+            return redirect('/messages/'.$username);
         }
         else{
             return redirect('/login');
