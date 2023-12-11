@@ -10,7 +10,7 @@
                 @foreach ($members as $member)
                     <li class="member-list-item">
                         <a href="{{ route('user', ['username' => $member->username]) }}"><p class="member-list-item-text">{{ $member->username }}</p></a>
-                        <form action="{{ route('group-join-request.remove', ['id' => $group->groupid]) }}" method="POST">
+                        <form action="{{ route('group.remove.member', ['id' => $group->groupid]) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button class="remove-member-button" name="userid" value="{{ $member->id }}">Remove</button>

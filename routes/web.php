@@ -77,6 +77,7 @@ Route::controller(GroupController::class)->group(function (){
     Route::post('/group/createFinal', 'create')->name('group.create');
     Route::get('/group/create', 'createPage')->name('group.createPage');
     Route::get('/group/{id}', 'show')->name('group');
+    Route::delete('/group/{id}/manage/removeMember', [GroupController::class, 'removeMember'])->name('group.remove.member');
     Route::get('/group/{id}/manage', 'manage')->name('group.manage');
 });
 

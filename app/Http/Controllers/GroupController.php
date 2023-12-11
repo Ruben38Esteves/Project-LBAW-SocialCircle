@@ -70,11 +70,18 @@ class GroupController extends Controller
             $group->name = $request->name;
             $group->description = $request->description;
             $group->ispublic = $request->isPublic;
-            $group->addMember($user);
             $group->save();
-            $groupId = $group->groupid;
-            
+            $group->addMember($user);
+            $groupId = $group->groupid;            
             return redirect('/group/' . $groupId);
         }
+    }
+
+    public function removeMember(Request $request, $id){
+        $group = Group::where('groupid', $id)->first();
+        $user = User::where('id', $request->userid)->first();
+        // falta aqui policy
+        $group->removeMember($user);
+        return redirect()->route('group.manage', ['id' => $group->groupid]);
     }
 }

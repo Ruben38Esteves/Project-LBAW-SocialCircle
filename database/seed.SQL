@@ -426,7 +426,8 @@ VALUES
 
 INSERT INTO groupMember (groupID, userID)
 VALUES
-    (1, 26);
+    (1, 26),
+    (1, 27);
   
 INSERT INTO groupJoinRequest (groupID, userID)
 VALUES
