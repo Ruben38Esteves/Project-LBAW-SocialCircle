@@ -50,4 +50,31 @@ class GroupController extends Controller
             return redirect()->route('group', ['id' => $group->groupid]);
         }
     }
+
+    public function createPage(){
+        if(!Auth::check()){
+            return redirect('/login');
+        }
+        else{
+            return view('pages.createGroup');
+        }
+    }
+
+    public function create(Request $request){
+        if(!Auth::check()){
+            return redirect('/login');
+        }else{
+            $user = Auth::user();
+            $group = new Group();
+            $group->ownerid = $request->ownerID;
+            $group->name = $request->name;
+            $group->description = $request->description;
+            $group->ispublic = $request->isPublic;
+            $group->addMember($user);
+            $group->save();
+            $groupId = $group->groupid;
+            
+            return redirect('/group/' . $groupId);
+        }
+    }
 }

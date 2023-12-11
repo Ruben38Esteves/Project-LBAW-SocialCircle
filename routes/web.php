@@ -58,7 +58,8 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/home', 'homeFeed')->name('posts');
     Route::post('/posts', 'create')->name('posts.create');
     Route::put('/posts/edit/{id}', [PostController::class, 'update']);
-    Route::delete('/posts/delete/{id}', [PostController::class, 'delete']); 
+    Route::delete('/posts/delete/{id}', [PostController::class, 'delete']);
+    Route::post('/posts/createGroupPost/{id}',  'createGroupPost')->name('group-posts.create');
 });
 
 Route::controller(UserController::class)->group(function (){
@@ -73,6 +74,8 @@ Route::controller(CommentController::class)->group(function (){
 });
 
 Route::controller(GroupController::class)->group(function (){
+    Route::post('/group/createFinal', 'create')->name('group.create');
+    Route::get('/group/create', 'createPage')->name('group.createPage');
     Route::get('/group/{id}', 'show')->name('group');
     Route::get('/group/{id}/manage', 'manage')->name('group.manage');
 });

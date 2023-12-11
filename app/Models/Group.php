@@ -42,4 +42,8 @@ class Group extends Model
     public function getJoinRequests() {
         return $this->hasMany(GroupJoinRequest::class, 'groupid', 'groupid');
     }
+
+    public function addMember(User $user){
+        $this->getMembers()->attach($user->userid);
+    }
 }
