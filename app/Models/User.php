@@ -42,7 +42,8 @@ class User extends Authenticatable
         'currentlocation',
         'password',
         'ispublic',
-        'isadmin'      
+        'isadmin',
+        'isactive'      
     ];
 
     /**
@@ -85,13 +86,20 @@ class User extends Authenticatable
         return $this->ispublic;
     }
 
+    public function isActive(){
+        return $this->isactive;
+    }
+
     public function friends() {
         return $this->belongsToMany(User::class, 'friendship', 'userid', 'friendid');
     }
 
-
     public function groups() {
         return $this->belongsToMany(Group::class, 'groupmember', 'userid', 'groupid');
     }
-
+    
+    public function notifications(){
+        return $this->hasManyThrough(UserNotification::class,Notification::class,'notifieduser','notificationid','id','notificationid');
+    }
+    
 }

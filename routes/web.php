@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -66,6 +67,7 @@ Route::controller(UserController::class)->group(function (){
     Route::get('/search', 'search')->name('search');
     Route::get('/friends/{username}', 'friends')->name('friends');
     Route::get('/groups/{username}', 'groups')->name('groups');
+    Route::get('/notifications/{username}','notifications')->name('notifications');
 });
 
 Route::controller(CommentController::class)->group(function (){
@@ -80,4 +82,8 @@ Route::controller(GroupController::class)->group(function (){
 Route::controller(GroupJoinRequestController::class)->group(function (){
     Route::post('/group/{id}/join-request', 'create')->name('group-join-request.create');
     Route::delete('/group/{id}/remove-request', 'remove')->name('group-join-request.remove');
+});
+
+Route::controller(UserNotificationController::class)->group(function (){
+    Route::post('/notification/{id}/markViewed', 'markAsViewed')->name('markNotifViewed');
 });

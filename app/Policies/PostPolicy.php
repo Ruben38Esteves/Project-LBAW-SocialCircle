@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -46,9 +47,9 @@ class PostPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user): response
     {
-        return Auth::check()
+        return $user->isActive()
             ? Response::allow()
             : Response::deny('You must be logged in to create a post.');
     }

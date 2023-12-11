@@ -21,7 +21,7 @@ class GroupPolicy
      */
     public function view(User $user, Group $group): bool
     {
-        $usersgroups = $user->groups();
+        $usersgroups = $user->groups()->get();
         return in_array($group, $usersgroups->toArray()) or $group->ispublic
             ? Response::allow()
             : Response::deny('You are not a member of this group.');

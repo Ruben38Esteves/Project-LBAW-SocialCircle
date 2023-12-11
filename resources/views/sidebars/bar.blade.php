@@ -16,6 +16,10 @@
             <li>
                 <button onclick='getFriendList("{{Auth::user()->username}}")'>Friends</button>
             </li>
+            <li>
+                <button onclick='getNotificationList("{{Auth::user()->username}}")'>Notifications</button>
+            </li>
+            
         </ul>
     </aside>
 @endsection

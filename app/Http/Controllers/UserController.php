@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\GroupNotification;
+use App\Models\UserNotification;
+use App\Policies\UserPolicy;
  
 class UserController extends Controller
 {
@@ -48,7 +51,10 @@ class UserController extends Controller
     public function fillProfile($username){
         $user = User::where('username', $username)->first();
         if(Auth::check()){
-            if(Auth::user()->cannot('view', $user)){
+            $userself = Auth::user();
+            if($userself->can('view', $user)){
+                return view('pages.profile', ['user' => $user, 'nonEventPosts' => $user->ownPosts]);
+            }else{
                 return redirect('/login');
             }
         }elseif(!($user->ispublic)){
@@ -87,6 +93,37 @@ class UserController extends Controller
         }else{
             return redirect('/login');
         }
+    }
+
+    public function notifications($username){
+        $user = User::where('username', $username)->first();
+        $user_me = Auth::user();
+        $notifs = $user->notifications;
+        $result=[];
+        if(Auth::check()){
+            if($user_me->can('view',$notifs->first())){
+                foreach($notifs as $notif){
+                    if($notif->viewed){
+                        $newnotif = (object)[
+                            'id' => $notif->notificationid,
+                            'text' => $notif->text(),
+                            'date' => $notif->created_at,
+                            'viewed' => 'true'
+                        ];
+                    }else{
+                        $newnotif = (object)[
+                            'id' => $notif->notificationid,
+                            'text' => $notif->text(),
+                            'date' => $notif->created_at,
+                            'viewed' => 'false'
+                        ];
+                    }
+                    
+                    $result[] = $newnotif;
+                }
+            }
+        }
+        return $result;
     }
 }    
 

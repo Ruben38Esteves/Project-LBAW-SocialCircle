@@ -9,11 +9,12 @@ class GroupNotification extends Model
 {
     use HasFactory;
 
-    protected $table = 'groupNotification';
+    protected $table = 'groupnotification';
     public $timestamps = false;
 
     protected $fillable = [
-        'groupID',
-        'notificationID'
+        'groupid',
+        'notificationid',
+        'notification_type'
     ];
 }

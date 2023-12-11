@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('content') 
+@section('content')
 @include('sidebars.bar')
     <div class="profile-container">
         <h1 class="profile-heading">Profile</h1>
@@ -12,5 +12,10 @@
         <section class="profile-posts-section" id='posts'>
             @each('partials.posts', $nonEventPosts, 'post')
         </section>
+        <?php
+            $notifs = $user->notifications;
+        ?>
+        @each('partials.notification',$notifs ,'notif')
+
     </div>
 @endsection

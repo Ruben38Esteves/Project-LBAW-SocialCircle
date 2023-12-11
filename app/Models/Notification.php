@@ -11,5 +11,15 @@ class Notification extends Model
 
     protected $table = 'notification';
     public $timestamps = false;
-    public $primaryKey = 'notificationID';
+    public $primaryKey = 'notificationid';
+
+    protected $fillable = [
+        'notifieduser',
+        'created_at'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'notifieduser', 'id');
+    }
 }

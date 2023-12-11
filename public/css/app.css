@@ -101,11 +101,27 @@ body {
     border-color: #4a76da;
   }
   
+  .notification-Viewed {
+    border: 2px solid rgb(68, 62, 94);
+    margin-bottom: 5px;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  .notification-notViewed {
+    border: 2px solid rgb(38, 73, 170);
+    margin-bottom: 5px;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  .notification p{
+    margin-bottom: 5px;
+  }
 
   .post {
     border: 2px solid #000000;
-    margin-bottom: 20px;
-    border-radius: 2px;
+    margin-bottom: 10px;
+    border-radius: 10px;
     padding: 20px;
   }
   
