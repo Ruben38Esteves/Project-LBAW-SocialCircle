@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Group;
+use App\Models\Message;
  
 class UserController extends Controller
 {
