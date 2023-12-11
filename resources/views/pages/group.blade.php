@@ -17,6 +17,12 @@
 
         <h3 class="group-posts-heading">Posts:</h3>
     </div>
+    <section class="group-create-post">
+        <form action="{{ route('group-posts.create', ['id' => $group->groupid]) }}" method="POST">
+            @csrf
+            <textarea class="post-textarea" name="content" placeholder="What's on your mind?"></textarea>
+            <button class="post-button">Post</button>
+        </form>
     <section class="group-posts-section" id='posts'>
         @each('partials.posts', $posts, 'post')
     </section>

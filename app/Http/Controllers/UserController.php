@@ -50,7 +50,10 @@ class UserController extends Controller
     public function fillProfile($username){
         $user = User::where('username', $username)->first();
         if(Auth::check()){
-            if(Auth::user()->cannot('view', $user)){
+            $userself = Auth::user();
+            if($userself->can('view', $user)){
+                return view('pages.profile', ['user' => $user, 'nonEventPosts' => $user->ownPosts]);
+            }else{
                 return redirect('/login');
             }
         }elseif(!($user->ispublic)){
