@@ -177,6 +177,8 @@ CREATE TABLE groupMember (
 CREATE TABLE groupJoinRequest (
   groupID INTEGER NOT NULL REFERENCES groups(groupID) ON UPDATE CASCADE,
   userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
   PRIMARY KEY (groupID, userID)
 );
 
