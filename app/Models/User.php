@@ -14,6 +14,7 @@ use App\Models\Post;
 use App\Models\Event;
 use App\Models\Comment;
 use App\Models\Group;
+use App\Models\Friendship;
 
 use App\Policies\UserPolicy;
 
@@ -64,6 +65,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function GetGroupJoinRequests() {
+        return $this->hasMany(GroupJoinRequest::class, 'userid');
+    }
+
     // Get all of the posts for the User
     public function ownPosts(){
         return $this->hasMany(Post::class, 'userid')->orderBy('created_at', 'desc');
@@ -92,6 +97,10 @@ class User extends Authenticatable
 
     public function groups() {
         return $this->belongsToMany(Group::class, 'groupmember', 'userid', 'groupid');
+    }
+
+    public function isFriend(User $user){
+        return Friendship::areFriends($this->id, $user->id);
     }
 
 }
