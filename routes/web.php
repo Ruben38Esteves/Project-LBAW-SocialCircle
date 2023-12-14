@@ -10,6 +10,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupJoinRequestController;
+use App\Http\Controllers\FriendshipController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -94,4 +95,11 @@ Route::controller(MessageController::class)->group(function (){
     Route::get('/messages/{username}', 'showPage')->name('messages');
     Route::get('/message/{username}', 'messages')->name('messages');
     Route::post('/message/send/{username}', 'sendMessage')->name('messages.send');
+});
+
+Route::controller(FriendshipController::class)->group(function (){
+    Route::post('/profile/{username}/add-friend', 'createRequest')->name('friend-request.create');
+    Route::delete('/profile/{username}/remove-request', 'removeRequest')->name('friend-request.remove');
+    Route::put('/profile/{username}/accept-request', 'acceptRequest')->name('friend-request.accept');
+    Route::delete('/profile/{username}/unfriend', 'delete')->name('friendship.delete');
 });

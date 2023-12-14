@@ -307,20 +307,6 @@ CREATE TRIGGER update_tsv_user_trigger
 -- TRIGGERS
 --------------------------------------------------------------------------------
 
--- dá update à data de alteracao do friend request
-
-CREATE OR REPLACE FUNCTION update_friend_request_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER friend_request_updated_at_trigger
-BEFORE UPDATE ON friendRequest
-FOR EACH ROW
-EXECUTE FUNCTION update_friend_request_updated_at();
 
 -- cria uma friendship apenas quando um friend request é aceite
 
