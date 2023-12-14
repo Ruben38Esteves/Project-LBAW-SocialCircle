@@ -17,23 +17,18 @@ class GroupJoinRequest extends Model
         'groupid',
         'userid'
     ];
-
-    protected $primaryKey = ['groupID', 'userID'];
+    public $incrementing = false;
+    protected $primaryKey = ['groupid', 'userid'];
 
 
     public function group() {
-        return $this->hasOne(Group::class);
+        $group = Group::where('id', $this->groupid)->first();
+        return $group;
     }
 
     public function user() {
-        dd($this);
-        //return $this->hasOne(User::class, 'id', 'userid')
-        if (property_exists($this, 'userid') && isset($this->userid)) {
-            dd($this->userid);
-        } else {
-            dd("userid is not set or has an incorrect value");
-        }
-        return User::where('id', $this->userid)->first();
+        $user = User::where('id', $this->userid)->first();
+        return $user;
     }
 
     public static function exists($groupid, $userid){
