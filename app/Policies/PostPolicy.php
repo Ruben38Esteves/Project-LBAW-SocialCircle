@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class PostPolicy
 {
@@ -20,25 +21,19 @@ class PostPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Post $post): Response
+    public function view(User $user, Post $post): bool
     {
         $postOwner = $post->owner;
         if($postOwner->ispublic){
-            return $postOwner->ispublic
-                ? Response::allow()
-                : Response::deny('You cant see this post.');
+            return $postOwner->ispublic;
         }
         if(Auth::check()){
             $postViewer = Auth::user();
             if($postOwner==$postViewer){
-                return $postOwner == $postViewer
-                    ? Response::allow()
-                    : Response::deny('You cant see this post.');
+                return $postOwner == $postViewer;
             }
             if($postOwner->isFriend($postViewer)){
-                return $postOwner->isFriend($postViewer)
-                    ? Response::allow()
-                    : Response::deny('You cant see this post.');
+                return $postOwner->isFriend($postViewer);
             }
         }
         return false;

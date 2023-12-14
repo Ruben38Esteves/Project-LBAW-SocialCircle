@@ -52,6 +52,20 @@ class PostController extends Controller{
         }
     }
 
+    public function createGroupPost(Request $request, $id){
+        if(!Auth::check()){
+            return redirect('/login');
+        }else{
+            $user = Auth::user();
+            $post = new Post();
+            $post->userid = $user->id;
+            $post->groupid = $id;
+            $post->content = $request->content;
+            $post->save();
+            return redirect('/group/'.$id);
+        }
+    }
+
 
     public function search(Request $request)    {
         if(!Auth::check())

@@ -178,6 +178,8 @@ CREATE TABLE groupMember (
 CREATE TABLE groupJoinRequest (
   groupID INTEGER NOT NULL REFERENCES groups(groupID) ON UPDATE CASCADE,
   userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
   PRIMARY KEY (groupID, userID)
 );
 
@@ -306,20 +308,6 @@ CREATE TRIGGER update_tsv_user_trigger
 -- TRIGGERS
 --------------------------------------------------------------------------------
 
--- dá update à data de alteracao do friend request
-
-CREATE OR REPLACE FUNCTION update_friend_request_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER friend_request_updated_at_trigger
-BEFORE UPDATE ON friendRequest
-FOR EACH ROW
-EXECUTE FUNCTION update_friend_request_updated_at();
 
 -- cria uma friendship apenas quando um friend request é aceite
 
@@ -424,7 +412,13 @@ VALUES
 INSERT INTO userMessage (sourceID, targetID, message)
 VALUES
     (1, 2, 'Oi, como vai?'),
-    (2, 1, 'Olá! Estou bem, obrigado! E você?');
+    (2, 1, 'Olá! Estou bem, obrigado! E você?'),
+    (27, 26, 'Olá ruben'),
+    (26, 27, 'Olá meu rei dionisio'),
+    (26, 27, 'Tudo bem?'),
+    (27, 26, 'Tudo e contigo?'),
+    (26, 27, 'Tudo também!'),
+    (27, 26, 'Ainda bem!');
 
 INSERT INTO groups (ownerID, name, description, isPublic)
 VALUES
@@ -432,7 +426,8 @@ VALUES
 
 INSERT INTO groupMember (groupID, userID)
 VALUES
-    (1, 26);
+    (1, 26),
+    (1, 27);
   
 INSERT INTO groupJoinRequest (groupID, userID)
 VALUES

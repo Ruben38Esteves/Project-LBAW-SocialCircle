@@ -20,7 +20,7 @@ class UserPolicy
      * Determine whether the user can view the model.
      */
     public function view(User $user, User $user2): response
-    {
+    {   
         return $user2->ispublic || $user->friends->contains($user2) || $user->id == $user2->id || $user->isAdmin()
             ? Response::allow()
             : Response::deny('You are not allowed to view this user.');

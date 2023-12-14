@@ -15,18 +15,27 @@ class Friendship extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'userID',
-        'friendID'
+        'userid',
+        'friendid'
     ];
 
-    public function areFriends($userID, $friendID) {
-        $friendship = Friendship::where('userID', $userID)->where('friendID', $friendID)->first();
+    public $primarykey = ['userid', 'friendid'];
+
+    public static function areFriends($userID, $friendID) {
+        $friendship = Friendship::where('userid', $userID)->where('friendid', $friendID)->first();
         if ($friendship == null) {
-            $friendship = Friendship::where('userID', $friendID)->where('friendID', $userID)->first();
+            $friendship = Friendship::where('userid', $friendID)->where('friendid', $userID)->first();
             if ($friendship == null) {
                 return false;
             }
         }
         return true;
+    }
+
+    public static function create($userID, $friendID) {
+        $friendship = new Friendship;
+        $friendship->userid = $userID;
+        $friendship->friendid = $friendID;
+        $friendship->save();
     }
 }

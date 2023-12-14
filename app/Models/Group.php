@@ -28,7 +28,7 @@ class Group extends Model
 
     public function getMembers()
     {
-        return $this->belongsToMany('App\Models\User', 'groupmember', 'groupid', 'userid');
+        return $this->belongsToMany(User::class, 'groupmember', 'groupid', 'userid');
     }
 
     public function getPosts() {
@@ -41,5 +41,13 @@ class Group extends Model
 
     public function getJoinRequests() {
         return $this->hasMany(GroupJoinRequest::class, 'groupid', 'groupid');
+    }
+
+    public function addMember(User $user){
+        $this->getMembers()->attach($user);
+    }
+
+    public function removeMember(User $user){
+        $this->getMembers()->detach($user);
     }
 }
