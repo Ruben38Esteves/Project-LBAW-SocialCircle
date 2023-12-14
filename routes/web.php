@@ -56,13 +56,13 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::controller(PostController::class)->group(function () {
-    Route::get('/home', 'homeFeed')->name('posts');
     Route::post('/posts', 'create')->name('posts.create');
     Route::put('/posts/edit/{id}', [PostController::class, 'update']);
     Route::delete('/posts/delete/{id}', [PostController::class, 'delete']); 
 });
 
 Route::controller(UserController::class)->group(function (){
+    Route::get('/home', 'homeFeed')->name('posts');
     Route::get('/profile/{username}', 'fillProfile')->name('user');
     Route::get('/search', 'search')->name('search');
     Route::get('/friends/{username}', 'friends')->name('friends');
@@ -85,5 +85,5 @@ Route::controller(GroupJoinRequestController::class)->group(function (){
 });
 
 Route::controller(UserNotificationController::class)->group(function (){
-    Route::post('/notification/{id}/markViewed', 'markAsViewed')->name('markNotifViewed');
+    Route::post('/notification/{id}/markViewed', 'markNotifAsViewed')->name('markNotifViewed');
 });

@@ -28,10 +28,9 @@ class UserNotification extends Model{
         return $this->belongsTo(User::class, 'userid', 'id');
     }
 
-    public function user(){
-        $notif=Notification::where('notificationid',$this->notificationid);
-        $user=User::where('id',$notif->user_id);
-        return $user;
+    public function userid(){
+        $notif=$this->notification();
+        return $notif->notifieduser;
     }
 
     public function text(){

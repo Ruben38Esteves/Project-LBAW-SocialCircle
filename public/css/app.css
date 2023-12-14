@@ -102,13 +102,13 @@ body {
   }
   
   .notification-Viewed {
-    border: 2px solid rgb(68, 62, 94);
+    background-color:  rgb(68, 62, 94);
     margin-bottom: 5px;
     border-radius: 5px;
     padding: 5px;
   }
   .notification-notViewed {
-    border: 2px solid rgb(38, 73, 170);
+    background-color:  rgb(38, 73, 170);
     margin-bottom: 5px;
     border-radius: 5px;
     padding: 5px;
@@ -119,8 +119,9 @@ body {
   }
 
   .post {
-    border: 2px solid #000000;
+    background-color: rgb(198, 200, 201);
     margin-bottom: 10px;
+    margin-left: 10px;
     border-radius: 10px;
     padding: 20px;
   }

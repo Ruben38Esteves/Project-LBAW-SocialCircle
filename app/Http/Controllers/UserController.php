@@ -50,6 +50,7 @@ class UserController extends Controller
 
     public function fillProfile($username){
         $user = User::where('username', $username)->first();
+        $notifications = $user->notifications;
         if(Auth::check()){
             $userself = Auth::user();
             if($userself->can('view', $user)){
@@ -95,7 +96,7 @@ class UserController extends Controller
         }
     }
 
-    public function notifications($username){
+    public function notificationsFromUser($username){
         $user = User::where('username', $username)->first();
         $user_me = Auth::user();
         $notifs = $user->notifications;
@@ -124,6 +125,20 @@ class UserController extends Controller
             }
         }
         return $result;
+    }
+
+    public function homeFeed(){
+        if(Auth::check()){
+            $user = Auth::user();
+            $posts = Post::all()->sortByDesc('created_at');
+            foreach ($posts as $post) {
+                if (!($user->can('view', $post))) {
+                    $posts->forget($post);
+                }
+            }
+            $notifications = $user->notifications;
+            return view('pages.home', ['posts' => $posts]);
+        }
     }
 }    
 

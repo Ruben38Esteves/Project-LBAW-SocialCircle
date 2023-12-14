@@ -39,17 +39,6 @@ class PostController extends Controller{
         }
     }
 
-
-    public function homeFeed(){
-        $posts = Post::all()->sortByDesc('created_at');
-        foreach ($posts as $post) {
-            if (Auth::user()->cannot('view', $post)) {
-                $posts->forget($post);
-            }
-        }
-        return view('pages.home', ['posts' => $posts]);
-    }
-
     public function create(Request $request){
         if(Auth::user()->cannot('create', Post::class)){
             return redirect('/login');

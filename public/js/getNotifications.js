@@ -1,3 +1,4 @@
+/*
 function getNotificationList(username) {
     fetch('/notifications/' + username)
         .then(response => response.json())
@@ -18,4 +19,21 @@ function getNotificationList(username) {
             ul.style.display = 'none';
             sidebar.innerHTML += notificationListHTML;            
         })
+}
+*/
+
+function getNotificationList(){
+    const sidebar = document.querySelector('.sidebar');            
+    const ul = sidebar.querySelector('ul');
+    ul.style.display = 'none';
+    const notifs = sidebar.querySelector('div');
+    notifs.style.display = 'block';
+}
+
+function hideNotifs(){
+    const sidebar = document.querySelector('.sidebar');            
+    const ul = sidebar.querySelector('ul');
+    ul.style.display = 'block';
+    const notifs = sidebar.querySelector('div');
+    notifs.style.display = 'none';
 }

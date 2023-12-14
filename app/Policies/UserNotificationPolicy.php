@@ -37,7 +37,7 @@ class UserNotificationPolicy
      */
     public function update(User $user, UserNotification $userNotification): bool
     {
-        return $user->isAdmin() || $user==$userNotification->user();
+        return $user->isAdmin() || $user->id==$userNotification->user()->id;
     }
 
     /**
