@@ -10,12 +10,12 @@ use App\Models\User;
 class Message extends Model
 {
     public $timestamps  = false;
-    protected $table = 'userMessage';
-    protected $primaryKey = 'messageID';
+    protected $table = 'usermessage';
+    protected $primaryKey = 'messageid';
 
     protected $fillable = [
-        'sourceID',
-        'targetID',
+        'sourceid',
+        'targetid',
         'sent_at',
         'message'
     ];
@@ -31,4 +31,5 @@ class Message extends Model
     public function date() {
         return $this->sent_at;
     }
+   
 }

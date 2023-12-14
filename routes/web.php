@@ -27,6 +27,7 @@ use App\Http\Controllers\Auth\RegisterController;
 
 // Home
 Route::redirect('/', '/login');
+Route::redirect('/', '/messages');
 
 // Cards
 Route::controller(CardController::class)->group(function () {
@@ -67,6 +68,7 @@ Route::controller(UserController::class)->group(function (){
     Route::get('/search', 'search')->name('search');
     Route::get('/friends/{username}', 'friends')->name('friends');
     Route::get('/groups/{username}', 'groups')->name('groups');
+    //Route::get('/messages/{username}', 'messages')->name('messages');
 });
 
 Route::controller(CommentController::class)->group(function (){
@@ -86,4 +88,10 @@ Route::controller(GroupJoinRequestController::class)->group(function (){
     Route::put('/group/{id}/accept-request', 'accept')->name('group-join-request.accept');
     Route::put('/group/{id}/reject-request', 'reject')->name('group-join-request.reject');
     Route::delete('/group/{id}/remove-request', 'remove')->name('group-join-request.remove');
+});
+
+Route::controller(MessageController::class)->group(function (){
+    Route::get('/messages/{username}', 'showPage')->name('messages');
+    Route::get('/message/{username}', 'messages')->name('messages');
+    Route::post('/message/send/{username}', 'sendMessage')->name('messages.send');
 });
