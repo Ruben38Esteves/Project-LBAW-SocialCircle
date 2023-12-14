@@ -35,4 +35,19 @@ class GroupJoinRequestController extends Controller
         }
         return redirect('/group/'.$id);
     }
+
+    public function accept(Request $request, $id) {
+        $user = Auth::user();
+        $group = Group::findOrFail($id);
+        // falta policy
+        $requestingUser = User::findOrFail($request->userid);
+        $groupJoinRequest = GroupJoinRequest::where('userid', $requestingUser->id)->where('groupid', $group->groupid)->first();
+        if ($groupJoinRequest) {
+            $group->addMember($requestingUser);
+            $groupJoinRequest->delete();
+            $members = $group->getMembers()->get();
+            $joinRequests = $group->getJoinRequests()->get();
+            return view('pages.managegroup', compact('group', 'members', 'joinRequests'));
+        }
+    }
 }

@@ -177,6 +177,8 @@ CREATE TABLE groupMember (
 CREATE TABLE groupJoinRequest (
   groupID INTEGER NOT NULL REFERENCES groups(groupID) ON UPDATE CASCADE,
   userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
   PRIMARY KEY (groupID, userID)
 );
 
@@ -432,7 +434,8 @@ VALUES
 
 INSERT INTO groupMember (groupID, userID)
 VALUES
-    (1, 26);
+    (1, 26),
+    (1, 27);
   
 INSERT INTO groupJoinRequest (groupID, userID)
 VALUES
