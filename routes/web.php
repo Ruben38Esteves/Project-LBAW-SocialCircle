@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserNotificationController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -57,7 +58,6 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::controller(PostController::class)->group(function () {
-    Route::get('/home', 'homeFeed')->name('posts');
     Route::post('/posts', 'create')->name('posts.create');
     Route::put('/posts/edit/{id}', [PostController::class, 'update']);
     Route::delete('/posts/delete/{id}', [PostController::class, 'delete']);
@@ -65,11 +65,16 @@ Route::controller(PostController::class)->group(function () {
 });
 
 Route::controller(UserController::class)->group(function (){
+    Route::get('/home', 'homeFeed')->name('posts');
     Route::get('/profile/{username}', 'fillProfile')->name('user');
     Route::get('/search', 'search')->name('search');
     Route::get('/friends/{username}', 'friends')->name('friends');
     Route::get('/groups/{username}', 'groups')->name('groups');
+<<<<<<< routes/web.php
+    Route::get('/notifications/{username}','notifications')->name('notifications');
+=======
     //Route::get('/messages/{username}', 'messages')->name('messages');
+>>>>>>> routes/web.php
 });
 
 Route::controller(CommentController::class)->group(function (){
@@ -91,6 +96,9 @@ Route::controller(GroupJoinRequestController::class)->group(function (){
     Route::delete('/group/{id}/remove-request', 'remove')->name('group-join-request.remove');
 });
 
+Route::controller(UserNotificationController::class)->group(function (){
+    Route::post('/notification/{id}/markViewed', 'markNotifAsViewed')->name('markNotifViewed');
+});
 Route::controller(MessageController::class)->group(function (){
     Route::get('/messages/{username}', 'showPage')->name('messages');
     Route::get('/message/{username}', 'messages')->name('messages');

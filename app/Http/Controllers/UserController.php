@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\GroupNotification;
+use App\Models\UserNotification;
+use App\Policies\UserPolicy;
 use App\Models\Group;
 use App\Models\Message;
  
@@ -49,6 +52,7 @@ class UserController extends Controller
 
     public function fillProfile($username){
         $user = User::where('username', $username)->first();
+        $notifications = $user->notifications;
         if(Auth::check()){
             $userself = Auth::user();
             if($userself->can('view', $user)){
@@ -91,6 +95,51 @@ class UserController extends Controller
             }
         }else{
             return redirect('/login');
+        }
+    }
+
+    public function notificationsFromUser($username){
+        $user = User::where('username', $username)->first();
+        $user_me = Auth::user();
+        $notifs = $user->notifications;
+        $result=[];
+        if(Auth::check()){
+            if($user_me->can('view',$notifs->first())){
+                foreach($notifs as $notif){
+                    if($notif->viewed){
+                        $newnotif = (object)[
+                            'id' => $notif->notificationid,
+                            'text' => $notif->text(),
+                            'date' => $notif->created_at,
+                            'viewed' => 'true'
+                        ];
+                    }else{
+                        $newnotif = (object)[
+                            'id' => $notif->notificationid,
+                            'text' => $notif->text(),
+                            'date' => $notif->created_at,
+                            'viewed' => 'false'
+                        ];
+                    }
+                    
+                    $result[] = $newnotif;
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function homeFeed(){
+        if(Auth::check()){
+            $user = Auth::user();
+            $posts = Post::all()->sortByDesc('created_at');
+            foreach ($posts as $post) {
+                if (!($user->can('view', $post))) {
+                    $posts->forget($post);
+                }
+            }
+            $notifications = $user->notifications;
+            return view('pages.home', ['posts' => $posts]);
         }
     }
 }    

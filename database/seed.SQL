@@ -122,7 +122,8 @@ CREATE TABLE userNotification (
   notificationID INTEGER PRIMARY KEY REFERENCES notification(notificationID),
   userID INTEGER NOT NULL REFERENCES users(id) ON UPDATE CASCADE,
   notification_type user_notification_types NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  viewed BOOLEAN DEFAULT false
 );
 
 CREATE TABLE groups (
@@ -312,10 +313,14 @@ CREATE TRIGGER update_tsv_user_trigger
 
 CREATE OR REPLACE FUNCTION create_friendship()
 RETURNS TRIGGER AS $$
+DECLARE
+  notification_id INTEGER;
 BEGIN
   IF NEW.friendRequestState = 'accepted' THEN
     INSERT INTO friendship VALUES (NEW.sourceID, NEW.targetID);
     INSERT INTO friendship VALUES (NEW.targetID, NEW.sourceID);
+    INSERT INTO notification (notifiedUser) VALUES (NEW.sourceID) RETURNING notificationID INTO notification_id;
+    INSERT INTO userNotification (notificationID, userID, notification_type) VALUES (notification_id, 1, 'accepted_friend_request');
   END IF;
   RETURN NEW;
 END;
@@ -392,7 +397,8 @@ INSERT INTO friendRequest (sourceID, targetID, friendRequestState, updated_at)
 VALUES
     (1, 2, 'pending', NOW()),
     (3, 4, 'accepted', NOW()),
-    (5, 6, 'pending', NOW());
+    (5, 6, 'pending', NOW()),
+    (27, 26, 'pending', NOW());
 
 INSERT INTO friendship (userID, friendID)
 VALUES
@@ -456,15 +462,19 @@ VALUES
     (1, false, true, true),
     (2, true, true, false);
 
-INSERT INTO notification (notificationID, notifiedUser)
+INSERT INTO notification ( notifiedUser)
 VALUES
-    (1, 1),
-    (2, 2);
+    (1),
+    (2),
+    (26),
+    (26);
 
-INSERT INTO userNotification (notificationID, userID, notification_type)
+INSERT INTO userNotification (notificationID, userID, notification_type,viewed)
 VALUES
-    (1, 1, 'request_friendship'),
-    (2, 2, 'request_friendship');
+    (1, 1, 'request_friendship',false),
+    (2, 2, 'request_friendship',false),
+    (3, 27, 'request_friendship',false),
+    (4, 27, 'received_message',true);
 
 INSERT INTO event (eventID, ownerID, title, description, created_at, locationID, startDate, endDate)
 VALUES

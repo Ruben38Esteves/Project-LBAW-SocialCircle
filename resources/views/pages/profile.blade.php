@@ -37,5 +37,10 @@
                 @include('partials.posts', ['post' => $post])
             @endforeach
         </section>
+        <?php
+            $notifs = $user->notifications;
+        ?>
+        @each('partials.notification',$notifs ,'notif')
+
     </div>
 @endsection
