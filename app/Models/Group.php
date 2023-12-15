@@ -22,8 +22,8 @@ class Group extends Model
         'isactive'
     ];
 
-    public Function owner() {
-        return User::find($this->ownerid);
+    public function owner() {
+        return $this->belongsTo(User::class, 'ownerid', 'id');
     }
 
     public function getMembers()

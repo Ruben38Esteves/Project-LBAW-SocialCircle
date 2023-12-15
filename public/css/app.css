@@ -101,15 +101,36 @@ body {
     border-color: #4a76da;
   }
   
+  #notifications{
+    margin-left: 0px;
+    padding: 0px;
+  }
+
+  .sidebar .notifcontainer{
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+  }
+
+  .sidebar .friendshipbuttons{
+    display: inline-flexbox;
+  }
+
+  .sidebar .friendshipbuttons{
+    display: inline-flexbox;
+  }
+
+
   .notification-Viewed {
     background-color:  rgb(68, 62, 94);
+    margin: 0px;
     margin-bottom: 5px;
     border-radius: 5px;
     padding: 5px;
   }
   .notification-notViewed {
     background-color:  rgb(38, 73, 170);
-    margin-bottom: 5px;
+    margin: 0px;
     border-radius: 5px;
     padding: 5px;
   }

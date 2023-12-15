@@ -6,12 +6,14 @@
 <?php
     use App\Models\GroupJoinRequest;
     if ($group->ispublic == 1 || $group->isMember(Auth::user())) {
+        $user = Auth::user();
+        $owner = $group->owner;
 ?>
         
     <div class="group-container">
         <h1 class="group-name">{{ $group->name }}</h1>
         <h2 class="group-description">{{ $group->description }}</h2>
-        <?php if ($group->owner() == Auth::user()) { ?>
+        <?php if ($user->id == $owner->id) { ?>
             <a href="{{ route('group.manage', ['id' => $group->groupid]) }}"><button class='group-manage-button'>Manage Group</button></a>
         <?php } ?>
 

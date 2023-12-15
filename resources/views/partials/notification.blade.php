@@ -7,19 +7,19 @@ $user = User::where('id', $notification->userid)->first();
 
 if($notification->viewed){
 	if($notification->notification_type=='received_message') { ?>
-		<a href="{{ url('/home') }}">
+		<a class="notifcontainer" href="{{ url('/home') }}">
 			<div class='notification-Viewed'>
 				<p>{{ $notification->text() }}</p>
 				<p>{{ $notification->created_at }}</p>
 			</div>
 		</a>
 	<?php } else {?>
-		<a href="{{ url('/profile/'.$user->username.'') }}">
+		<a class="notifcontainer" href="{{ url('/profile/'.$user->username.'') }}">
 			<div class='notification-Viewed'>
 				<p>{{ $notification->text() }}</p>
 				<p>{{ $notification->created_at }}</p>
 				<?php if($notification->notification_type=='request_friendship'){ ?>
-					<ul style="display: inline-block">
+					<ul class="friendshipbuttons">
 						<li>
 							<button >✓</button>
 						</li>
@@ -31,7 +31,7 @@ if($notification->viewed){
 			</div>
 		</a>
 <?php } }else{ if($notification->notification_type=='received_message'){ ?>
-	<a href="{{ url('/home') }}">
+	<a class="notifcontainer" href="{{ url('/home') }}">
 		<div class='notification-notViewed'>
 			<p>{{ $notification->text() }}</p>
 			<form action="{{ route('markNotifViewed', ['id' => $notification->notificationid]) }}" method="POST">
@@ -42,11 +42,11 @@ if($notification->viewed){
 		</div>
 	</a>
 <?php }else{ ?>
-	<a href="{{ url('/profile/'.$user->username.'') }}">
+	<a class="notifcontainer" href="{{ url('/profile/'.$user->username.'') }}">
 		<div class='notification-notViewed'>
 			<p>{{ $notification->text() }}</p>
 			<?php if($notification->notification_type=='request_friendship'){ ?>
-				<ul style="display: inline-block">
+				<ul class="friendshipbuttons">
 					<li>
 						<button >✓</button>
 					</li>
