@@ -118,6 +118,7 @@ body {
 
   .sidebar .friendshipbuttons{
     display: inline-flexbox;
+    width: 50px;
   }
 
 

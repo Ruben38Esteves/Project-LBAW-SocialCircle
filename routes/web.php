@@ -99,7 +99,7 @@ Route::controller(UserNotificationController::class)->group(function (){
 });
 Route::controller(MessageController::class)->group(function (){
     Route::get('/messages/{username}', 'showPage')->name('messages');
-    Route::get('/message/{username}', 'messages')->name('messages');
+    Route::get('/message/{username}', 'messages')->name('getMessages');
     Route::post('/message/send/{username}', 'sendMessage')->name('messages.send');
 });
 
