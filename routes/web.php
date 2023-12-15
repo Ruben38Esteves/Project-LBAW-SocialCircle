@@ -70,11 +70,8 @@ Route::controller(UserController::class)->group(function (){
     Route::get('/search', 'search')->name('search');
     Route::get('/friends/{username}', 'friends')->name('friends');
     Route::get('/groups/{username}', 'groups')->name('groups');
-<<<<<<< routes/web.php
     Route::get('/notifications/{username}','notifications')->name('notifications');
-=======
     //Route::get('/messages/{username}', 'messages')->name('messages');
->>>>>>> routes/web.php
 });
 
 Route::controller(CommentController::class)->group(function (){
