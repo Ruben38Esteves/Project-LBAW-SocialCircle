@@ -45,6 +45,7 @@ Route::controller(ItemController::class)->group(function () {
     Route::delete('/api/item/{id}', 'delete');
 });
 
+
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
