@@ -15,6 +15,22 @@ function getFriendList(username) {
         })
 }
 
+function getFriendList(){
+    const sidebar = document.querySelector('.sidebar');            
+    const ul = sidebar.querySelector('ul');
+    ul.style.display = 'none';
+    const notifs = sidebar.querySelector('#friends');
+    notifs.style.display = 'block';
+}
+
+function hideFriends(){
+    const sidebar = document.querySelector('.sidebar');            
+    const ul = sidebar.querySelector('ul');
+    ul.style.display = 'block';
+    const notifs = sidebar.querySelector('#friends');
+    notifs.style.display = 'none';
+}
+
 function restoreSidebar() {
     const sidebar = document.querySelector('.sidebar');
     const friends = sidebar.querySelector('.sidebar-friends');

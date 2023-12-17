@@ -26,7 +26,7 @@ function getNotificationList(){
     const sidebar = document.querySelector('.sidebar');            
     const ul = sidebar.querySelector('ul');
     ul.style.display = 'none';
-    const notifs = sidebar.querySelector('div');
+    const notifs = sidebar.querySelector('#notifications');
     notifs.style.display = 'block';
 }
 

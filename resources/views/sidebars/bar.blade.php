@@ -1,6 +1,8 @@
 @section('sidebar')
     <?php 
     $notifications = Auth::user()->notifications;
+    $friends = Auth::user()->friends;
+    $groups = Auth::user()->groups;
     ?>
     <aside class = 'sidebar'>
         <ul class = 'list-unstyled sidebar-itens-positioning'>
@@ -27,6 +29,11 @@
             <h1 id="page-title"><a href="{{ url('/home') }}">SocialCircle</a></h1>
             @each('partials.notification', $notifications, 'notification')
             <button onclick='hideNotifs()'>Go Back</button>
+        </div>
+        <div id='friends' style="display: none">
+            <h1 id="page-title"><a href="{{ url('/home') }}">SocialCircle</a></h1>
+            @each('partials.userheader',$friends, 'user')
+            <button onclick='hideFriends()'>Go Back</button>
         </div>
     </aside>
 @endsection
