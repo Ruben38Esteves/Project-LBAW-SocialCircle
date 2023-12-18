@@ -569,6 +569,10 @@ input:checked+.slider:before {
     margin-left: 0px;
     margin-top: 2px;
     color:#333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 130px;
 }
 
 .notifcontainer .user_header_img {
