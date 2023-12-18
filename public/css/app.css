@@ -26,6 +26,10 @@ main>header span {
     justify-self: center;
 }
 
+#content {
+    padding: 20px;
+}
+
 #content label {
     font-weight: normal;
 }
@@ -158,10 +162,10 @@ input[type=password]:focus {
     margin-bottom: 5px;
 }
 
+
 .post {
     background-color: rgb(198, 200, 201);
     margin-bottom: 10px;
-    margin-left: 10px;
     border-radius: 10px;
     padding: 20px;
 }
@@ -527,4 +531,40 @@ input:checked+.slider:before {
     margin-left: 0px;
     margin-top: 2px;
     color: #555;
+}
+
+.sidebar .group_header {
+    display: inline-flex;
+    width: 97%;
+    background-color: rgb(198, 200, 201);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+.group_header .group_name {
+    font-size: 18px;
+    margin-left: 0px;
+    margin-bottom: -9px;
+    margin-top: 0px;
+    color: #000000;
+}
+
+.group_header .group_description {
+    font-size: 12px;
+    margin-left: 0px;
+    margin-top: 2px;
+    color: #555;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+}
+
+.user_header .user_message{
+    font-size: 14px;
+    margin-left: 0px;
+    margin-top: 2px;
+    color:#333;
 }

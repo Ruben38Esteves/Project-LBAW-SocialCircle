@@ -1,3 +1,4 @@
+/*
 function getFriendList(username) {
     fetch('/friends/' + username)
         .then(response => response.json())
@@ -14,6 +15,7 @@ function getFriendList(username) {
             sidebar.innerHTML += friendListHTML;            
         })
 }
+*/
 
 function getFriendList(){
     const sidebar = document.querySelector('.sidebar');            
@@ -29,13 +31,4 @@ function hideFriends(){
     ul.style.display = 'block';
     const notifs = sidebar.querySelector('#friends');
     notifs.style.display = 'none';
-}
-
-function restoreSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    const friends = sidebar.querySelector('.sidebar-friends');
-    friends.remove();
-    const ul = sidebar.querySelector('ul');
-    ul.style.display = 'block';
-    
 }

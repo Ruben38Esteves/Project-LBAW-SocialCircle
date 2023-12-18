@@ -21,7 +21,12 @@ if($notification->viewed){
 				<?php if($notification->notification_type=='request_friendship'){ ?>
 					<ul class="friendshipbuttons">
 						<li>
-							<button >✓</button>
+							<form>
+								<form action="{{ route('friend-request.accept', ['username' => $user->username]) }}" method="POST">
+									@csrf
+									<button type="submit">✓</button>
+								</form>
+							</form>
 						</li>
 						<li>
 							<button >✕</button>

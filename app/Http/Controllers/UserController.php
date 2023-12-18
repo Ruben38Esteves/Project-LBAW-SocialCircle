@@ -98,36 +98,6 @@ class UserController extends Controller
         }
     }
 
-    public function notificationsFromUser($username){
-        $user = User::where('username', $username)->first();
-        $user_me = Auth::user();
-        $notifs = $user->notifications;
-        $result=[];
-        if(Auth::check()){
-            if($user_me->can('view',$notifs->first())){
-                foreach($notifs as $notif){
-                    if($notif->viewed){
-                        $newnotif = (object)[
-                            'id' => $notif->notificationid,
-                            'text' => $notif->text(),
-                            'date' => $notif->created_at,
-                            'viewed' => 'true'
-                        ];
-                    }else{
-                        $newnotif = (object)[
-                            'id' => $notif->notificationid,
-                            'text' => $notif->text(),
-                            'date' => $notif->created_at,
-                            'viewed' => 'false'
-                        ];
-                    }
-                    
-                    $result[] = $newnotif;
-                }
-            }
-        }
-        return $result;
-    }
 
     public function homeFeed(){
         if(Auth::check()){

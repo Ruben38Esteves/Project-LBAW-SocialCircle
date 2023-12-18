@@ -29,7 +29,9 @@
                 <button type="submit" class="profile-addfriend-button">Add Friend</button>
             </form>
         @endif
-
+        <a href="/messages/{{$user->username}}">
+            <p>Message</p>
+        </a>
         <h3 class="profile-posts-heading">Posts:</h3>
         <section class="profile-posts-section" id='posts'>
             <?php $posts =  $user->ownPosts()->get();?>
