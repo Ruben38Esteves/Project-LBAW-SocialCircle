@@ -21,7 +21,18 @@
             <form action="{{ route('friend-request.remove', ['username' => $user->username]) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="profile-removefriend-button">Requested</button>
+                <button type="submit" class="profile-removefriendRequest-button">Requested</button>
+            </form>
+        @elseif (FriendRequest::exists($user->id, Auth::user()->id))
+            <form action="{{ route('friend-request.accept', ['username' => $user->username]) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <button type="submit" class="profile-acceptfriendRequest-button">Accept Friend Request</button>
+            </form>
+            <form action="{{ route('friend-request.remove', ['username' => $user->username]) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="profile-removefriendRequest-button">Decline Friend Request</button>
             </form>
         @else
             <form action="{{ route('friend-request.create', ['username' => $user->username]) }}" method="POST">

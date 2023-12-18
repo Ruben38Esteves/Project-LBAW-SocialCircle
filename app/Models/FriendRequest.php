@@ -35,7 +35,9 @@ class FriendRequest extends Model
 
     public function accept(){
         $this->friendrequeststate = 'accepted';
-        $this->save();
+        FriendRequest::where('sourceid', $this->sourceid)
+                    ->where('targetid', $this->targetid)
+                    ->update(['friendrequeststate' => 'accepted']);
     }
 
     public static function exists($sourceid, $targetid){
