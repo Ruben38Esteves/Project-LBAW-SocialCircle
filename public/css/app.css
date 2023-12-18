@@ -100,7 +100,6 @@ main>header span {
 button {
     background-color: #4a76da;
     border-color: #4a76da;
-    width: 200px;
 }
 
 a.button {
@@ -133,28 +132,31 @@ input[type=password]:focus {
     border: 0px;
 }
 
-.sidebar .friendshipbuttons {
-    display: inline-flexbox;
+.sidebar .notificationbuttons {
+    list-style: none;
 }
 
-.sidebar .friendshipbuttons {
-    display: inline-flexbox;
-    width: 50px;
+.notificationbuttons li{
+    display: inline-block;
+    margin-right: 5px;
+
 }
 
 
 .notification-Viewed {
-    background-color: rgb(68, 62, 94);
+    background-color:rgb(198, 200, 201);
     margin: 0px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     border-radius: 5px;
     padding: 5px;
 }
 
 .notification-notViewed {
-    background-color: rgb(38, 73, 170);
+    background-color: rgb(198, 200, 201);
     margin: 0px;
+    margin-bottom: 15px;
     border-radius: 5px;
+    border-color: #106af1;
     padding: 5px;
 }
 
@@ -312,7 +314,7 @@ input[type=password]:focus {
     list-style: none;
 }
 
-.sidebar button {
+.sidebar .mainbutton {
     width: 97%
 }
 
@@ -567,4 +569,36 @@ input:checked+.slider:before {
     margin-left: 0px;
     margin-top: 2px;
     color:#333;
+}
+
+.notifcontainer .user_header_img {
+    display: inline-flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-top: 3px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid #000000;
+    overflow: hidden;
+}
+
+.notifcontainer .user_names .notificationbuttons li button {
+    width: 40px;
+    max-width: 50px;
+}
+
+.notification-notViewed .user_full_name {
+    color: #333;
+}
+
+.notification-Viewed .user_full_name {
+    color: #333;
+    margin-left: 10px;
+}
+
+.notifdate {
+    font-size: 12px;
+    color: #555;
+    margin-left: 10px;
 }

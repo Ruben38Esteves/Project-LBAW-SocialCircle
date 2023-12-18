@@ -34,6 +34,6 @@ function hideNotifs(){
     const sidebar = document.querySelector('.sidebar');            
     const ul = sidebar.querySelector('ul');
     ul.style.display = 'block';
-    const notifs = sidebar.querySelector('div');
+    const notifs = sidebar.querySelector('#notifications');
     notifs.style.display = 'none';
 }

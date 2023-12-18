@@ -1,70 +1,45 @@
-<?php 
-
+@php
 use App\Models\User;
 
 $user = User::where('id', $notification->userid)->first();
+@endphp
 
-
-if($notification->viewed){
-	if($notification->notification_type=='received_message') { ?>
-		<a class="notifcontainer" href="{{ url('/home') }}">
-			<div class='notification-Viewed'>
-				<p>{{ $notification->text() }}</p>
-				<p>{{ $notification->created_at }}</p>
-			</div>
-		</a>
-	<?php } else {?>
-		<a class="notifcontainer" href="{{ url('/profile/'.$user->username.'') }}">
-			<div class='notification-Viewed'>
-				<p>{{ $notification->text() }}</p>
-				<p>{{ $notification->created_at }}</p>
-				<?php if($notification->notification_type=='request_friendship'){ ?>
-					<ul class="friendshipbuttons">
+@if($notification->notification_type=='received_message')
+	<a class="notifcontainer" href="/messages/{{ $user->username }}">
+@else
+	<a class="notifcontainer" href="/profile/{{ $user->username }}">
+@endif
+	<div class="{{ $notification->viewed ? 'notification-Viewed' : 'notification-notViewed' }}">
+		<div class="user_header_img">
+			<img src="/images/default-user.jpg">
+		</div>
+		<ul class="user_names">
+			<li class="user_full_name">
+				{{ $notification->text() }}
+			</li>
+			<li>
+				<ul class="notificationbuttons">
+					@if($notification->notification_type=='request_friendship')
 						<li>
-							<form>
-								<form action="{{ route('friend-request.accept', ['username' => $user->username]) }}" method="POST">
-									@csrf
-									<button type="submit">✓</button>
-								</form>
+							<button>✓</button>
+						</li>
+						<li>
+							<button>✕</button>
+						</li>
+					@endif
+					@if(!$notification->viewed)
+						<li>
+							<form action="{{ route('markNotifViewed', ['id' => $notification->notificationid]) }}" method="POST">
+								@csrf
+								<button type="submit">Viewed</button>
 							</form>
 						</li>
-						<li>
-							<button >✕</button>
+					@endif
+						<li class="notifdate">
+							{{ $notification->created_at }}
 						</li>
-					</ul>
-				<?php } ?>
-			</div>
-		</a>
-<?php } }else{ if($notification->notification_type=='received_message'){ ?>
-	<a class="notifcontainer" href="{{ url('/home') }}">
-		<div class='notification-notViewed'>
-			<p>{{ $notification->text() }}</p>
-			<form action="{{ route('markNotifViewed', ['id' => $notification->notificationid]) }}" method="POST">
-				@csrf
-				<button type="submit">Mark as Viewed</button>
-			</form>
-			<p>{{ $notification->created_at }}</p>
-		</div>
-	</a>
-<?php }else{ ?>
-	<a class="notifcontainer" href="{{ url('/profile/'.$user->username.'') }}">
-		<div class='notification-notViewed'>
-			<p>{{ $notification->text() }}</p>
-			<?php if($notification->notification_type=='request_friendship'){ ?>
-				<ul class="friendshipbuttons">
-					<li>
-						<button >✓</button>
-					</li>
-					<li>
-						<button >✕</button>
-					</li>
 				</ul>
-			<?php } ?>
-			<form action="{{ route('markNotifViewed', ['id' => $notification->notificationid]) }}" method="POST">
-				@csrf
-				<button type="submit">Mark as Viewed</button>
-			</form>
-			<p>{{ $notification->created_at }}</p>
-		</div>
-	</a>
-<?php } } ?>
+			</li>
+		</ul>
+	</div>
+</a>

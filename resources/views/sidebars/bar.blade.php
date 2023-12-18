@@ -3,7 +3,6 @@
     use App\Models\Message;
     $notifications = Auth::user()->notifications;
     $friends = Auth::user()->friends;
-    dd($friends);
     $groups = Auth::user()->groups;
     $messages = [];
     foreach ($friends as $friend) {
@@ -32,26 +31,21 @@
                 <h1 id="page-title"><a href="{{ url('/home') }}">SocialCircle</a></h1>
             </li>
             <li>
-                <button onclick="location.href='{{url('/home')}}'">Home</button>
+                <button class="mainbutton" onclick="location.href='{{url('/home')}}'">Home</button>
             </li>
             <li>
-                <button onclick='getMessageList()'>Messages</button>
+                <button class="mainbutton" onclick='getMessageList()'>Messages</button>
             </li>
             <li>
-                <button onclick='getGroupList()'>Groups</button>
+                <button class="mainbutton" onclick='getGroupList()'>Groups</button>
             </li>
             <li>
-                <button onclick='getFriendList()'>Friends</button>
+                <button class="mainbutton" onclick='getFriendList()'>Friends</button>
             </li>
             <li>
-                <button onclick='getNotificationList()'>Notifications</button>
+                <button class="mainbutton" onclick='getNotificationList()'>Notifications</button>
             </li>
         </ul>
-        <div id='notifications' style="display: none">
-            <h1 id="page-title"><a href="{{ url('/home') }}">SocialCircle</a></h1>
-            @each('partials.notification', $notifications, 'notification')
-            <button onclick='hideNotifs()'>Go Back</button>
-        </div>
         <div id='friends' style="display: none">
             <h1 id="page-title"><a href="{{ url('/home') }}">SocialCircle</a></h1>
             @each('partials.userheader',$friends, 'user')
@@ -66,6 +60,11 @@
             <h1 id="page-title"><a href="{{ url('/home') }}">SocialCircle</a></h1>
             @each('partials.messagemini',$messages, 'message')
             <button onclick='hideMessages()'>Go Back</button>
+        </div>
+        <div id='notifications' style="display: none">
+            <h1 id="page-title"><a href="{{ url('/home') }}">SocialCircle</a></h1>
+            @each('partials.notification', $notifications, 'notification')
+            <button onclick='hideNotifs()'>Go Back</button>
         </div>
     </aside>
 @endsection
