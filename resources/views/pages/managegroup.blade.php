@@ -20,7 +20,7 @@
             </ul>
         </div>
         <div class="join-requests-list">
-            <h2 class="join-requests-list-heading">Join Requests:</h2>
+            <h2 class="join-requests-list-heading">Join Requests: {{ count($joinRequests) }}</h2>
             <ul class="join-requests-list">
                 @foreach ($joinRequests as $joinRequest)
                     <li class="join-request-list-item">
