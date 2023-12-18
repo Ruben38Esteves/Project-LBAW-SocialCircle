@@ -1,14 +1,17 @@
 <div id="post_{{$post->postid}}" class="post">
+    <!--
     <a href="/profile/{{$post->owner->username}}" class="post-link">
         <div class="post-header">
             <div class="miniUserPic">
-                
+                <img src="/images/presi.jpeg">
             </div>
             <div class="username">
                 {{$post->owner->username}}
             </div>
         </div>
     </a>
+    -->
+    @each('partials.userheader', [$post->owner], 'user')
     <div class="post-content">
         <div class="post_text_content" style="display: block">
             {{ $post->content }}

@@ -1,5 +1,5 @@
---DROP SCHEMA IF EXISTS lbaw_23155 CASCADE;
---CREATE SCHEMA IF NOT EXISTS lbaw_23155_2;
+DROP SCHEMA IF EXISTS lbaw23155_2 CASCADE;
+CREATE SCHEMA IF NOT EXISTS lbaw23155_2;
 SET SEARCH_PATH TO lbaw23155_2;
 --------------------------------------------------------------------------------
 -- DROP

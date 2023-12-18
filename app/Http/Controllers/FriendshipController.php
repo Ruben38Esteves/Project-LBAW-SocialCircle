@@ -60,6 +60,15 @@ class FriendshipController extends Controller
         ])->first();
 
         $friendRequest->accept();
+        DB::table('friendship')->insert([
+            'userid' => $userID,
+            'friendid' => $friend->id
+        ]);
+        DB::table('friendship')->insert([
+            'userid' => $friend->id,
+            'friendid' => $userID
+        ]);
+        
         return view('pages.profile', ['user' => $friend]);
     }
 }

@@ -1,3 +1,4 @@
+/*
 function getGroupList(username) {
     fetch('/groups/' + username)
         .then(response => response.json())
@@ -14,4 +15,21 @@ function getGroupList(username) {
             ul.style.display = 'none';
             sidebar.innerHTML += groupListHTML;
         });
+}
+*/
+
+function getGroupList(){
+    const sidebar = document.querySelector('.sidebar');            
+    const ul = sidebar.querySelector('ul');
+    ul.style.display = 'none';
+    const notifs = sidebar.querySelector('#groups');
+    notifs.style.display = 'block';
+}
+
+function hideGroups(){
+    const sidebar = document.querySelector('.sidebar');            
+    const ul = sidebar.querySelector('ul');
+    ul.style.display = 'block';
+    const notifs = sidebar.querySelector('#groups');
+    notifs.style.display = 'none';
 }
