@@ -21,10 +21,18 @@ $user = User::where('id', $notification->userid)->first();
 				<ul class="notificationbuttons">
 					@if($notification->notification_type=='request_friendship')
 						<li>
-							<button>✓</button>
+							<form action="{{ route('friend-request.accept', ['username' => $user->username]) }}" method="POST">
+								@csrf
+								@method('PUT')
+								<button type="submit">✓</button>
+							</form>
 						</li>
 						<li>
-							<button>✕</button>
+							<form action="{{ route('friend-request.remove', ['username' => $user->username]) }}" method="POST">
+								@csrf
+								@method('PUT')
+								<button type="submit">✕</button>
+							</form>
 						</li>
 					@endif
 					@if(!$notification->viewed)

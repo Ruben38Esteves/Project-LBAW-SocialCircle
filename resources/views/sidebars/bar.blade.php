@@ -6,8 +6,8 @@
     $groups = Auth::user()->groups;
     $messages = [];
     foreach ($friends as $friend) {
-        $message1 = Message::where('sourceid', $friend->id)->where('targetid', Auth::user()->id)->orderBy('sent_at', 'desc')->first();
-        $message2 = Message::where('sourceid', Auth::user()->id)->where('targetid', $friend->id)->orderBy('sent_at', 'desc')->first();
+        $message1 = Message::where('sourceid', $friend->id)->where('targetid', Auth::user()->id)->latest('sent_at')->first();
+        $message2 = Message::where('sourceid', Auth::user()->id)->where('targetid', $friend->id)->latest('sent_at')->first();
         if ($message1 != null) {
             if($message2 != null) {
                 if ($message1->sent_at > $message2->sent_at) {

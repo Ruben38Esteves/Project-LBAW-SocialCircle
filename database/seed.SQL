@@ -408,16 +408,16 @@ VALUES
     (3, 4),
     (4, 3);
   
-INSERT INTO userMessage (sourceID, targetID, message)
+INSERT INTO userMessage (sourceID, targetID, message, sent_at)
 VALUES
-    (1, 2, 'Oi, como vai?'),
-    (2, 1, 'Olá! Estou bem, obrigado! E você?'),
-    (27, 26, 'Olá ruben'),
-    (26, 27, 'Olá meu rei dionisio'),
-    (26, 27, 'Tudo bem?'),
-    (27, 26, 'Tudo e contigo?'),
-    (26, 27, 'Tudo também!'),
-    (27, 26, 'Ainda bem!');
+    (1, 2, 'Oi, como vai?', '2021-05-24 20:00:00'),
+    (2, 1, 'Olá! Estou bem, obrigado! E você?', '2021-05-24 20:00:00'),
+    (27, 26, 'Olá meu rei ruben', '2021-05-24 20:00:00'),
+    (26, 27, 'Olá dionisio', '2021-05-24 20:00:00'),
+    (26, 27, 'Tudo bem?', '2021-05-24 20:00:00'),
+    (27, 26, 'Tudo e contigo?', '2021-05-24 20:00:00'),
+    (26, 27, 'Tudo também!', '2021-05-24 21:00:00'),
+    (27, 26, 'Ainda bem!', '2021-05-24 21:30:00');
 
 INSERT INTO groups (ownerID, name, description, isPublic)
 VALUES
