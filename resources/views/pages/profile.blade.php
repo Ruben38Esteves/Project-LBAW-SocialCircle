@@ -1,5 +1,5 @@
-@use(App\Models\Friendship);
-@use(App\Models\FriendRequest);
+@use(App\Models\Friendship)
+@use(App\Models\FriendRequest)
 
 @extends('layouts.app')
 @section('content')
@@ -40,7 +40,9 @@
                 <button type="submit" class="profile-addfriend-button">Add Friend</button>
             </form>
         @endif
-
+        <a href="/messages/{{$user->username}}">
+            <p>Message</p>
+        </a>
         <h3 class="profile-posts-heading">Posts:</h3>
         <section class="profile-posts-section" id='posts'>
             <?php $posts =  $user->ownPosts()->get();?>
@@ -48,10 +50,6 @@
                 @include('partials.posts', ['post' => $post])
             @endforeach
         </section>
-        <?php
-            $notifs = $user->notifications;
-        ?>
-        @each('partials.notification',$notifs ,'notif')
 
     </div>
 @endsection
