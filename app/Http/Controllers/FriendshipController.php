@@ -52,23 +52,14 @@ class FriendshipController extends Controller
     public function acceptRequest($friend) {
         $user = Auth::user();
         $userID = $user->id;
-        $friend = User::where('username', $friend)->first();
+        $friendAux = User::where('username', $friend)->first();
 
         $friendRequest = FriendRequest::where([
-            ['sourceid', $userID],
-            ['targetid', $friend->id]
+            ['sourceid', $friendAux->id],
+            ['targetid', $userID]
         ])->first();
 
         $friendRequest->accept();
-        DB::table('friendship')->insert([
-            'userid' => $userID,
-            'friendid' => $friend->id
-        ]);
-        DB::table('friendship')->insert([
-            'userid' => $friend->id,
-            'friendid' => $userID
-        ]);
-        
-        return view('pages.profile', ['user' => $friend]);
+        return view('pages.profile', ['user' => $friendAux]);
     }
 }
