@@ -43,8 +43,12 @@ class GroupJoinRequestController extends Controller
         $requestingUser = User::findOrFail($request->userid);
         $groupJoinRequest = GroupJoinRequest::where('userid', $requestingUser->id)->where('groupid', $group->groupid)->first();
         if ($groupJoinRequest) {
-            $group->addMember($requestingUser);
-            $groupJoinRequest->delete();
+            $group->addMember($requestingUser);     
+
+            GroupJoinRequest::where('groupid', $groupJoinRequest->groupid)
+            ->where('userid', $groupJoinRequest->userid)
+            ->delete();
+
             $members = $group->getMembers()->get();
             $joinRequests = $group->getJoinRequests()->get();
             return view('pages.managegroup', compact('group', 'members', 'joinRequests'));
