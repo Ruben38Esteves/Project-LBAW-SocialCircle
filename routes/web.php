@@ -29,7 +29,6 @@ use App\Http\Controllers\Auth\RegisterController;
 
 // Home
 Route::redirect('/', '/login');
-Route::redirect('/', '/messages');
 
 // Cards
 Route::controller(CardController::class)->group(function () {
@@ -90,7 +89,7 @@ Route::controller(GroupController::class)->group(function (){
 Route::controller(GroupJoinRequestController::class)->group(function (){
     Route::post('/group/{id}/join-request', 'create')->name('group-join-request.create');
     Route::put('/group/{id}/accept-request', 'accept')->name('group-join-request.accept');
-    Route::put('/group/{id}/reject-request', 'reject')->name('group-join-request.reject');
+    Route::delete('/group/{id}/reject-request', 'reject')->name('group-join-request.reject');
     Route::delete('/group/{id}/remove-request', 'remove')->name('group-join-request.remove');
 });
 
