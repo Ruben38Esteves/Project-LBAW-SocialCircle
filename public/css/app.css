@@ -375,14 +375,41 @@ h2.join-requests-list-heading {
     margin-right: 20px;
 }
 
-.other-user {
+.other-user-message {
     text-align: left;
+    background-color:#777;
+    border-radius: 20px;
+    padding: 10px;
 }
 
-.authenticated-user {
+.authenticated-user-message {
     text-align: right;
+    border-radius: 20px;
+    background-color: #2196F3;
+    float: right;
+    padding: 10px;
 }
 
+.message-chat {
+    display: flex;
+    flex-direction: column;
+}
+.message-chat {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.message-chat .message-text {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #ffffff;
+}
+.message-chat .message-date {
+    margin-bottom: 10px;
+    font-size: 10px;
+    color: #ffffff;
+}
 /* Slider do create Group */
 
 .switch {

@@ -3,7 +3,7 @@
 @section('content')
     @include('sidebars.bar')
     <div id = 'message-heading'>
-        <h1>{{$user->username}}</h1>
+        <h1>{{$user->firstname}} {{$user->lastname}}</h1>
     <div id="messages-container">
         <script> getMessages("{{ Auth::user()->id }}", "{{ $user->id }}", "{{ Auth::user()->username }}", "{{ $user->username }}");   </script>
     </div>
