@@ -11,6 +11,12 @@
         <h3 class="profile-about">About me: {{ $user->aboutme }}</h3>
         @if (Auth::user()->id == $user->id)
             <a href="/profile/edit" class="profile-edit-link">Edit Profile</a>
+            <form action="{{ route('addImage', ['id' => $user->id]) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('POST')
+                <input type="file" class="form-control" name="image" />
+                <button type="submit" class="btn btn-sm">Upload</button>
+            </form>
         @elseif (Friendship::areFriends(Auth::user()->id, $user->id))
             <form action="/profile/{{ $user->username }}/unfriend" method="POST">
                 @csrf
