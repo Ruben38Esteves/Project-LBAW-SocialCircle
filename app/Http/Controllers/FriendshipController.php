@@ -22,7 +22,7 @@ class FriendshipController extends Controller
         $friend = User::where('username', $friend)->first();
 
         FriendRequest::create($userID, $friend->id);
-        return view('pages.profile', ['user' => $friend]);
+        return redirect()->route('user', ['username' => $friend->username]);
     }
 
 
@@ -60,6 +60,25 @@ class FriendshipController extends Controller
         ])->first();
 
         $friendRequest->accept();
+        return view('pages.profile', ['user' => $friendAux]);
+    }
+
+    // erases friendship
+    public function unfriend($friend) {
+        $user = Auth::user();
+        $userID = $user->id;
+        $friendAux = User::where('username', $friend)->first();
+    
+        $friendship = Friendship::where(function ($query) use ($userID, $friendAux) {
+            $query->where('userid', $userID)->where('friendid', $friendAux->id);
+        })->orWhere(function ($query) use ($userID, $friendAux) {
+            $query->where('userid', $friendAux->id)->where('friendid', $userID);
+        });
+    
+        if ($friendship) {
+            $friendship->delete();
+        }
+    
         return view('pages.profile', ['user' => $friendAux]);
     }
 }

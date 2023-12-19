@@ -310,6 +310,7 @@ CREATE TRIGGER update_tsv_user_trigger
 
 -- cria uma friendship apenas quando um friend request é aceite
 
+/*
 CREATE OR REPLACE FUNCTION create_friendship()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -329,6 +330,55 @@ CREATE TRIGGER create_friendship_trigger
 AFTER UPDATE ON friendRequest
 FOR EACH ROW
 EXECUTE FUNCTION create_friendship();
+*/
+
+-- Create a trigger function to handle accepted friend requests
+CREATE OR REPLACE FUNCTION handle_accepted_friend_request()
+RETURNS TRIGGER AS $$
+BEGIN
+
+  INSERT INTO friendship (userID, friendID) 
+  VALUES (NEW.sourceID, NEW.targetID), (NEW.targetID, NEW.sourceID);
+
+  INSERT INTO notification (notifiedUser) 
+  VALUES (NEW.targetID);
+  
+  INSERT INTO userNotification (notificationID, userID, notification_type) 
+  VALUES (currval('notification_notificationID_seq'), NEW.targetID, 'accepted_friend_request');
+  
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create a trigger to execute the trigger function
+CREATE TRIGGER handle_accepted_friend_request_trigger
+AFTER UPDATE ON friendRequest
+FOR EACH ROW
+WHEN (NEW.friendRequestState = 'accepted')
+EXECUTE FUNCTION handle_accepted_friend_request();
+
+
+
+CREATE OR REPLACE FUNCTION handle_new_friend_request()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO notification (notifiedUser) 
+  VALUES (NEW.targetID);
+  
+  INSERT INTO userNotification (notificationID, userID, notification_type) 
+  VALUES (currval('notification_notificationID_seq'), NEW.targetID, 'request_friendship');
+  
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create a trigger to execute the trigger function
+CREATE TRIGGER handle_new_friend_request_trigger
+AFTER INSERT ON friendRequest
+FOR EACH ROW
+WHEN (NEW.friendRequestState = 'pending')
+EXECUTE FUNCTION handle_new_friend_request();
+
 
 --------------------------------------------------------------------------------
 -- TRANSACTIONS
@@ -387,7 +437,7 @@ VALUES
     ('Lúcia', 'Oliveira', 'Apaixonada por dança', 'Female', '1985-05-28', 2, 1, 'luciao', 'lucia@email.com', 'password123', false, true, false, true),
     ('Vasco', 'Sousa', 'Amante de história', 'Male', '1994-10-02', 1, 1, 'vascos', 'vasco@email.com', 'password456', false, true, true, true),
     ('Isabel', 'Costa', 'Fã de literatura', 'Female', '1988-09-16', 2, 2, 'isabelc', 'isabel@email.com', 'password789', false, true, true, true),
-    ('Ricardo', 'Ramos', 'Entusiasta de esportes', 'Male', '1992-06-25', 1, 2, 'ricardor', 'ricardo@email.com', 'password123', false, true, true, true),
+    ('Ricardo', 'Ramos', 'Entusiasta de esportes', 'Male', '1992-06-25', 1, 2, 'ricardor', 'ricardo@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, true),
     ('Ruben', 'Esteves', 'Sou um gajo fixe', 'Male', '2002-05-24', 1, 2, 'ruben38esteves', 'ruben38esteves@gmail.com','$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, true),
     ('Miguel', 'Dionisio', 'Sou um gajo fixe', 'Male', '2002-08-14', 1, 2, 'miguelmdionisio', 'miguelmdionisio@gmail.com','$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, false);
 
@@ -396,8 +446,7 @@ INSERT INTO friendRequest (sourceID, targetID, friendRequestState, updated_at)
 VALUES
     (1, 2, 'pending', NOW()),
     (3, 4, 'accepted', NOW()),
-    (5, 6, 'pending', NOW()),
-    (27, 26, 'pending', NOW());
+    (5, 6, 'pending', NOW());
 
 INSERT INTO friendship (userID, friendID)
 VALUES
@@ -461,6 +510,7 @@ VALUES
     (1, false, true, true),
     (2, true, true, false);
 
+/*
 INSERT INTO notification ( notifiedUser)
 VALUES
     (1),
@@ -474,6 +524,8 @@ VALUES
     (2, 2, 'request_friendship',false),
     (3, 27, 'request_friendship',false),
     (4, 27, 'received_message',true);
+*/
+
 
 INSERT INTO event (eventID, ownerID, title, description, created_at, locationID, startDate, endDate)
 VALUES
