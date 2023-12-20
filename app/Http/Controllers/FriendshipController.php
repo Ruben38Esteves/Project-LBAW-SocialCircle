@@ -60,6 +60,11 @@ class FriendshipController extends Controller
         ])->first();
 
         $friendRequest->accept();
+        //dd($friendRequest);
+        FriendRequest::where([
+            ['sourceid', $friendAux->id],
+            ['targetid', $userID]
+        ])->delete();
         return view('pages.profile', ['user' => $friendAux]);
     }
 

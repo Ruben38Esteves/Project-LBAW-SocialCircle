@@ -38,10 +38,6 @@ class FriendRequest extends Model
         FriendRequest::where('sourceid', $this->sourceid)
                     ->where('targetid', $this->targetid)
                     ->update(['friendrequeststate' => 'accepted']);
-        
-        FriendRequest::where('sourceid', $this->sourceid)
-                    ->where('targetid', $this->targetid)
-                    ->delete();
     }
 
     public static function exists($sourceid, $targetid){
