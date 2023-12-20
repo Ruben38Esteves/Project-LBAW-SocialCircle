@@ -43,10 +43,75 @@ class UserController extends Controller
             $groups = Group::whereRaw("tsvectors @@ to_tsquery('english', ?)", [$search])
                 ->orderByRaw("ts_rank(groups.tsvectors, to_tsquery(?)) ASC", [$search])->get();
 
-            $results = [
-                'users' => $users,
+            $posts = Post::whereRaw("tsvectors @@ to_tsquery('english', ?)", [$search])
+                ->orderByRaw("ts_rank(userpost.tsvectors, to_tsquery(?)) ASC", [$search])->get();
+
+
+            $postsResult = array();
+            $usersResult = array();
+
+
+            foreach ($posts as $post){
+                if (!Auth::user()->can('view', $post)) {
+                    continue;
+                }
+
+                $image = Image::where('imageid', User::where('id', $post->userid)->first()->profilepictureid)->first();
+                if ($image){
+                    $postUserImagePath = $image->imagepath;
+                } else {
+                    $postUserImagePath = 'default-user.jpg';
+                }
+                //$group = Group::where('groupid', $post->groupid)->first();
+                $postUsername = User::where('id', $post->userid)->first()->username;
+                $postUserID = User::where('id', $post->userid)->first()->userid;
+                $postUserFirstName = User::where('id', $post->userid)->first()->firstname;
+                $postUserLastName = User::where('id', $post->userid)->first()->lastname;                
+                //$postGroupID = $post->groupid;
+                //dd($group);
+                //$postGroupName = $group->name;
+                $postContent = $post->content;
+                $postID = $post->postid;
+                
+                //dd($postGroupID);
+                
+                $postsResult[] = (object) [
+                    'username' => $postUsername,
+                    'userid' => $postUserID,
+                    'imagepath' => $postUserImagePath,
+                    'userfirstname' => $postUserFirstName,
+                    'userlastname' => $postUserLastName,
+                    //'groupid' => $postGroupID,
+                    //'groupname' => $postGroupName,
+                    'content' => $postContent,
+                    'postid' => $postID
+                ];
+            }
+
+
+            foreach ($users as $user) {
+                $image = Image::where('imageid', $user->profilepictureid)->first();
+                if ($image){
+                    $imagepath = $image->imagepath;
+                } else {
+                    $imagepath = 'default-user.jpg';
+                }
+                $usersResult[] = (object) [
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname,
+                    'username' => $user->username,
+                    'imagepath' => $imagepath
+                ];
+            }
+
+
+            
+            $results = (object) [
+                'users' => $usersResult,
                 'groups' => $groups,
+                'posts' => $postsResult
             ];
+            
 
             return $results;
     }

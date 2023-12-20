@@ -215,12 +215,11 @@ CREATE INDEX index_username ON users(username, firstname, lastname);
 -- TEXT SEARCH INDEXES
 --------------------------------------------------------------------------------
 
+-- INDEX 04 comment_content_search_index
 
--- INDEX 04 post_content_index
-ALTER TABLE userPost ADD COLUMN tsvectors tsvector;
+ALTER TABLE comment ADD COLUMN tsvectors tsvector;
 
-
-CREATE OR REPLACE FUNCTION update_tsv_content() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION update_tsv_comment() RETURNS TRIGGER AS $$
   BEGIN
     IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
       NEW.tsvectors = to_tsvector('english', NEW.content);
@@ -229,16 +228,36 @@ CREATE OR REPLACE FUNCTION update_tsv_content() RETURNS TRIGGER AS $$
   END;
   $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER update_tsv_comment_trigger
+  BEFORE INSERT OR UPDATE ON comment
+  FOR EACH ROW
+  EXECUTE PROCEDURE update_tsv_comment();
+
+
+
+
+-- INDEX 05 post_content_search_index
+ALTER TABLE userPost ADD COLUMN tsvectors tsvector;
+
+CREATE OR REPLACE FUNCTION update_tsv_content() RETURNS TRIGGER AS $$
+  BEGIN
+    IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+      NEW.tsvectors = to_tsvector('english', NEW.content);
+    END IF;
+    RETURN NEW;
+  END;
+$$ LANGUAGE plpgsql;
+
 CREATE TRIGGER update_tsv_content_trigger
   BEFORE INSERT OR UPDATE ON userPost
   FOR EACH ROW
   EXECUTE PROCEDURE update_tsv_content();
-;
+
 CREATE INDEX post_content_index ON userPost USING GIN(tsvectors);
 
 
 
---INDEX 05 groups_search_index
+--INDEX 06 groups_search_index
 
 ALTER TABLE groups ADD COLUMN tsvectors tsvector;
 
@@ -262,7 +281,7 @@ CREATE TRIGGER update_tsv_groups_trigger
 
 
 
--- INDEX 06 user_search_index
+-- INDEX 07 user_search_index
 
 ALTER TABLE users ADD COLUMN tsvectors TSVECTOR;
 
@@ -293,6 +312,11 @@ CREATE TRIGGER update_tsv_user_trigger
   BEFORE INSERT OR UPDATE ON users
   FOR EACH ROW
   EXECUTE PROCEDURE update_tsv_user();
+
+
+
+
+
 --------------------------------------------------------------------------------
 -- TRIGGERS
 --------------------------------------------------------------------------------

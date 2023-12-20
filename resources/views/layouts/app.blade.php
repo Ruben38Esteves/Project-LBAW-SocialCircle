@@ -64,16 +64,16 @@ searchInput.addEventListener('input', function() {
         fetch(`/search?query=${query}`)
             .then(response => response.json())
             .then(data => {
-                let resultsHtml = '<ul>';
+                let resultsHtml = '<ul class="searchResultsList">';
 
                 if (data.users.length > 0) {
                     resultsHtml += '<li class="search-result-header">Users</li>';
 
                     data.users.forEach(result => {
                         resultsHtml += `
-                            <li class="search-result">
+                            <li class="search-result-user">
                                 <a href="/profile/${result.username}">
-                                    <div class="miniUserPic"></div>
+                                    <img src="/images/${result.imagepath}" class="searchPicture"></img>
                                     <p>${result.username}</p>
                                 </a>
                             </li>
@@ -86,11 +86,28 @@ searchInput.addEventListener('input', function() {
 
                     data.groups.forEach(result => {
                         resultsHtml += `
-                            <li class="search-result">
+                            <li class="search-result-group">
                                 <a href="/group/${result.groupid}">
-                                    <div class="groupIcon"></div>
                                     <p>${result.name}</p>
                                 </a>
+                            </li>
+                        `;
+                    });
+                }
+
+                if (data.posts.length > 0) {
+                    resultsHtml += '<li class="search-result-header">Posts</li>';
+
+                    data.posts.forEach(result => {
+                        resultsHtml += `
+                            <li class="search-result-post">
+                                <div class= "user-in-postSearch">
+                                <a href="/profile/${result.username}">
+                                    <img src="/images/${result.imagepath}" class="searchPicture"></img>
+                                    <p>${result.username}</p>
+                                </a>
+                                </div>
+                                <p class="searchPostContent">${result.content}</p>
                             </li>
                         `;
                     });
