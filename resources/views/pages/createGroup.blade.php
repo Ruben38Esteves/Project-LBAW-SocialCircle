@@ -13,8 +13,9 @@
     <textarea id="description" name="description" required></textarea><br><br>
     
     <label for="isPublic">Private:</label>
+    <input type="hidden" name="isPublic" value="1">
     <label class="switch">
-      <input type="checkbox" id="isPublic" name="isPublic" value="0">
+      <input type="checkbox" id="isPublic" name="isPublic" value="1">
       <span class="slider round"></span>
     </label><br><br>
     
