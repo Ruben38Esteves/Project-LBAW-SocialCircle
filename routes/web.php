@@ -13,6 +13,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupJoinRequestController;
 use App\Http\Controllers\FriendshipController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\LikeController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -98,5 +99,8 @@ Route::controller(FriendshipController::class)->group(function (){
     Route::put('/profile/{username}/accept-request', 'acceptRequest')->name('friend-request.accept');
     Route::delete('/profile/{username}/unfriend', 'delete')->name('friendship.delete');
 });
-
+Route::controller(LikeController::class)->group(function (){
+    Route::post('/like/{postid}', 'like')->name('like');
+    Route::post('/dislike/{postid}', 'dislike')->name('dislike');
+});
 
