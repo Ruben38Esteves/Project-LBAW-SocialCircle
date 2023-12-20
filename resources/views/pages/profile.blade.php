@@ -4,16 +4,28 @@
 @extends('layouts.app')
 @section('content')
 @include('sidebars.bar')
+    <?php  
+    use App\Models\Image; 
+    $image = Image::where('imageid', $user->profilepictureid)->first();
+    ?>
     <div class="profile-container">
-        <h1 class="profile-heading">Profile</h1>
+        @if ($image)
+        <div class="user_header_img">
+            <img src="/images/{{$image->imagepath}}">
+        </div>
+        @else
+        <div class="user_header_img">
+            <img src="/images/default-user.jpg">
+        </div>
+        @endif
         <h2 class="profile-name">{{ $user->firstname }} {{ $user->lastname }}</h2>
         <h2 class="profile-username">{{ $user->username }}</h2>
         <h3 class="profile-about">About me: {{ $user->aboutme }}</h3>
+        
         @if (Auth::user()->id == $user->id)
             <a href="/profile/edit" class="profile-edit-link">Edit Profile</a>
-            <form action="{{ route('addImage', ['id' => $user->id]) }}" method="POST" enctype="multipart/form-data">
+            <form action='/profile/{{$user->id}}/add-image' method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('POST')
                 <input type="file" class="form-control" name="image" />
                 <button type="submit" class="btn btn-sm">Upload</button>
             </form>
