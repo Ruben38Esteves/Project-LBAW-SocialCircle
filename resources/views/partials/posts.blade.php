@@ -1,20 +1,11 @@
 <div id="post_{{$post->postid}}" class="post">
-    <!--
-    <a href="/profile/{{$post->owner->username}}" class="post-link">
-        <div class="post-header">
-            <div class="miniUserPic">
-                <img src="/images/presi.jpeg">
-            </div>
-            <div class="username">
-                {{$post->owner->username}}
-            </div>
-        </div>
-    </a>
-    -->
     @each('partials.userheader', [$post->owner], 'user')
     <div class="post-content">
         <div class="post_text_content" style="display: block">
             {{ $post->content }}
+        </div>
+        <div class="likes">
+            <a>{{count($post->likes)}} ❤️</a>
         </div>
         <div class="edit_post" style="display: none">
             <form action="{{ url('/posts/edit/'.$post->postid) }}" method="POST">
@@ -31,7 +22,6 @@
     </div>
     <ul class="post_buttons">
         <li>
-            <a>{{count($post->likes)}}</a>
             @if (Auth::user()->likedPost($post))
             <form action="{{ route('dislike',['postid'=>$post->postid]) }}" method="POST">
                 @csrf
@@ -43,7 +33,7 @@
             <form action="{{ route('like',['postid'=>$post->postid]) }}" method="POST">
                 @csrf
                 <button type="submit" id="delete_button">
-                    ✓
+                    ❤️
                 </button>
             </form>
             @endif
@@ -80,16 +70,15 @@
         </div>
         -->
     </div>
-    <section id="post-form">
+    <section class="post-form">
         @auth
             <form action="{{ url('/comments/create/'.$post->postid) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <br>
-                <label for="content">Content:</label>
-                <textarea name="content" required></textarea>
+                <input type="text" name="content" required></textarea>
                 <br>
-                <button type="submit">Create Comment</button>
+                <button type="submit">Comment</button>
             </form>
         @endauth
     </section>
