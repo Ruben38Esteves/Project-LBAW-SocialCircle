@@ -341,7 +341,7 @@ BEGIN
   VALUES (NEW.sourceID, NEW.targetID), (NEW.targetID, NEW.sourceID);
 
   INSERT INTO notification (notifiedUser) 
-  VALUES (NEW.targetID);
+  VALUES (NEW.sourceID);
   
   INSERT INTO userNotification (notificationID, userID, notification_type) 
   VALUES (currval('notification_notificationID_seq'), NEW.targetID, 'accepted_friend_request');
@@ -366,7 +366,7 @@ BEGIN
   VALUES (NEW.targetID);
   
   INSERT INTO userNotification (notificationID, userID, notification_type) 
-  VALUES (currval('notification_notificationID_seq'), NEW.targetID, 'request_friendship');
+  VALUES (currval('notification_notificationID_seq'), NEW.sourceID, 'request_friendship');
   
   RETURN NULL;
 END;
