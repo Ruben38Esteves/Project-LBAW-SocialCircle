@@ -66,6 +66,8 @@ Route::controller(CommentController::class)->group(function (){
 });
 
 Route::controller(GroupController::class)->group(function (){
+    Route::post('/group/{id}/join', 'joinGroup')->name('group.join');
+    Route::delete('/group/{id}/leave', 'leaveGroup')->name('group.leave');
     Route::post('/group/createFinal', 'create')->name('group.create');
     Route::get('/group/create', 'createPage')->name('group.createPage');
     Route::get('/group/{id}', 'show')->name('group');

@@ -69,7 +69,11 @@ class GroupController extends Controller
             $group->ownerid = $request->ownerID;
             $group->name = $request->name;
             $group->description = $request->description;
-            $group->ispublic = $request->isPublic;
+            if($request->isPublic == NULL){
+                $group->ispublic = 1;
+            }else{
+                $group->ispublic = $request->isPublic;
+            }
             $group->save();
             $group->addMember($user);
             $groupId = $group->groupid;            
@@ -83,5 +87,19 @@ class GroupController extends Controller
         // falta aqui policy
         $group->removeMember($user);
         return redirect()->route('group.manage', ['id' => $group->groupid]);
+    }
+
+    public function leaveGroup($id){
+        $group = Group::where('groupid', $id)->first();
+        $user = Auth::user();
+        $group->removeMember($user);
+        return redirect()->route('group', ['id' => $group->groupid]);
+    }
+
+    public function joinGroup($id){
+        $group = Group::where('groupid', $id)->first();
+        $user = Auth::user();
+        $group->addMember($user);
+        return redirect()->route('group', ['id' => $group->groupid]);
     }
 }

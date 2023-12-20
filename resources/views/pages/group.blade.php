@@ -15,10 +15,24 @@
         <h2 class="group-description">{{ $group->description }}</h2>
         <?php if ($user->id == $owner->id) { ?>
             <a href="{{ route('group.manage', ['id' => $group->groupid]) }}"><button class='group-manage-button'>Manage Group</button></a>
+        <?php }
+        elseif ($group->isMember($user)) { ?>
+            <form action="{{ route('group.leave', ['id' => $group->groupid]) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button class="group-leave-button">Leave Group</button>
+            </form>
+        <?php } else { ?>
+            <form action="{{ route('group.join', ['id' => $group->groupid]) }}" method="POST">
+                @csrf
+                <button class="group-join-button">Join Group</button>
+            </form>
         <?php } ?>
-
+        
         <h3 class="group-posts-heading">Posts:</h3>
     </div>
+
+    <!-- se for publico ou membro pode ver isto -->
     <section class="group-create-post">
         <form action="{{ route('group-posts.create', ['id' => $group->groupid]) }}" method="POST">
             @csrf
@@ -28,6 +42,7 @@
     <section class="group-posts-section" id='posts'>
         @each('partials.posts', $posts, 'post')
     </section>
+    <!-- até aqui -->
 <?php
     } else {
 ?>
