@@ -48,6 +48,8 @@
                 <button type="submit" class="btn btn-sm">Upload</button>
                 <button onclick="hidePictureForm()" class="btn btn-sm">Cancel</button>
             </form>
+        @endif
+        @if (Auth::user()->id == $user->id)
         @elseif (Friendship::areFriends(Auth::user()->id, $user->id))
             <form action="/profile/{{ $user->username }}/unfriend" method="POST">
                 @csrf
