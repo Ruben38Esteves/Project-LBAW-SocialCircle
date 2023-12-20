@@ -238,38 +238,28 @@ CREATE INDEX post_content_index ON userPost USING GIN(tsvectors);
 
 
 
---INDEX 05 event_search_index
+--INDEX 05 groups_search_index
 
-ALTER TABLE event ADD COLUMN tsvectors tsvector;
+ALTER TABLE groups ADD COLUMN tsvectors tsvector;
 
-
-CREATE OR REPLACE FUNCTION update_tsv_event() RETURNS TRIGGER AS $$
-BEGIN
-  IF TG_OP = 'INSERT' THEN
-    NEW.tsvectors = (
-      setweight(to_tsvector('english', NEW.title), 'A') ||
-      setweight(to_tsvector('english', NEW.description), 'B')
-    );
-  END IF;
-  IF TG_OP = 'UPDATE' THEN
-    IF (NEW.title <> OLD.title) OR (NEW.description <> OLD.description) THEN
+CREATE OR REPLACE FUNCTION update_tsv_groups() RETURNS TRIGGER AS $$
+  BEGIN
+    IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
       NEW.tsvectors = (
-        setweight(to_tsvector('english', NEW.title), 'A') ||
+        setweight(to_tsvector('english', NEW.name), 'A') ||
         setweight(to_tsvector('english', NEW.description), 'B')
       );
     END IF;
-  END IF;
     RETURN NEW;
   END;
-$$ LANGUAGE plpgsql;
+  $$ LANGUAGE plpgsql;
 
-
-CREATE TRIGGER update_tsv_event_trigger
-  BEFORE INSERT OR UPDATE ON event
+CREATE TRIGGER update_tsv_groups_trigger
+  BEFORE INSERT OR UPDATE ON groups
   FOR EACH ROW
-  EXECUTE PROCEDURE update_tsv_event();
+  EXECUTE PROCEDURE update_tsv_groups();
 
-CREATE INDEX event_search_index ON event USING GIN(tsvectors);
+
 
 
 -- INDEX 06 user_search_index
@@ -308,31 +298,8 @@ CREATE TRIGGER update_tsv_user_trigger
 --------------------------------------------------------------------------------
 
 
--- cria uma friendship apenas quando um friend request é aceite
 
-/*
-CREATE OR REPLACE FUNCTION create_friendship()
-RETURNS TRIGGER AS $$
-DECLARE
-  notification_id INTEGER;
-BEGIN
-  IF NEW.friendRequestState = 'accepted' THEN
-    INSERT INTO friendship VALUES (NEW.sourceID, NEW.targetID);
-    INSERT INTO friendship VALUES (NEW.targetID, NEW.sourceID);
-    INSERT INTO notification (notifiedUser) VALUES (NEW.sourceID) RETURNING notificationID INTO notification_id;
-    INSERT INTO userNotification (notificationID, userID, notification_type) VALUES (notification_id, 1, 'accepted_friend_request');
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER create_friendship_trigger
-AFTER UPDATE ON friendRequest
-FOR EACH ROW
-EXECUTE FUNCTION create_friendship();
-*/
-
--- Create a trigger function to handle accepted friend requests
+-- lidar com friend requests aceites
 CREATE OR REPLACE FUNCTION handle_accepted_friend_request()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -358,7 +325,7 @@ WHEN (NEW.friendRequestState = 'accepted')
 EXECUTE FUNCTION handle_accepted_friend_request();
 
 
-
+-- lidar com novos friend requests
 CREATE OR REPLACE FUNCTION handle_new_friend_request()
 RETURNS TRIGGER AS $$
 BEGIN
