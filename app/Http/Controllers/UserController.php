@@ -17,16 +17,11 @@ use App\Models\UserNotification;
 use App\Policies\UserPolicy;
 use App\Models\Group;
 use App\Models\Message;
+use App\Models\Image;
  
 class UserController extends Controller
+
 {
-    public function index(): View
-    {
-        
-    }
-
-    
-
     public function isFriend($id){
         $user = Auth::user();
         $friends = $user->friends;
@@ -38,6 +33,25 @@ class UserController extends Controller
         return false;
     }
 
+
+    public function search(Request $request){
+            $search = $request->get('query');
+
+            $users = User::whereRaw("tsvectors @@ to_tsquery('english', ?)", [$search])
+                ->orderByRaw("ts_rank(users.tsvectors, to_tsquery(?)) ASC", [$search])->get();
+
+            $groups = Group::whereRaw("tsvectors @@ to_tsquery('english', ?)", [$search])
+                ->orderByRaw("ts_rank(groups.tsvectors, to_tsquery(?)) ASC", [$search])->get();
+
+            $results = [
+                'users' => $users,
+                'groups' => $groups,
+            ];
+
+            return $results;
+    }
+
+    /*
     public function search(Request $request)    {
 
         $search = $request->get('query');
@@ -49,7 +63,7 @@ class UserController extends Controller
         //dd($users);
         return $users;
     }
-
+    */
     public function fillProfile($username){
         $user = User::where('username', $username)->first();
         $notifications = $user->notifications;

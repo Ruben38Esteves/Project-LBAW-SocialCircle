@@ -1,3 +1,9 @@
+@php 
+    use App\Models\User;
+    use App\Models\Image;
+@endphp
+
+
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
     <head>
@@ -37,7 +43,7 @@
             <section id="content">
                 <div class="search-bar">
                     <form action="{{ url('/search?query') }}" method="GET">
-                        <input type="text" name="query" id="search-input" placeholder="Search... Result will be displayed below without the need to press">
+                        <input type="text" name="query" id="search-input" placeholder="Search users and groups...">
                         <div id="search-results"></div>
                     </form>
                 </div>
@@ -48,19 +54,22 @@
 </html>
 
 <script>
-    const searchInput = document.getElementById('search-input');
-    const searchResults = document.getElementById('search-results');
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
 
-    searchInput.addEventListener('input', function() {
-        const query = searchInput.value.trim();
+searchInput.addEventListener('input', function() {
+    const query = searchInput.value.trim();
 
-        if (query.length > 0) {
-            fetch(`/search?query=${query}`)
-                .then(response => response.json())
-                .then(data => {
-                    let resultsHtml = '<ul>';
+    if (query.length > 0) {
+        fetch(`/search?query=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                let resultsHtml = '<ul>';
 
-                    data.forEach(result => {
+                if (data.users.length > 0) {
+                    resultsHtml += '<li class="search-result-header">Users</li>';
+
+                    data.users.forEach(result => {
                         resultsHtml += `
                             <li class="search-result">
                                 <a href="/profile/${result.username}">
@@ -70,16 +79,32 @@
                             </li>
                         `;
                     });
+                }
 
-                    resultsHtml += '</ul>'; // End the unordered list
+                if (data.groups.length > 0) {
+                    resultsHtml += '<li class="search-result-header">Groups</li>';
 
-                    searchResults.innerHTML = resultsHtml;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        } else {
-            searchResults.innerHTML = '';
-        }
-    });
+                    data.groups.forEach(result => {
+                        resultsHtml += `
+                            <li class="search-result">
+                                <a href="/group/${result.groupid}">
+                                    <div class="groupIcon"></div>
+                                    <p>${result.name}</p>
+                                </a>
+                            </li>
+                        `;
+                    });
+                }
+
+                resultsHtml += '</ul>'; // End the unordered list
+
+                searchResults.innerHTML = resultsHtml;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    } else {
+        searchResults.innerHTML = '';
+    }
+});
 </script>
