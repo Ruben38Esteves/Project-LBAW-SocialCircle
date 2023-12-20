@@ -111,4 +111,13 @@ class User extends Authenticatable
     public function isFriend(User $user){
         return Friendship::areFriends($this->id, $user->id);
     }
+
+    public function likedPost($post){
+        $like = Like::where('postid', $post->postid)->where('userid',$this->id)->first();
+        if($like!=null){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

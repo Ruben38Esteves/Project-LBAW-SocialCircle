@@ -29,8 +29,26 @@
             </form>
         </div>
     </div>
-    <?php if(Auth::check() && (Auth::user()->id == $post->owner->id || Auth::user()->isAdmin())): ?>
-        <ul class="post_buttons">
+    <ul class="post_buttons">
+        <li>
+            <a>{{count($post->likes)}}</a>
+            @if (Auth::user()->likedPost($post))
+            <form action="{{ route('dislike',['postid'=>$post->postid]) }}" method="POST">
+                @csrf
+                <button type="submit" id="delete_button">
+                    Dislike
+                </button>
+            </form>
+            @else
+            <form action="{{ route('like',['postid'=>$post->postid]) }}" method="POST">
+                @csrf
+                <button type="submit" id="delete_button">
+                    ✓
+                </button>
+            </form>
+            @endif
+        </li>
+        <?php if(Auth::check() && (Auth::user()->id == $post->owner->id || Auth::user()->isAdmin())): ?>
             <li>
                 <button id="edit_button" onclick="show_post_changer('post_{{$post->postid}}')" >
                     Edit
@@ -45,8 +63,8 @@
                     </button>
                 </form>
             </li>
-        </ul>
-    <?php endif; ?>
+        <?php endif; ?>
+    </ul>   
     <div class="post-footer">
         <div class="post-date">
             {{ $post->updated_at }}

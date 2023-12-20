@@ -10,10 +10,11 @@ class Like extends Model
     use HasFactory;
 
     public $timestamps = false;
-    public $primaryKey = 'likeID';
+    public $primaryKey = 'likeid';
 
     protected $fillable = [
-        'postID',
-        'userID'
+        'postid',
+        'userid',
+        'created_at'
     ];
 }
