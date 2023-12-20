@@ -31,7 +31,7 @@
         <main>
             <header>
                 @if (Auth::check())
-                    <a class="button" href="{{ url('/logout') }}"> Logout </a> <a href="profile/{{ Auth::user()->username }}">{{ Auth::user()->username }}</a>
+                    <a class="button" href="{{ url('/logout') }}"> Logout </a> <a href="../profile/{{ Auth::user()->username }}">{{ Auth::user()->username }}</a>
                 @endif
             </header>
             <section id="content">

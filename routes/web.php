@@ -58,7 +58,8 @@ Route::controller(UserController::class)->group(function (){
     Route::get('/friends/{username}', 'friends')->name('friends');
     Route::get('/groups/{username}', 'groups')->name('groups');
     Route::get('/notifications/{username}','notifications')->name('notifications');
-    //Route::get('/messages/{username}', 'messages')->name('messages');
+    Route::put('/profile/{username}/editName', 'editName')->name('editName');
+    Route::put('/profile/{username}/editAboutMe', 'editAboutMe')->name('editAboutMe');
 });
 
 Route::controller(CommentController::class)->group(function (){
