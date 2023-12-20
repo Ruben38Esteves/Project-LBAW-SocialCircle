@@ -112,5 +112,24 @@ class UserController extends Controller
             return view('pages.home', ['posts' => $posts]);
         }
     }
+
+    public function editName(Request $request, $username){
+        $user = User::Where('username', $username)->first();
+        if(Auth::user()->can('update', $user));{
+            $user->firstname = $request->get('firstname');
+            $user->lastname = $request->get('lastname');
+            $user->save();
+        }
+        return redirect('/profile/'.$user->username);
+    }
+
+    public function editAboutMe(Request $request, $username){
+        $user = User::Where('username', $username)->first();
+        if(Auth::user()->can('update', $user));{
+            $user->aboutme = $request->get('aboutme');
+            $user->save();
+        }
+        return redirect('/profile/'.$user->username);
+    }
 }    
 

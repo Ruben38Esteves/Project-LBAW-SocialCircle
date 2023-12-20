@@ -54,6 +54,9 @@
         <div id='groups' style="display: none">
             <h1 id="page-title"><a href="{{ url('/home') }}">SocialCircle</a></h1>
             @each('partials.groupheader',$groups, 'group')
+            <a href="/group/create">
+                <button>Create Group</button>
+            </a>
             <button onclick='hideGroups()'>Go Back</button>
         </div>
         <div id='messages' style="display: none">

@@ -39,7 +39,11 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        //
+        if($user != null && ($user->id == $model->id || $user->isAdmin())){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
