@@ -97,7 +97,7 @@ Route::controller(FriendshipController::class)->group(function (){
     Route::post('/profile/{username}/add-friend', 'createRequest')->name('friend-request.create');
     Route::delete('/profile/{username}/remove-request', 'removeRequest')->name('friend-request.remove');
     Route::put('/profile/{username}/accept-request', 'acceptRequest')->name('friend-request.accept');
-    Route::delete('/profile/{username}/unfriend', 'delete')->name('friendship.delete');
+    Route::delete('/profile/{username}/unfriend', 'unfriend')->name('friendship.delete');
 });
 Route::controller(LikeController::class)->group(function (){
     Route::post('/like/{postid}', 'like')->name('like');
