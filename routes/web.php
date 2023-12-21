@@ -53,13 +53,15 @@ Route::controller(PostController::class)->group(function () {
 
 Route::controller(UserController::class)->group(function (){
     Route::get('/home', 'homeFeed')->name('posts');
+    Route::get('/about', 'about')->name('about');
+    Route::put('/profile/{username}/editName', 'editName')->name('editName');
+    Route::put('/profile/{username}/editAboutMe', 'editAboutMe')->name('editAboutMe');
     Route::get('/profile/{username}', 'fillProfile')->name('user');
     Route::get('/search', 'search')->name('search');
     Route::get('/friends/{username}', 'friends')->name('friends');
     Route::get('/groups/{username}', 'groups')->name('groups');
     Route::get('/notifications/{username}','notifications')->name('notifications');
-    Route::put('/profile/{username}/editName', 'editName')->name('editName');
-    Route::put('/profile/{username}/editAboutMe', 'editAboutMe')->name('editAboutMe');
+    Route::get('/about', 'about')->name('about');    
 });
 
 Route::controller(CommentController::class)->group(function (){

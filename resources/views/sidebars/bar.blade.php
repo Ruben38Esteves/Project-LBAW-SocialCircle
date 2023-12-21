@@ -69,7 +69,12 @@
             @each('partials.notification', $notifications, 'notification')
             <button onclick='hideNotifs()'>Go Back</button>
         </div>
+        <div class="sidebar-bottom">
+            <a href="{{ url('/about') }}" class="footerLink"><p class="barFooter">About</p></a>  
+            <a href="{{ url('/help') }}" class="footerLink"><p class="barFooter">Help</p></a>
+        </div>
     </aside>
+    
 @endsection
             
             
