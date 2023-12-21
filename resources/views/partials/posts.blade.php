@@ -22,14 +22,14 @@
     </div>
     <ul class="post_buttons">
         <li>
-            @if (Auth::user()->likedPost($post))
+            @if (Auth::check() && Auth::user()->likedPost($post))
             <form action="{{ route('dislike',['postid'=>$post->postid]) }}" method="POST">
                 @csrf
                 <button type="submit" id="delete_button">
                     Dislike
                 </button>
             </form>
-            @else
+            @elif(Auth::check())
             <form action="{{ route('like',['postid'=>$post->postid]) }}" method="POST">
                 @csrf
                 <button type="submit" id="delete_button">
@@ -59,16 +59,6 @@
         <div class="post-date">
             {{ $post->updated_at }}
         </div>
-        <!--
-        <div class="post-likes">
-            <button id="like_button">
-                Like
-            </button>
-            <button id="dislike_button">
-                Dislike
-            </button>
-        </div>
-        -->
     </div>
     <section class="post-form">
         @auth

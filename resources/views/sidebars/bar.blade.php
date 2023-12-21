@@ -1,29 +1,32 @@
 @section('sidebar')
     <?php 
     use App\Models\Message;
-    $notifications = Auth::user()->notifications;
-    $friends = Auth::user()->friends;
-    $groups = Auth::user()->groups;
-    $messages = [];
-    foreach ($friends as $friend) {
-        $message1 = Message::where('sourceid', $friend->id)->where('targetid', Auth::user()->id)->latest('sent_at')->first();
-        $message2 = Message::where('sourceid', Auth::user()->id)->where('targetid', $friend->id)->latest('sent_at')->first();
-        if ($message1 != null) {
-            if($message2 != null) {
-                if ($message1->sent_at > $message2->sent_at) {
-                    $messages[]= $message1;
+    if(Auth::check()){
+        $notifications = Auth::user()->notifications;
+        $friends = Auth::user()->friends;
+        $groups = Auth::user()->groups;
+        $messages = [];
+        foreach ($friends as $friend) {
+            $message1 = Message::where('sourceid', $friend->id)->where('targetid', Auth::user()->id)->latest('sent_at')->first();
+            $message2 = Message::where('sourceid', Auth::user()->id)->where('targetid', $friend->id)->latest('sent_at')->first();
+            if ($message1 != null) {
+                if($message2 != null) {
+                    if ($message1->sent_at > $message2->sent_at) {
+                        $messages[]= $message1;
+                    } else {
+                        $messages[]= $message2;
+                    }
                 } else {
+                    $messages[]= $message1;
+                }
+            }else{
+                if($message2 != null) {
                     $messages[]= $message2;
                 }
-            } else {
-                $messages[]= $message1;
-            }
-        }else{
-            if($message2 != null) {
-                $messages[]= $message2;
             }
         }
     }
+    
     ?>
     <aside class = 'sidebar'>
         <ul class = 'list-unstyled sidebar-itens-positioning'>
@@ -33,6 +36,7 @@
             <li>
                 <button class="mainbutton" onclick="location.href='{{url('/home')}}'">Home</button>
             </li>
+        @if(Auth::check())
             <li>
                 <button class="mainbutton" onclick='getMessageList()'>Messages</button>
             </li>
@@ -69,6 +73,7 @@
             @each('partials.notification', $notifications, 'notification')
             <button onclick='hideNotifs()'>Go Back</button>
         </div>
+        @endif
     </aside>
 @endsection
             
