@@ -22,7 +22,7 @@ class MessageController extends Controller
     public function messages($username){
         $user = User::where('username', $username)->first();
         $user_me = Auth::user();
-        if($user && $user_me){
+        if(Auth::check()){
             return Message::where('sourceid', $user_me->id)->where('targetid', $user->id)->orWhere('sourceid', $user->id)->where('targetid', $user_me->id)->get();
         }
         else{
@@ -42,18 +42,21 @@ class MessageController extends Controller
     }
 
     public function sendMessage(Request $request, $username){
-        $user_me = Auth::user();
-        if($user_me){
-            $message = new Message();
-            $message->sourceid = $user_me->id;
-            $message->targetid = User::where('username', $username)->first()->id;
-            $message->sent_at = now();
-            $message->message = $request->input('message-content');
-            $message->save();
-            return redirect('/messages/'.$username);
+        if(Auth::check()){
+            $user_me = Auth::user();
+            if($user_me->can('create', Message::class)){
+                $message = new Message();
+                $message->sourceid = $user_me->id;
+                $message->targetid = User::where('username', $username)->first()->id;
+                $message->sent_at = now();
+                $message->message = $request->input('message-content');
+                $message->save();
+                return redirect('/messages/'.$username);
+            }
+            else{
+                return redirect('/login');
+            }
         }
-        else{
-            return redirect('/login');
-        }
+        return redirect('/login');
     }
 }
