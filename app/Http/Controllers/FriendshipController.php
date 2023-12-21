@@ -20,8 +20,9 @@ class FriendshipController extends Controller
         $user = Auth::user();
         $userID = $user->id;
         $friend = User::where('username', $friend)->first();
-
-        FriendRequest::create($userID, $friend->id);
+        if($user->can('create', FriendRequest::class)){
+            FriendRequest::create($userID, $friend->id);
+        }
         return redirect()->route('user', ['username' => $friend->username]);
     }
 
@@ -31,19 +32,12 @@ class FriendshipController extends Controller
         $userID = $user->id;
         $friend = User::where('username', $friend)->first();
 
-        // $friendRequest = FriendRequest::where('sourceid', $userID)
-        // ->where('targetid', $friend->id)->get();
-        // dd($friendRequest);
-
-        // $friendRequest->delete();
-
-        
-        FriendRequest::where([
+        if($user->can('delete', FriendRequest::class)){
+            FriendRequest::where([
                 ['sourceid', $userID],
                 ['targetid', $friend->id]
             ])->delete();
-
-        // $friendRequest->delete();
+        }
 
         return view('pages.profile', ['user' => $friend]);
     }
@@ -59,12 +53,15 @@ class FriendshipController extends Controller
             ['targetid', $userID]
         ])->first();
 
-        $friendRequest->accept();
-        //dd($friendRequest);
-        FriendRequest::where([
-            ['sourceid', $friendAux->id],
-            ['targetid', $userID]
-        ])->delete();
+        if($user->can('create', Friendship::class)){
+            $friendRequest->accept();
+        }
+        if($user->can('delete', FriendRequest::class)){
+            FriendRequest::where([
+                ['sourceid', $friendAux->id],
+                ['targetid', $userID]
+            ])->delete();
+        }
         return view('pages.profile', ['user' => $friendAux]);
     }
 
@@ -80,7 +77,7 @@ class FriendshipController extends Controller
             $query->where('userid', $friendAux->id)->where('friendid', $userID);
         });
     
-        if ($friendship) {
+        if ($friendship && $user->can('delete', $friendship)) {
             $friendship->delete();
         }
     
