@@ -54,6 +54,7 @@ Route::controller(PostController::class)->group(function () {
 Route::controller(UserController::class)->group(function (){
     Route::get('/home', 'homeFeed')->name('posts');
     Route::get('/about', 'about')->name('about');
+    Route::get('/help', 'help')->name('help');
     Route::put('/profile/{username}/editName', 'editName')->name('editName');
     Route::put('/profile/{username}/editAboutMe', 'editAboutMe')->name('editAboutMe');
     Route::get('/profile/{username}', 'fillProfile')->name('user');
