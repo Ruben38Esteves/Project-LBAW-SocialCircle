@@ -17,6 +17,10 @@ class ImageController extends Controller
     }
     public function storeImage(Request $request, $id)
     {
+        $user = User::where('id', $id)->first();
+        if($user->cannot('create', Image::class)){
+            return redirect()->back();
+        }
         $request->validate([
             'image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
         ]);
