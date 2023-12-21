@@ -9,6 +9,9 @@
     use App\Policies\UserPolicy;
     use Illuminate\Support\Facades\Auth;
     $image = Image::where('imageid', $user->profilepictureid)->first();
+    if(!Auth::check() &&  !$user->ispublic){
+        return redirect('/home');
+    }
     ?>
     
     <script type="text/javascript" src={{ asset('js/editProfile.js') }}></script>
@@ -22,7 +25,7 @@
             <img src="/images/default-user.jpg">
         </div>
         @endif
-        <h2 id="profile-name">{{ $user->firstname }} {{ $user->lastname }}<?php if(Auth::user()->can('update', $user)){ ?> <button id="profile-edit-name" onclick="getNameForm()">Edit</button> <?php } ?></h2>
+        <h2 id="profile-name">{{ $user->firstname }} {{ $user->lastname }}<?php if(Auth::check() && Auth::user()->can('update', $user)){ ?> <button id="profile-edit-name" onclick="getNameForm()">Edit</button> <?php } ?></h2>
         <form id="profile-name-edit" action='/profile/{{$user->username}}/editName' method="POST" style="display: none">
             @csrf
             @method('PUT')
@@ -32,7 +35,8 @@
             <button onclick="hideNameForm()" class="btn btn-sm">Cancel</button>
         </form>
         <h2 class="profile-username">@ {{ $user->username }}</h2>
-        <h3 id="profile-about">About me: {{ $user->aboutme }}<?php if(Auth::user()->can('update', $user)){ ?> <button id="profile-edit-aboutme" onclick="getAboutMeForm()">Edit</button> <?php } ?></h3>
+        <p>About me:</p>
+        <h3 id="profile-about">{{ $user->aboutme }}<?php if(Auth::check() && Auth::user()->can('update', $user)){ ?> <button id="profile-edit-aboutme" onclick="getAboutMeForm()">Edit</button> <?php } ?></h3>
         <form id="profile-about-edit" action='/profile/{{$user->username}}/editAboutMe' method="POST" style="display: none">
             @csrf
             @method('PUT')
@@ -40,7 +44,7 @@
             <button type="submit" class="btn btn-sm">submit</button>
             <button onclick="hideAboutMeForm()" class="btn btn-sm">Cancel</button>
         </form>
-        @if (Auth::user()->can('update', $user))
+        @if (Auth::check() && Auth::user()->can('update', $user))
             <button id="profile-edit-image" onclick="getPictureForm()">Edit Picture</button>
             <form id="profile-picture-edit" action='/profile/{{$user->id}}/add-image' method="POST" enctype="multipart/form-data" style="display: none">
                 @csrf
@@ -49,20 +53,20 @@
                 <button onclick="hidePictureForm()" class="btn btn-sm">Cancel</button>
             </form>
         @endif
-        @if (Auth::user()->id == $user->id)
-        @elseif (Friendship::areFriends(Auth::user()->id, $user->id))
+        @if (Auth::check() && Auth::user()->id == $user->id)
+        @elseif (Auth::check() && Friendship::areFriends(Auth::user()->id, $user->id))
             <form action="/profile/{{ $user->username }}/unfriend" method="POST">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="profile-unfriend-button">Unfriend</button>
             </form>
-        @elseif (FriendRequest::exists(Auth::user()->id, $user->id))
+        @elseif (Auth::check() && FriendRequest::exists(Auth::user()->id, $user->id))
             <form action="{{ route('friend-request.remove', ['username' => $user->username]) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="profile-removefriendRequest-button">Requested</button>
             </form>
-        @elseif (FriendRequest::exists($user->id, Auth::user()->id))
+        @elseif (Auth::check() && FriendRequest::exists($user->id, Auth::user()->id))
             <form action="{{ route('friend-request.accept', ['username' => $user->username]) }}" method="POST">
                 @csrf
                 @method('PUT')
@@ -73,13 +77,13 @@
                 @method('DELETE')
                 <button type="submit" class="profile-removefriendRequest-button">Decline Friend Request</button>
             </form>
-        @else
+        @elseif(Auth::check())
             <form action="{{ route('friend-request.create', ['username' => $user->username]) }}" method="POST">
                 @csrf
                 <button type="submit" class="profile-addfriend-button">Add Friend</button>
             </form>
         @endif
-        @if ($user->id != Auth::user()->id)
+        @if (Auth::check() && $user->id != Auth::user()->id)
         <a href="/messages/{{$user->username}}">
             <p>Message</p>
         </a>

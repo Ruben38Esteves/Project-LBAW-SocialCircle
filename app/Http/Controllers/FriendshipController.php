@@ -20,8 +20,9 @@ class FriendshipController extends Controller
         $user = Auth::user();
         $userID = $user->id;
         $friend = User::where('username', $friend)->first();
-
-        FriendRequest::create($userID, $friend->id);
+        if($user->can('create', FriendRequest::class)){
+            FriendRequest::create($userID, $friend->id);
+        }
         return redirect()->route('user', ['username' => $friend->username]);
     }
 
@@ -31,21 +32,14 @@ class FriendshipController extends Controller
         $userID = $user->id;
         $friend = User::where('username', $friend)->first();
 
-        // $friendRequest = FriendRequest::where('sourceid', $userID)
-        // ->where('targetid', $friend->id)->get();
-        // dd($friendRequest);
-
-        // $friendRequest->delete();
-
-        
-        FriendRequest::where([
-                ['sourceid', $userID],
-                ['targetid', $friend->id]
+        if($user->can('delete', FriendRequest::where([['sourceid', $friend->id],['targetid', $userID]]))){
+            FriendRequest::where([
+                ['sourceid', $friend->id],
+                ['targetid', $userID]
             ])->delete();
+        }
 
-        // $friendRequest->delete();
-
-        return view('pages.profile', ['user' => $friend]);
+        return redirect('/profile/'.$friend);
     }
 
 
@@ -59,13 +53,19 @@ class FriendshipController extends Controller
             ['targetid', $userID]
         ])->first();
 
-        $friendRequest->accept();
-        //dd($friendRequest);
-        FriendRequest::where([
+        if($user->can('create', Friendship::class)){
+            $friendRequest->accept();
+        }
+        if($user->can('delete', FriendRequest::where([
             ['sourceid', $friendAux->id],
             ['targetid', $userID]
-        ])->delete();
-        return view('pages.profile', ['user' => $friendAux]);
+        ])->first())){
+            FriendRequest::where([
+                ['sourceid', $friendAux->id],
+                ['targetid', $userID]
+            ])->delete();
+        }
+        return redirect('/profile/'.$friend);
     }
 
     // erases friendship
@@ -78,12 +78,15 @@ class FriendshipController extends Controller
             $query->where('userid', $userID)->where('friendid', $friendAux->id);
         })->orWhere(function ($query) use ($userID, $friendAux) {
             $query->where('userid', $friendAux->id)->where('friendid', $userID);
-        });
-    
-        if ($friendship) {
-            $friendship->delete();
+        })->first();
+        if ($user->can('delete', $friendship)) {
+            Friendship::where(function ($query) use ($userID, $friendAux) {
+                $query->where('userid', $userID)->where('friendid', $friendAux->id);
+            })->orWhere(function ($query) use ($userID, $friendAux) {
+                $query->where('userid', $friendAux->id)->where('friendid', $userID);
+            })->delete();
         }
-    
-        return view('pages.profile', ['user' => $friendAux]);
+
+        return redirect('/profile/'.$friend);
     }
 }

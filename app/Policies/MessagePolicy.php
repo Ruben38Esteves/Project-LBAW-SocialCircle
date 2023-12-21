@@ -2,13 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Message;
 use App\Models\User;
-use App\Models\UserNotification;
 use Illuminate\Auth\Access\Response;
-
 use Illuminate\Support\Facades\Auth;
-
-class UserNotificationPolicy
+class MessagePolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -21,9 +19,9 @@ class UserNotificationPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, UserNotification $userNotification): bool
+    public function view(User $user, Message $message): bool
     {
-        return($user->isAdmin() || $user==$userNotification->user());
+        return(Auth::check() && ($user->id === $message->sourceid || $user->id === $message->targetid));
     }
 
     /**
@@ -31,35 +29,29 @@ class UserNotificationPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return Auth::check();
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, UserNotification $userNotification): bool
+    public function update(User $user, Message $message): bool
     {
-        if($user!=null){
-            return $user->isAdmin() || $user->id==$userNotification->user()->id;
-        }
-        return false;
+        //
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, UserNotification $userNotification): bool
+    public function delete(User $user, Message $message): bool
     {
-        if($user!=null){
-            return $user->isAdmin() || $user->id==$userNotification->user()->id;
-        }
-        return false;
+        //
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, UserNotification $userNotification): bool
+    public function restore(User $user, Message $message): bool
     {
         //
     }
@@ -67,7 +59,7 @@ class UserNotificationPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, UserNotification $userNotification): bool
+    public function forceDelete(User $user, Message $message): bool
     {
         //
     }

@@ -10,7 +10,7 @@
                 @csrf
                 <br>
                 <label for="content">New Post</label>
-                <input type="text" name="content" required> </input
+                <input type="text" name="content" required></input>
                 <br>
                 <button type="submit">Post</button>
             </form>

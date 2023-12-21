@@ -323,7 +323,6 @@ CREATE TRIGGER update_tsv_user_trigger
 
 
 
--- lidar com friend requests aceites
 CREATE OR REPLACE FUNCTION handle_accepted_friend_request()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -341,7 +340,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Create a trigger to execute the trigger function
+
 CREATE TRIGGER handle_accepted_friend_request_trigger
 AFTER UPDATE ON friendRequest
 FOR EACH ROW
@@ -349,7 +348,7 @@ WHEN (NEW.friendRequestState = 'accepted')
 EXECUTE FUNCTION handle_accepted_friend_request();
 
 
--- lidar com novos friend requests
+
 CREATE OR REPLACE FUNCTION handle_new_friend_request()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -363,12 +362,28 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Create a trigger to execute the trigger function
+
 CREATE TRIGGER handle_new_friend_request_trigger
 AFTER INSERT ON friendRequest
 FOR EACH ROW
 WHEN (NEW.friendRequestState = 'pending')
 EXECUTE FUNCTION handle_new_friend_request();
+
+
+CREATE OR REPLACE FUNCTION delete_post_comments_and_likes()
+RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM comment WHERE postID = OLD.postID;
+  DELETE FROM likes WHERE postID = OLD.postID;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_post_comments_and_likes_trigger
+BEFORE DELETE ON userPost
+FOR EACH ROW
+EXECUTE FUNCTION delete_post_comments_and_likes();
+
 
 
 --------------------------------------------------------------------------------
@@ -391,6 +406,8 @@ BEGIN
       ROLLBACK;
 END;
 $$ LANGUAGE plpgsql;
+
+
 
 
 --------------------------------------------------------------------------------
@@ -502,23 +519,6 @@ INSERT INTO userSettings (userID, isGuide, isPublic, darkMode)
 VALUES
     (1, false, true, true),
     (2, true, true, false);
-
-/*
-INSERT INTO notification ( notifiedUser)
-VALUES
-    (1),
-    (2),
-    (26),
-    (26);
-
-INSERT INTO userNotification (notificationID, userID, notification_type,viewed)
-VALUES
-    (1, 1, 'request_friendship',false),
-    (2, 2, 'request_friendship',false),
-    (3, 27, 'request_friendship',false),
-    (4, 27, 'received_message',true);
-*/
-
 
 INSERT INTO event (eventID, ownerID, title, description, created_at, locationID, startDate, endDate)
 VALUES
