@@ -21,12 +21,18 @@ class CommentController extends Controller
     }
 
     public function create(Request $request, $postid){
-        $user = Auth::user();
-        $comment = new Comment;
-        $comment->postid = $postid;
-        $comment->creatorid = $user->id;
-        $comment->content = $request->content;
-        $comment->save();
-        return redirect()->back();
+        if(Auth::check()){
+            $user = Auth::user();
+            if(!$user->can('create', Comment::class)){
+                return redirect()->back();
+            }
+            $comment = new Comment;
+            $comment->postid = $postid;
+            $comment->creatorid = $user->id;
+            $comment->content = $request->content;
+            $comment->save();
+            return redirect()->back();
+
+        }
     }
 }

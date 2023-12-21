@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@include('sidebars.bar')
 <form method="POST" action="{{ route('login') }}">
     {{ csrf_field() }}
 
