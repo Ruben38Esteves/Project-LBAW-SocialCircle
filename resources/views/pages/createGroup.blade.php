@@ -4,6 +4,7 @@
 @include('sidebars.bar')
 
 <h1>Create Group</h1>
+<fieldset>
   <form action="{{ route('group.create') }}" method="POST">
     @csrf
     <label for="name">Name:</label>
@@ -23,5 +24,6 @@
     
     <input type="submit" value="Create Group">
   </form>
+</fieldset>
 
 @endsection

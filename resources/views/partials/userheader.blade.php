@@ -7,11 +7,11 @@
 <a class="user_header" href="/profile/{{$user->username}}">
     @if ($image)
     <div class="user_header_img">
-        <img src="/images/{{$image->imagepath}}">
+        <img src="/images/{{$image->imagepath}}" alt="profile-picture">
     </div>
     @else
     <div class="user_header_img">
-        <img src="/images/default-user.jpg">
+        <img src="/images/default-user.jpg" alt="profile-picture">
     </div>
     @endif
     <ul class="user_names">

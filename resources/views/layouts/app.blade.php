@@ -14,7 +14,35 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>
+            <?php
+            $url = $_SERVER['REQUEST_URI'];
+
+            if (endsWith($url, '/home')) {
+                echo 'Home';
+            } elseif (preg_match('/\/profile\/\w+/', $url)) {
+                echo 'Profile';
+            } elseif (endsWith($url, '/about')) {
+                echo 'About';
+            } elseif (startsWith($url, '/messages/')) {
+                echo 'Messages';
+            } else {
+                echo config('app.name', 'Laravel');
+            }
+
+            function endsWith($haystack, $needle) {
+                $length = strlen($needle);
+                if ($length == 0) {
+                    return true;
+                }
+                return (substr($haystack, -$length) === $needle);
+            }
+
+            function startsWith($haystack, $needle) {
+                return strpos($haystack, $needle) === 0;
+            }
+            ?>
+        </title>
 
         <!-- Styles -->
         <link href="{{ url('css/milligram.min.css') }}" rel="stylesheet">
@@ -73,7 +101,7 @@ searchInput.addEventListener('input', function() {
                         resultsHtml += `
                             <li class="search-result-user">
                                 <a href="/profile/${result.username}">
-                                    <img src="/images/${result.imagepath}" class="searchPicture"></img>
+                                    <img src="/images/${result.imagepath}" class="searchPicture" alt="profile-picute"></img>
                                     <p>${result.username}</p>
                                 </a>
                             </li>
@@ -103,7 +131,7 @@ searchInput.addEventListener('input', function() {
                             <li class="search-result-post">
                                 <div class= "user-in-postSearch">
                                 <a href="/profile/${result.username}">
-                                    <img src="/images/${result.imagepath}" class="searchPicture"></img>
+                                    <img src="/images/${result.imagepath}" class="searchPicture" alt="profile-picture"></img>
                                     <p>${result.username}</p>
                                 </a>
                                 </div>

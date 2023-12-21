@@ -430,7 +430,9 @@ VALUES
     ('Isabel', 'Costa', 'Fã de literatura', 'Female', '1988-09-16', 2, 2, 'isabelc', 'isabel@email.com', 'password789', false, true, true, true),
     ('Ricardo', 'Ramos', 'Entusiasta de esportes', 'Male', '1992-06-25', 1, 2, 'ricardor', 'ricardo@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', false, true, true, true),
     ('Ruben', 'Esteves', 'Sou um gajo fixe', 'Male', '2002-05-24', 1, 2, 'ruben38esteves', 'ruben38esteves@gmail.com','$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, true),
-    ('Miguel', 'Dionisio', 'Sou um gajo fixe', 'Male', '2002-08-14', 1, 2, 'miguelmdionisio', 'miguelmdionisio@gmail.com','$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, false);
+    ('Miguel', 'Dionisio', 'Sou um gajo fixe', 'Male', '2002-08-14', 1, 2, 'miguelmdionisio', 'miguelmdionisio@gmail.com','$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', true, true, true, false),
+    ('Miguel', 'Morais', 'Sou um mero utilizador', 'Male', '2002-08-14', 1, 2, 'miguelmorais', 'miguel@gmail.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', false, true, true, true),
+    ('Ruben', 'Silvestre', 'Sou outro mero utilizador', 'Male', '2002-08-14', 1, 2, 'rubensilvestre', 'ruben@gmail.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', false, true, true, true);
 
 
 INSERT INTO friendRequest (sourceID, targetID, friendRequestState, updated_at)
