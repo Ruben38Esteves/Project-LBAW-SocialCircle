@@ -371,6 +371,24 @@ WHEN (NEW.friendRequestState = 'pending')
 EXECUTE FUNCTION handle_new_friend_request();
 
 
+-- create a trigger to delete a posts comments and likes when a post is deleted
+CREATE OR REPLACE FUNCTION delete_post_comments_and_likes()
+RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM comment WHERE postID = OLD.postID;
+  DELETE FROM likes WHERE postID = OLD.postID;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create a trigger to execute the trigger function
+CREATE TRIGGER delete_post_comments_and_likes_trigger
+BEFORE DELETE ON userPost
+FOR EACH ROW
+EXECUTE FUNCTION delete_post_comments_and_likes();
+
+
+
 --------------------------------------------------------------------------------
 -- TRANSACTIONS
 --------------------------------------------------------------------------------
@@ -391,6 +409,8 @@ BEGIN
       ROLLBACK;
 END;
 $$ LANGUAGE plpgsql;
+
+
 
 
 --------------------------------------------------------------------------------
