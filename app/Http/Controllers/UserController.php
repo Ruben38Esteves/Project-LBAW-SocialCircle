@@ -62,27 +62,18 @@ class UserController extends Controller
                 } else {
                     $postUserImagePath = 'default-user.jpg';
                 }
-                //$group = Group::where('groupid', $post->groupid)->first();
                 $postUsername = User::where('id', $post->userid)->first()->username;
                 $postUserID = User::where('id', $post->userid)->first()->userid;
                 $postUserFirstName = User::where('id', $post->userid)->first()->firstname;
-                $postUserLastName = User::where('id', $post->userid)->first()->lastname;                
-                //$postGroupID = $post->groupid;
-                //dd($group);
-                //$postGroupName = $group->name;
+                $postUserLastName = User::where('id', $post->userid)->first()->lastname;         
                 $postContent = $post->content;
                 $postID = $post->postid;
-                
-                //dd($postGroupID);
-                
                 $postsResult[] = (object) [
                     'username' => $postUsername,
                     'userid' => $postUserID,
                     'imagepath' => $postUserImagePath,
                     'userfirstname' => $postUserFirstName,
                     'userlastname' => $postUserLastName,
-                    //'groupid' => $postGroupID,
-                    //'groupname' => $postGroupName,
                     'content' => $postContent,
                     'postid' => $postID
                 ];
@@ -116,19 +107,6 @@ class UserController extends Controller
             return $results;
     }
 
-    /*
-    public function search(Request $request)    {
-
-        $search = $request->get('query');
-
-        
-        $users = User::whereRaw("tsvectors @@ to_tsquery('english', ?)", [$search])
-        ->orderByRaw("ts_rank(users.tsvectors, to_tsquery(?)) ASC", [$search])->get();     
-        
-        //dd($users);
-        return $users;
-    }
-    */
     public function fillProfile($username){
         $user = User::where('username', $username)->first();
         $notifications = $user->notifications;

@@ -17,6 +17,7 @@ class UserNotificationController extends Controller
 {
 
     public function markNotifAsViewed($id){
+        if(!Auth::check()) return redirect()->back();
         if(Auth::user()->can('update',UserNotification::where('notificationid', $id)))
         $affected = DB::table('usernotification')
             ->where('notificationid', $id)
