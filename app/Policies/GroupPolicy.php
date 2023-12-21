@@ -31,9 +31,7 @@ class GroupPolicy
 
     public function manage(User $user, Group $group): bool
     {
-        return $user->id === $group->ownerid or $user->isAdmin()
-            ? Response::allow()
-            : Response::deny('You do not own this group.');
+        return $user->id === $group->ownerid || $user->isAdmin();
     }
 
     /**
