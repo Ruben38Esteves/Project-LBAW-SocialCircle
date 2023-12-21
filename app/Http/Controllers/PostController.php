@@ -20,15 +20,6 @@ class PostController extends Controller{
     }
 
 
-    public function list(){
-        if(!Auth::check()){
-            return redirect('/login');
-        }else{
-            $posts = Post::all();
-            return view('pages.home', ['posts' => $posts]);
-        }
-    }
-
     public function getNonEventPosts($username){
         if(!Auth::check()){
             return redirect('/login');
@@ -40,7 +31,7 @@ class PostController extends Controller{
     }
 
     public function create(Request $request){
-        if(Auth::user()->cannot('create', Post::class)){
+        if(!Auth::check() || Auth::user()->cannot('create', Post::class)){
             return redirect('/login');
         }else{
             $user = Auth::user();
@@ -53,7 +44,7 @@ class PostController extends Controller{
     }
 
     public function createGroupPost(Request $request, $id){
-        if(!Auth::check()){
+        if(!Auth::check() || Auth::user()->cannot('create', Post::class)){
             return redirect('/login');
         }else{
             $user = Auth::user();
