@@ -9,6 +9,9 @@
     use App\Policies\UserPolicy;
     use Illuminate\Support\Facades\Auth;
     $image = Image::where('imageid', $user->profilepictureid)->first();
+    if(!Auth::check() &&  !$user->ispublic){
+        return redirect('/home');
+    }
     ?>
     
     <script type="text/javascript" src={{ asset('js/editProfile.js') }}></script>

@@ -179,15 +179,21 @@ class UserController extends Controller
 
 
     public function homeFeed(){
+        $posts = Post::all()->sortByDesc('created_at');
         if(Auth::check()){
             $user = Auth::user();
-            $posts = Post::all()->sortByDesc('created_at');
             foreach ($posts as $post) {
                 if (!($user->can('view', $post))) {
                     $posts->forget($post);
                 }
             }
-            $notifications = $user->notifications;
+            return view('pages.home', ['posts' => $posts]);
+        }else{
+            foreach ($posts as $post) {
+                if (!$post->owner->ispublic) {
+                    $posts->forget($post);
+                }
+            }
             return view('pages.home', ['posts' => $posts]);
         }
     }
