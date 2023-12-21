@@ -109,7 +109,6 @@ class UserController extends Controller
 
     public function fillProfile($username){
         $user = User::where('username', $username)->first();
-        $notifications = $user->notifications;
         if(Auth::check()){
             $userself = Auth::user();
             if($userself->can('view', $user)){

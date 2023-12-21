@@ -32,10 +32,10 @@ class FriendshipController extends Controller
         $userID = $user->id;
         $friend = User::where('username', $friend)->first();
 
-        if($user->can('delete', FriendRequest::where([['sourceid', $friend->id],['targetid', $userID]]))){
+        if($user->can('delete', FriendRequest::where([['sourceid', $userID],['targetid', $friend->id]])->first())){
             FriendRequest::where([
-                ['sourceid', $friend->id],
-                ['targetid', $userID]
+                ['sourceid', $userID],
+                ['targetid', $friend->id]
             ])->delete();
         }
 
