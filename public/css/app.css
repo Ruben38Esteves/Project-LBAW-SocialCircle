@@ -186,6 +186,13 @@ input[type=password]:focus {
     margin-right: 10px;
 }
 
+.searchPicture {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
 .username {
     color: #000000;
 }
@@ -246,18 +253,66 @@ input[type=password]:focus {
     margin-bottom: 10px;
 }
 
-.search-result .miniUserPic {
-    width: 35px;
-    height: 35px;
-    background-color: #ccc;
-    border-radius: 50%;
-    margin-right: 10px;
+.search-result-user {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.searchResultsList {
+    list-style-type: none;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    margin: 0;
+    padding-left: 0;
+}
+
+.search-result-group p {
+    padding-left: 15px;
+}
+
+.search-result-header {
+    color: #000000;
+    border-radius: 10px;
+    border: 1px solid #000000;
+    background-color: #dadada;
+    padding-left: 15px;
+}
+
+.searchPostContent {
+    padding-left: 40px;
+    color: #000000;
 }
 
 .search-result a {
     display: flex;
     align-items: center;
     text-decoration: none;
+}
+
+.user-in-postSearch a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.user-in-postSearch p {
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.search-result-user a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+li.search-result-post {
+    border-radius: 1px;
+    border-bottom: #000000;
 }
 
 .search-result p {
@@ -268,13 +323,14 @@ input[type=password]:focus {
     margin-bottom: 10px;
 }
 
-.search-result .miniUserPic {
-    width: 35px;
-    height: 35px;
-    background-color: #ccc;
-    border-radius: 50%;
-    margin-right: 10px;
+.search-result-user p {
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
+
 
 .search-result a {
     display: flex;
