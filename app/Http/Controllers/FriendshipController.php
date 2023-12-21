@@ -39,7 +39,7 @@ class FriendshipController extends Controller
             ])->delete();
         }
 
-        return view('pages.profile', ['user' => $friend]);
+        return redirect('/profile/'.$friend);
     }
 
 
@@ -59,13 +59,13 @@ class FriendshipController extends Controller
         if($user->can('delete', FriendRequest::where([
             ['sourceid', $friendAux->id],
             ['targetid', $userID]
-        ]))){
+        ])->first())){
             FriendRequest::where([
                 ['sourceid', $friendAux->id],
                 ['targetid', $userID]
             ])->delete();
         }
-        return view('pages.profile', ['user' => $friendAux]);
+        return redirect('/profile/'.$friend);
     }
 
     // erases friendship
@@ -87,6 +87,6 @@ class FriendshipController extends Controller
             })->delete();
         }
 
-        return view('pages.profile', ['user' => $friendAux]);
+        return redirect('/profile/'.$friend);
     }
 }
