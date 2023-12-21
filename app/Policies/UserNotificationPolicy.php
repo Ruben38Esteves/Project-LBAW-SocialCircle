@@ -37,7 +37,10 @@ class UserNotificationPolicy
      */
     public function update(User $user, UserNotification $userNotification): bool
     {
-        return $user->isAdmin() || $user->id==$userNotification->user()->id;
+        if($user!=null){
+            return $user->isAdmin() || $user->id==$userNotification->user()->id;
+        }
+        return false;
     }
 
     /**
@@ -45,7 +48,10 @@ class UserNotificationPolicy
      */
     public function delete(User $user, UserNotification $userNotification): bool
     {
-        return($user->isAdmin() || $user==$userNotification->user());
+        if($user!=null){
+            return $user->isAdmin() || $user->id==$userNotification->user()->id;
+        }
+        return false;
     }
 
     /**
