@@ -193,5 +193,13 @@ class UserController extends Controller
         }
         return redirect('/profile/'.$user->username);
     }
+
+    public function about(){
+        return view('pages.about');
+    }
+
+    public function help(){
+        return view('pages.help');
+    }
 }    
 
