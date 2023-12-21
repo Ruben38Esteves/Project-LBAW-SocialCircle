@@ -46,7 +46,7 @@ class FriendshipPolicy
      */
     public function delete(User $user, Friendship $friendship): bool
     {
-        return Auth::check() && ($user->id == $friendship->userid || $user->id == $friendship->friendid);
+        return (Auth::check() && ($user->id == $friendship->userid || $user->id == $friendship->friendid));
     }
 
     /**

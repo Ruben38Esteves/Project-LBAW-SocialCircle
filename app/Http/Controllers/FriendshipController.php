@@ -32,10 +32,10 @@ class FriendshipController extends Controller
         $userID = $user->id;
         $friend = User::where('username', $friend)->first();
 
-        if($user->can('delete', FriendRequest::class)){
+        if($user->can('delete', FriendRequest::where([['sourceid', $friend->id],['targetid', $userID]]))){
             FriendRequest::where([
-                ['sourceid', $userID],
-                ['targetid', $friend->id]
+                ['sourceid', $friend->id],
+                ['targetid', $userID]
             ])->delete();
         }
 
@@ -56,7 +56,10 @@ class FriendshipController extends Controller
         if($user->can('create', Friendship::class)){
             $friendRequest->accept();
         }
-        if($user->can('delete', FriendRequest::class)){
+        if($user->can('delete', FriendRequest::where([
+            ['sourceid', $friendAux->id],
+            ['targetid', $userID]
+        ]))){
             FriendRequest::where([
                 ['sourceid', $friendAux->id],
                 ['targetid', $userID]
@@ -75,12 +78,15 @@ class FriendshipController extends Controller
             $query->where('userid', $userID)->where('friendid', $friendAux->id);
         })->orWhere(function ($query) use ($userID, $friendAux) {
             $query->where('userid', $friendAux->id)->where('friendid', $userID);
-        });
-    
-        if ($friendship && $user->can('delete', $friendship)) {
-            $friendship->delete();
+        })->first();
+        if ($user->can('delete', $friendship)) {
+            Friendship::where(function ($query) use ($userID, $friendAux) {
+                $query->where('userid', $userID)->where('friendid', $friendAux->id);
+            })->orWhere(function ($query) use ($userID, $friendAux) {
+                $query->where('userid', $friendAux->id)->where('friendid', $userID);
+            })->delete();
         }
-    
+
         return view('pages.profile', ['user' => $friendAux]);
     }
 }

@@ -6,6 +6,8 @@ use App\Models\Group;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
+use Illuminate\Support\Facades\Auth;
+
 class GroupPolicy
 {
     /**

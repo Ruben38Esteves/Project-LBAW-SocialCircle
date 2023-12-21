@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
+use Illuminate\Support\Facades\Auth;
 class UserPolicy
 {
     /**

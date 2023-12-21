@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\UserNotification;
 use Illuminate\Auth\Access\Response;
 
+use Illuminate\Support\Facades\Auth;
+
 class UserNotificationPolicy
 {
     /**

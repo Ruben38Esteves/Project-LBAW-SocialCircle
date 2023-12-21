@@ -30,7 +30,7 @@ class ImagePolicy
      */
     public function create(User $user): bool
     {
-        return Auth::user()->id === $user->id || Auth::user()->isAdmin;
+        return Auth::user()->id === $user->id || Auth::user()->isadmin;
     }
 
     /**
