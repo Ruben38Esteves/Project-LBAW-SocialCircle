@@ -29,7 +29,7 @@
                     Dislike
                 </button>
             </form>
-            @elif(Auth::check())
+            @elseif(Auth::check())
             <form action="{{ route('like',['postid'=>$post->postid]) }}" method="POST">
                 @csrf
                 <button type="submit" id="delete_button">
