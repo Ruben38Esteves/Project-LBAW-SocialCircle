@@ -70,10 +70,10 @@
             </header>
             <section id="content">
                 <div class="search-bar">
-                    <form action="{{ url('/search?query') }}" method="GET">
-                        <input type="text" name="query" id="search-input" placeholder="Search users and groups...">
-                        <div id="search-results"></div>
-                    </form>
+                <form action="{{ url('/search?query') }}" method="GET" id="search-form">
+                    <input type="text" name="query" id="search-input" placeholder="Search users and groups...">
+                    <div id="search-results"></div>
+                </form>
                 </div>
                 @yield('content')
             </section>
@@ -81,7 +81,25 @@
     </body>
 </html>
 
+
+<!-- JS script retorna sem precisar de enter-->
+
+
 <script>
+
+// desativar enter
+
+const searchForm = document.getElementById('search-form');
+
+searchForm.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); 
+        searchInput.blur(); 
+    }
+});
+
+
+
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
 
@@ -141,9 +159,14 @@ searchInput.addEventListener('input', function() {
                     });
                 }
 
-                resultsHtml += '</ul>'; // End the unordered list
+                
 
                 searchResults.innerHTML = resultsHtml;
+                
+                if (data.users.length === 0 && data.groups.length === 0 && data.posts.length === 0) {
+                    searchResults.innerHTML = '<li class="search-result-header">No Results</li>';
+                }
+                resultsHtml += '</ul>';
             })
             .catch(error => {
                 console.error('Error:', error);
