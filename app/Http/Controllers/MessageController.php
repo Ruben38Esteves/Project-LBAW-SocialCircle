@@ -54,7 +54,7 @@ class MessageController extends Controller
                 return redirect('/messages/'.$username);
             }
             else{
-                return redirect('/login');
+                return redirect()->back();
             }
         }
         return redirect('/login');
